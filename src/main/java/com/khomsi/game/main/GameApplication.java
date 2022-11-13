@@ -2,8 +2,12 @@ package main.java.com.khomsi.game.main;
 
 import javax.swing.*;
 
-public class Main {
+public class GameApplication {
     public static void main(String[] args) {
+        new GameApplication().startGame();
+    }
+
+    private void startGame() {
         JFrame window = new JFrame();
 
         //let window close properly, when use press close (x) button
@@ -19,6 +23,7 @@ public class Main {
         window.setLocationRelativeTo(null);
         //we can see the window
         window.setVisible(true);
+        gamePanel.setupGame();
         gamePanel.startGameThread();
     }
 }

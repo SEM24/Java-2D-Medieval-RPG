@@ -1,6 +1,7 @@
 package main.java.com.khomsi.game.main;
 
 import main.java.com.khomsi.game.entity.Player;
+import main.java.com.khomsi.game.objects.SuperObject;
 import main.java.com.khomsi.game.tiles.TileManager;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     static final int ORIGINAL_TILE_SIZE = 16; //16x16 tiles
 
-    //we need to scale the size of hero, because on big screens it'll be too small
+    //we need to scale the size of hero and game, because on big screens it'll be too small
     static final int SCALE = 3;
     public static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE; //48x48 tiles
     public static final int MAX_SCREEN_COL = 16; //16 tiles horizontal
@@ -19,11 +20,24 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL; //768 pixels
     public static final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW; //576 pixels
 
+    //World settings
+    public static final int MAX_WORLD_COL = 50;
+
+    public static final int MAX_WORLD_ROW = 50;
+
+    //TODO для чего они?
+    public static final int WORLD_WIDTH = TILE_SIZE * MAX_WORLD_COL;
+
+    public static final int WORLD_HEIGHT = TILE_SIZE * MAX_WORLD_ROW;
+
     KeyHandler keyHandler = new KeyHandler();
     //use threads to start, stop,repeat actions.
     Thread gameThread;
-    Player player = new Player(this, keyHandler);
+    public Player player = new Player(this, keyHandler);
     TileManager tileManager = new TileManager(this);
+    public CheckCollision checkCollision = new CheckCollision(this);
+    public PlaceObjects placeObjects = new PlaceObjects(this);
+    public SuperObject[] object = new SuperObject[10];
 
     int FPS = 60;
 
@@ -37,6 +51,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyHandler);
         //focus to receive key input
         this.setFocusable(true);
+    }
+
+    public void setupGame() {
+        placeObjects.setObject();
     }
 
     public void startGameThread() {
@@ -91,8 +109,15 @@ public class GamePanel extends JPanel implements Runnable {
         //extends graphic class and provide more control on geometry, color managment ect.
         Graphics2D graphics2D = (Graphics2D) graphics;
         tileManager.draw(graphics2D);
-
+        //object
+        for (SuperObject superObject : object) {
+            if (superObject != null) {
+                superObject.draw(graphics2D, this);
+            }
+        }
+        //player
         player.draw(graphics2D);
+
         //save some memory
         graphics2D.dispose();
     }
