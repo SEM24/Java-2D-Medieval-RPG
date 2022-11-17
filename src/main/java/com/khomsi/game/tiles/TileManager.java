@@ -117,7 +117,6 @@ public class TileManager {
                 worldCol = 0;
 
                 worldRow++;
-
             }
         }
     }

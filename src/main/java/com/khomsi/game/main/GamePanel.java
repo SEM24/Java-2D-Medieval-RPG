@@ -1,6 +1,10 @@
 package main.java.com.khomsi.game.main;
 
 import main.java.com.khomsi.game.entity.Player;
+import main.java.com.khomsi.game.main.tools.KeyHandler;
+import main.java.com.khomsi.game.main.tools.PlaceObjects;
+import main.java.com.khomsi.game.main.tools.Sound;
+import main.java.com.khomsi.game.main.tools.UI;
 import main.java.com.khomsi.game.objects.SuperObject;
 import main.java.com.khomsi.game.tiles.TileManager;
 
@@ -25,21 +29,20 @@ public class GamePanel extends JPanel implements Runnable {
 
     public static final int MAX_WORLD_ROW = 50;
 
-    //TODO для чего они?
-    public static final int WORLD_WIDTH = TILE_SIZE * MAX_WORLD_COL;
-
-    public static final int WORLD_HEIGHT = TILE_SIZE * MAX_WORLD_ROW;
-
     KeyHandler keyHandler = new KeyHandler();
-    //use threads to start, stop,repeat actions.
-    Thread gameThread;
-    public Player player = new Player(this, keyHandler);
     TileManager tileManager = new TileManager(this);
+    Sound music = new Sound();
+    Sound se = new Sound();
+    public UI ui = new UI(this);
+    //use threads to start, stop,repeat actions.
+    public Thread gameThread;
     public CheckCollision checkCollision = new CheckCollision(this);
     public PlaceObjects placeObjects = new PlaceObjects(this);
+    public Player player = new Player(this, keyHandler);
+
     public SuperObject[] object = new SuperObject[10];
 
-    int FPS = 60;
+    public static final int FPS = 60;
 
     public GamePanel() {
         //set size of this class
@@ -55,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame() {
         placeObjects.setObject();
+        playMusic(0);
     }
 
     public void startGameThread() {
@@ -70,14 +74,14 @@ public class GamePanel extends JPanel implements Runnable {
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-        long timer = 0;
-        int drawCount = 0;
+//        long timer = 0;
+//        int drawCount = 0;
 
         while (gameThread != null) {
             currentTime = System.nanoTime();
 
             delta += (currentTime - lastTime) / drawInterval;
-            timer += (currentTime - lastTime);
+//            timer += (currentTime - lastTime);
             lastTime = currentTime;
 
             if (delta >= 1) {
@@ -86,13 +90,13 @@ public class GamePanel extends JPanel implements Runnable {
                 //draw the screen info with updated info
                 repaint();
                 delta--;
-                drawCount++;
+//                drawCount++;
             }
-            if (timer >= 1_000_000_000) {
-                System.out.println("FPS: " + drawCount);
-                drawCount = 0;
-                timer = 0;
-            }
+//            if (timer >= 1_000_000_000) {
+//                System.out.println("FPS: " + drawCount);
+//                drawCount = 0;
+//                timer = 0;
+//            }
         }
     }
 
@@ -105,7 +109,6 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics graphics) {
 
         super.paintComponent(graphics);
-
         //extends graphic class and provide more control on geometry, color managment ect.
         Graphics2D graphics2D = (Graphics2D) graphics;
         tileManager.draw(graphics2D);
@@ -117,8 +120,26 @@ public class GamePanel extends JPanel implements Runnable {
         }
         //player
         player.draw(graphics2D);
+        //UI(text)
+        ui.draw(graphics2D);
 
         //save some memory
         graphics2D.dispose();
+    }
+
+    //use method to loop the main music
+    public void playMusic(int i) {
+        music.setFile(i);
+        music.play();
+        music.loop();
+    }
+
+    public void stopMusic() {
+        music.stop();
+    }
+
+    public void playSE(int i) {
+        se.setFile(i);
+        se.play();
     }
 }

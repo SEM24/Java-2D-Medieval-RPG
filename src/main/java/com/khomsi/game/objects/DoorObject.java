@@ -13,5 +13,6 @@ public class DoorObject extends SuperObject {
             System.err.println("Error in " + getClass().getSimpleName());
             e.printStackTrace();
         }
+        collision = true;
     }
 }

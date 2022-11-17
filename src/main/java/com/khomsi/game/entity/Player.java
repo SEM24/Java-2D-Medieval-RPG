@@ -1,7 +1,7 @@
 package main.java.com.khomsi.game.entity;
 
 import main.java.com.khomsi.game.main.GamePanel;
-import main.java.com.khomsi.game.main.KeyHandler;
+import main.java.com.khomsi.game.main.tools.KeyHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,6 +16,7 @@ public class Player extends Entity {
     private final String playerPath = "/player/";
 
     public final int screenX, screenY;
+    public int hasKey = 0;
 
     //specific player width due to diff size of sprites
     //TODO maybe it's better to make this type of constant for whole characters
@@ -36,8 +37,8 @@ public class Player extends Entity {
         solidAreaDefaultY = solidArea.y;
         //boundaries of player
         //TODO adjust it if needed
-        solidArea.width = 26 - PLAYER_WIDTH;
-        solidArea.height = 26;
+        solidArea.width = 28 - PLAYER_WIDTH;
+        solidArea.height = 28;
 
         setDefaultValues();
         getPlayerImage();
@@ -54,40 +55,40 @@ public class Player extends Entity {
     public void getPlayerImage() {
         try {
             up = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_up.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_up.png")));
 
             up1 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_up_1.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_up_1.png")));
 
             up2 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_up_2.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_up_2.png")));
 
             down = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_down.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_down.png")));
 
             down1 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_down_1.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_down_1.png")));
 
             down2 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_down_2.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_down_2.png")));
 
             left = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_left.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_left.png")));
 
             left1 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_left_1.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_left_1.png")));
 
             left2 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_left.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_left_2.png")));
 
             right = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_right.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_right.png")));
 
             right1 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_right_1.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_right_1.png")));
 
             right2 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "boy_right_2.png")));
+                    getClass().getResourceAsStream(playerPath + "chara_right_2.png")));
 
         } catch (IOException e) {
             System.err.println("Error on getting player images!");
@@ -114,7 +115,9 @@ public class Player extends Entity {
             //Check tile collision
             collisionOn = false;
             gamePanel.checkCollision.checkTile(this);
-
+            //Check obj collision
+            int objIndex = gamePanel.checkCollision.checkObject(this, true);
+            takeObject(objIndex);
             //If collision false, play player move
             if (!collisionOn) {
                 switch (direction) {
@@ -141,6 +144,53 @@ public class Player extends Entity {
             if (standCounter == 24) {
                 spriteNum = 3;  // Idle sprite
                 standCounter = 0;
+            }
+        }
+    }
+
+    public void takeObject(int index) {
+        //if index is not player, make a reaction on obj
+        if (index != 999) {
+            String objName = gamePanel.object[index].name;
+            switch (objName) {
+                case "Key" -> {
+                    gamePanel.playSE(2);
+                    hasKey++;
+                    gamePanel.object[index] = null;
+                    gamePanel.ui.showMessage("You got a key!");
+                }
+                case "Door" -> {
+                    if (hasKey > 0) {
+                        gamePanel.playSE(4);
+                        gamePanel.object[index] = null;
+                        hasKey--;
+                        gamePanel.ui.showMessage("Door opened!");
+                    } else {
+                        gamePanel.ui.showMessage("Find a key!");
+//                        gamePanel.playerSE(5);
+                    }
+                }
+                case "Boots" -> {
+                    gamePanel.playSE(3);
+                    speed += 1;
+                    gamePanel.object[index] = null;
+                    gamePanel.ui.showMessage("Go faster!");
+                }
+                case "Dog" -> {
+                    gamePanel.playSE(1);
+                    speed -= 1;
+                    gamePanel.object[index] = null;
+                    gamePanel.ui.showMessage("Big toby!");
+                }
+                case "Knife" -> {
+                    gamePanel.playSE(6);
+                    gamePanel.object[index] = null;
+                }
+                case "Chest" -> {
+                    gamePanel.ui.gameFinished = true;
+                    gamePanel.stopMusic();
+                    gamePanel.playSE(7);
+                }
             }
         }
     }
