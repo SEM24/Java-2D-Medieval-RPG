@@ -2,6 +2,7 @@ package main.java.com.khomsi.game.entity;
 
 import main.java.com.khomsi.game.main.GamePanel;
 import main.java.com.khomsi.game.main.tools.KeyHandler;
+import main.java.com.khomsi.game.main.tools.Tools;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,16 +13,12 @@ import java.util.Objects;
 public class Player extends Entity {
     GamePanel gamePanel;
     KeyHandler keyHandler;
+    Tools tools = new Tools();
 
     private final String playerPath = "/player/";
 
     public final int screenX, screenY;
     public int hasKey = 0;
-
-    //specific player width due to diff size of sprites
-    //TODO maybe it's better to make this type of constant for whole characters
-    //because they're also might be different
-    private static final int PLAYER_WIDTH = 16;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         this.gamePanel = gamePanel;
@@ -31,13 +28,14 @@ public class Player extends Entity {
         screenY = GamePanel.SCREEN_HEIGHT / 2 - (GamePanel.TILE_SIZE / 2);
 
         solidArea = new Rectangle();
-        solidArea.x = 8;
+        solidArea.x = 10;
         solidArea.y = 16;
+
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         //boundaries of player
         //TODO adjust it if needed
-        solidArea.width = 28 - PLAYER_WIDTH;
+        solidArea.width = 28;
         solidArea.height = 28;
 
         setDefaultValues();
@@ -53,47 +51,31 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage() {
+        up = setup("boy_up");
+        up1 = setup("boy_up_1");
+        up2 = setup("boy_up_2");
+        down = setup("boy_down");
+        down1 = setup("boy_down_1");
+        down2 = setup("boy_down_2");
+        left = setup("boy_left");
+        left1 = setup("boy_left_1");
+        left2 = setup("boy_left_2");
+        right = setup("boy_right");
+        right1 = setup("boy_right_1");
+        right2 = setup("boy_right_2");
+    }
+
+    public BufferedImage setup(String imageName) {
+        BufferedImage image = null;
         try {
-            up = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_up.png")));
-
-            up1 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_up_1.png")));
-
-            up2 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_up_2.png")));
-
-            down = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_down.png")));
-
-            down1 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_down_1.png")));
-
-            down2 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_down_2.png")));
-
-            left = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_left.png")));
-
-            left1 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_left_1.png")));
-
-            left2 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_left_2.png")));
-
-            right = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_right.png")));
-
-            right1 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_right_1.png")));
-
-            right2 = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + "chara_right_2.png")));
-
+            image = ImageIO.read(Objects.requireNonNull(
+                    getClass().getResourceAsStream(playerPath + imageName + ".png")));
+            image = tools.scaledImage(image, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
         } catch (IOException e) {
-            System.err.println("Error on getting player images!");
+            System.err.println("Error in setup in " + getClass().getSimpleName());
             e.printStackTrace();
         }
+        return image;
     }
 
     //This method updates player's coordinates
@@ -115,6 +97,7 @@ public class Player extends Entity {
             //Check tile collision
             collisionOn = false;
             gamePanel.checkCollision.checkTile(this);
+
             //Check obj collision
             int objIndex = gamePanel.checkCollision.checkObject(this, true);
             takeObject(objIndex);
@@ -167,7 +150,6 @@ public class Player extends Entity {
                         gamePanel.ui.showMessage("Door opened!");
                     } else {
                         gamePanel.ui.showMessage("Find a key!");
-//                        gamePanel.playerSE(5);
                     }
                 }
                 case "Boots" -> {
@@ -196,8 +178,8 @@ public class Player extends Entity {
     }
 
     public void draw(Graphics2D graphics2D) {
-
         BufferedImage image = null;
+
         switch (direction) {
             case "up" -> {
                 if (spriteNum == 1) image = up1;
@@ -220,7 +202,6 @@ public class Player extends Entity {
                 if (spriteNum == 3) image = right;
             }
         }
-        //FIXME player width = hardcode
-        graphics2D.drawImage(image, screenX, screenY, GamePanel.TILE_SIZE - PLAYER_WIDTH, GamePanel.TILE_SIZE, null);
+        graphics2D.drawImage(image, screenX, screenY, null);
     }
 }

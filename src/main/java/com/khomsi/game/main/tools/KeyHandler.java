@@ -1,9 +1,18 @@
 package main.java.com.khomsi.game.main.tools;
 
+import main.java.com.khomsi.game.main.GamePanel;
+
 import java.awt.event.*;
 
 public class KeyHandler implements KeyListener {
+    GamePanel gamePanel;
     public boolean upPressed, downPressed, leftPressed, rightPressed;
+    //Debug
+    public boolean debugMode = false;
+
+    public KeyHandler(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -20,6 +29,10 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_S) downPressed = true;
         if (code == KeyEvent.VK_A) leftPressed = true;
         if (code == KeyEvent.VK_D) rightPressed = true;
+        //TODO Debug
+        // if it's false, make it true, else make it false
+        if (code == KeyEvent.VK_F9) debugMode = !debugMode;
+        if (code == KeyEvent.VK_F8) gamePanel.tileManager.loadMap("/maps/world01.txt");
     }
 
     @Override

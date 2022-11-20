@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 //parent class for player, monster ect
-public class Entity {
+public abstract class Entity {
     //Set default position
     public int worldX, worldY;
     public int speed;
