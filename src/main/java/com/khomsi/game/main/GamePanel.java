@@ -25,12 +25,12 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW; //576 pixels
 
     //World settings
-    public static final int MAX_WORLD_COL = 50;
+    public static int MAX_WORLD_COL;
 
-    public static final int MAX_WORLD_ROW = 50;
+    public static int MAX_WORLD_ROW;
 
-    KeyHandler keyHandler = new KeyHandler();
-    TileManager tileManager = new TileManager(this);
+    KeyHandler keyHandler = new KeyHandler(this);
+    public TileManager tileManager = new TileManager(this);
     Sound music = new Sound();
     Sound se = new Sound();
     public UI ui = new UI(this);
@@ -43,6 +43,9 @@ public class GamePanel extends JPanel implements Runnable {
     public SuperObject[] object = new SuperObject[10];
 
     public static final int FPS = 60;
+    //GameState
+    public int gameState;
+    public final int playState = 1;
 
     public GamePanel() {
         //set size of this class
@@ -74,14 +77,14 @@ public class GamePanel extends JPanel implements Runnable {
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-//        long timer = 0;
-//        int drawCount = 0;
+        long timer = 0;
+        int drawCount = 0;
 
         while (gameThread != null) {
             currentTime = System.nanoTime();
 
             delta += (currentTime - lastTime) / drawInterval;
-//            timer += (currentTime - lastTime);
+            timer += (currentTime - lastTime);
             lastTime = currentTime;
 
             if (delta >= 1) {
@@ -90,13 +93,13 @@ public class GamePanel extends JPanel implements Runnable {
                 //draw the screen info with updated info
                 repaint();
                 delta--;
-//                drawCount++;
+                drawCount++;
             }
-//            if (timer >= 1_000_000_000) {
-//                System.out.println("FPS: " + drawCount);
-//                drawCount = 0;
-//                timer = 0;
-//            }
+            if (timer >= 1_000_000_000) {
+                System.out.println("FPS: " + drawCount);
+                drawCount = 0;
+                timer = 0;
+            }
         }
     }
 
@@ -111,6 +114,11 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(graphics);
         //extends graphic class and provide more control on geometry, color managment ect.
         Graphics2D graphics2D = (Graphics2D) graphics;
+        //object
+        long drawStart = 0;
+        if (keyHandler.debugMode)
+            drawStart = System.nanoTime();
+
         tileManager.draw(graphics2D);
         //object
         for (SuperObject superObject : object) {
@@ -122,6 +130,33 @@ public class GamePanel extends JPanel implements Runnable {
         player.draw(graphics2D);
         //UI(text)
         ui.draw(graphics2D);
+        //TODO Debug function
+        if (keyHandler.debugMode) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            graphics2D.setFont(new Font("Arial", Font.PLAIN, 20));
+            graphics2D.setColor(Color.WHITE);
+            int x = 10;
+            int y = 410;
+            int lineHeight = 20;
+            graphics2D.drawString("World_X: " + player.worldX, x, y);
+            y += lineHeight;
+            graphics2D.drawString("World_Y: " + player.worldY, x, y);
+            y += lineHeight;
+            graphics2D.drawString("Col: " + (player.worldX + player.solidArea.x) / TILE_SIZE, x, y);
+            y += lineHeight;
+            graphics2D.drawString("Row: : " + (player.worldY + player.solidArea.y) / TILE_SIZE, x, y);
+            y += lineHeight;
+            graphics2D.drawString("Draw Time: " + passed, x, y);
+            y += lineHeight;
+            graphics2D.drawString("Press Ctrl+F9 after ed map", x, y);
+            y += lineHeight;
+            graphics2D.drawString("Press F8 to reload tiles", x, y);
+            //Show player bounds
+            graphics2D.setColor(Color.RED);
+            graphics2D.drawRect(player.screenX + player.solidArea.x, player.screenY + player.solidArea.y,
+                    player.solidArea.width, player.solidArea.height);
+        }
 
         //save some memory
         graphics2D.dispose();
