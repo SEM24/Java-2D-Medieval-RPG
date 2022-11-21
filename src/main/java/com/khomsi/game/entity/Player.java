@@ -4,24 +4,17 @@ import main.java.com.khomsi.game.main.GamePanel;
 import main.java.com.khomsi.game.main.tools.KeyHandler;
 import main.java.com.khomsi.game.main.tools.Tools;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class Player extends Entity {
-    GamePanel gamePanel;
     KeyHandler keyHandler;
     Tools tools = new Tools();
-
     private final String playerPath = "/player/";
-
     public final int screenX, screenY;
-    public int hasKey = 0;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
-        this.gamePanel = gamePanel;
+        super(gamePanel);
         this.keyHandler = keyHandler;
         //camera position
         screenX = GamePanel.SCREEN_WIDTH / 2 - (GamePanel.TILE_SIZE / 2);
@@ -46,36 +39,27 @@ public class Player extends Entity {
         //player position of player
         worldX = GamePanel.TILE_SIZE * 23;
         worldY = GamePanel.TILE_SIZE * 21;
-        speed = 4;
+        speed = 3;
         direction = "down";
     }
 
     public void getPlayerImage() {
-        up = setup("boy_up");
-        up1 = setup("boy_up_1");
-        up2 = setup("boy_up_2");
-        down = setup("boy_down");
-        down1 = setup("boy_down_1");
-        down2 = setup("boy_down_2");
-        left = setup("boy_left");
-        left1 = setup("boy_left_1");
-        left2 = setup("boy_left_2");
-        right = setup("boy_right");
-        right1 = setup("boy_right_1");
-        right2 = setup("boy_right_2");
-    }
-
-    public BufferedImage setup(String imageName) {
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(playerPath + imageName + ".png")));
-            image = tools.scaledImage(image, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
-        } catch (IOException e) {
-            System.err.println("Error in setup in " + getClass().getSimpleName());
-            e.printStackTrace();
-        }
-        return image;
+        up = setup(playerPath + "player_up");
+        up1 = setup(playerPath + "player_up_1");
+        up2 = setup(playerPath + "player_up_2");
+        up3 = setup(playerPath + "player_up_3");
+        down = setup(playerPath + "player_down");
+        down1 = setup(playerPath + "player_down_1");
+        down2 = setup(playerPath + "player_down_2");
+        down3 = setup(playerPath + "player_down_3");
+        left = setup(playerPath + "player_left");
+        left1 = setup(playerPath + "player_left_1");
+        left2 = setup(playerPath + "player_left_2");
+        left3 = setup(playerPath + "player_left_3");
+        right = setup(playerPath + "player_right");
+        right1 = setup(playerPath + "player_right_1");
+        right2 = setup(playerPath + "player_right_2");
+        right3 = setup(playerPath + "player_right_3");
     }
 
     //This method updates player's coordinates
@@ -115,17 +99,23 @@ public class Player extends Entity {
             if (spriteCounter <= 13) {
                 spriteNum = 1;
             }
-            if (spriteCounter > 13 && spriteCounter <= 24) {
+            if (spriteCounter > 13 && spriteCounter <= 23) {
                 spriteNum = 2;
             }
-            if (spriteCounter > 24) {
+            if (spriteCounter > 23 && spriteCounter <= 33) {
+                spriteNum = 3;
+            }
+            if (spriteCounter > 33 && spriteCounter <= 42) {
+                spriteNum = 2;
+            }
+            if (spriteCounter > 42) {
                 spriteCounter = 0;
             }
         } else {
             standCounter++;
             //timer before the idle anim starts
-            if (standCounter == 24) {
-                spriteNum = 3;  // Idle sprite
+            if (standCounter == 42) {
+                spriteNum = 0;  // Idle sprite
                 standCounter = 0;
             }
         }
@@ -134,74 +124,12 @@ public class Player extends Entity {
     public void takeObject(int index) {
         //if index is not player, make a reaction on obj
         if (index != 999) {
-            String objName = gamePanel.object[index].name;
-            switch (objName) {
-                case "Key" -> {
-                    gamePanel.playSE(2);
-                    hasKey++;
-                    gamePanel.object[index] = null;
-                    gamePanel.ui.showMessage("You got a key!");
-                }
-                case "Door" -> {
-                    if (hasKey > 0) {
-                        gamePanel.playSE(4);
-                        gamePanel.object[index] = null;
-                        hasKey--;
-                        gamePanel.ui.showMessage("Door opened!");
-                    } else {
-                        gamePanel.ui.showMessage("Find a key!");
-                    }
-                }
-                case "Boots" -> {
-                    gamePanel.playSE(3);
-                    speed += 1;
-                    gamePanel.object[index] = null;
-                    gamePanel.ui.showMessage("Go faster!");
-                }
-                case "Dog" -> {
-                    gamePanel.playSE(1);
-                    speed -= 1;
-                    gamePanel.object[index] = null;
-                    gamePanel.ui.showMessage("Big toby!");
-                }
-                case "Knife" -> {
-                    gamePanel.playSE(6);
-                    gamePanel.object[index] = null;
-                }
-                case "Chest" -> {
-                    gamePanel.ui.gameFinished = true;
-                    gamePanel.stopMusic();
-                    gamePanel.playSE(7);
-                }
-            }
+            //TODO
         }
     }
 
     public void draw(Graphics2D graphics2D) {
-        BufferedImage image = null;
-
-        switch (direction) {
-            case "up" -> {
-                if (spriteNum == 1) image = up1;
-                if (spriteNum == 2) image = up2;
-                if (spriteNum == 3) image = up;
-            }
-            case "down" -> {
-                if (spriteNum == 1) image = down1;
-                if (spriteNum == 2) image = down2;
-                if (spriteNum == 3) image = down;
-            }
-            case "left" -> {
-                if (spriteNum == 1) image = left1;
-                if (spriteNum == 2) image = left2;
-                if (spriteNum == 3) image = left;
-            }
-            case "right" -> {
-                if (spriteNum == 1) image = right1;
-                if (spriteNum == 2) image = right2;
-                if (spriteNum == 3) image = right;
-            }
-        }
+        BufferedImage image = characterSpriteDirection();
         graphics2D.drawImage(image, screenX, screenY, null);
     }
 }

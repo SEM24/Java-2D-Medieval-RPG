@@ -1,5 +1,6 @@
 package main.java.com.khomsi.game.main;
 
+import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.entity.Player;
 import main.java.com.khomsi.game.main.tools.KeyHandler;
 import main.java.com.khomsi.game.main.tools.PlaceObjects;
@@ -39,20 +40,25 @@ public class GamePanel extends JPanel implements Runnable {
     public CheckCollision checkCollision = new CheckCollision(this);
     public PlaceObjects placeObjects = new PlaceObjects(this);
     public Player player = new Player(this, keyHandler);
-
+    //TODO расширить метод, как появится больше обьектом
     public SuperObject[] object = new SuperObject[10];
+    public Entity[] npc = new Entity[10];
 
     public static final int FPS = 60;
     //GameState
     public int gameState;
     public final int playState = 1;
+    //depends on situation, draw dif keyInput
+    public final int pauseState = 2;
+    //until player doesn't press shift, he doesn't run
+    public boolean playerRun = false;
 
     public GamePanel() {
         //set size of this class
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.WHITE);
-        //if true, all drawing from this comp will be done in an offscreen painting buffer.
-        //if turn on, it can improve the performance of rendering
+        //if true, everything drawing from this comp will be done in an offscreen painting buffer.
+        //it can improve the performance of rendering
         this.setDoubleBuffered(true);
         this.addKeyListener(keyHandler);
         //focus to receive key input
@@ -61,7 +67,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame() {
         placeObjects.setObject();
+        placeObjects.setNpc();
         playMusic(0);
+        gameState = playState;
     }
 
     public void startGameThread() {
@@ -95,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable {
                 delta--;
                 drawCount++;
             }
-            if (timer >= 1_000_000_000) {
+            if (timer >= 1_000_000_000 && keyHandler.debugMode) {
                 System.out.println("FPS: " + drawCount);
                 drawCount = 0;
                 timer = 0;
@@ -104,7 +112,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        player.update();
+        if (gameState == playState)
+            player.update();
+        if (gameState == pauseState) {
+            //todo None
+        }
     }
 
     //method to draw the components on screen
@@ -124,6 +136,11 @@ public class GamePanel extends JPanel implements Runnable {
         for (SuperObject superObject : object) {
             if (superObject != null) {
                 superObject.draw(graphics2D, this);
+            }
+        }
+        for (Entity character : npc) {
+            if (character != null) {
+                character.draw(graphics2D);
             }
         }
         //player

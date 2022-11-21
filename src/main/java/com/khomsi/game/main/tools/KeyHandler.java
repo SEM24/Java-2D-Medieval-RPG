@@ -2,7 +2,8 @@ package main.java.com.khomsi.game.main.tools;
 
 import main.java.com.khomsi.game.main.GamePanel;
 
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     GamePanel gamePanel;
@@ -29,8 +30,15 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_S) downPressed = true;
         if (code == KeyEvent.VK_A) leftPressed = true;
         if (code == KeyEvent.VK_D) rightPressed = true;
+        //Pause the game
+        if (code == KeyEvent.VK_P) {
+            if (gamePanel.gameState == gamePanel.playState)
+                gamePanel.gameState = gamePanel.pauseState;
+            else if (gamePanel.gameState == gamePanel.pauseState)
+                gamePanel.gameState = gamePanel.playState;
+        }
+
         //TODO Debug
-        // if it's false, make it true, else make it false
         if (code == KeyEvent.VK_F9) debugMode = !debugMode;
         if (code == KeyEvent.VK_F8) gamePanel.tileManager.loadMap("/maps/world01.txt");
     }
@@ -43,5 +51,15 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_S) downPressed = false;
         if (code == KeyEvent.VK_A) leftPressed = false;
         if (code == KeyEvent.VK_D) rightPressed = false;
+        //TODO when player press shift, character runs faster
+        if (code == KeyEvent.VK_SHIFT) {
+            if (!gamePanel.playerRun) {
+                gamePanel.playerRun = true;
+                gamePanel.player.speed = 4;
+            } else {
+                gamePanel.playerRun = false;
+                gamePanel.player.speed = 3;
+            }
+        }
     }
 }

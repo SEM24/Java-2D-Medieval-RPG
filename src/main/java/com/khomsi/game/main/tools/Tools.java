@@ -2,8 +2,11 @@ package main.java.com.khomsi.game.main.tools;
 
 import main.java.com.khomsi.game.main.GamePanel;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 public class Tools {
     public BufferedImage scaledImage(BufferedImage image, int width, int height) {
@@ -29,7 +32,6 @@ public class Tools {
                     GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
         }
     }
-
 //    public void stopCameraMovement(GamePanel gamePanel, int screenX, int screenY, int worldX, int worldY) {
 //        // STOP MOVING CAMERA
 //        if (worldX < screenX) {

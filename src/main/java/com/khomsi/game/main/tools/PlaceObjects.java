@@ -1,7 +1,7 @@
 package main.java.com.khomsi.game.main.tools;
 
+import main.java.com.khomsi.game.entity.NPC_Woman3;
 import main.java.com.khomsi.game.main.GamePanel;
-import main.java.com.khomsi.game.objects.*;
 
 public class PlaceObjects {
     GamePanel gamePanel;
@@ -11,44 +11,13 @@ public class PlaceObjects {
     }
 
     public void setObject() {
-        gamePanel.object[0] = new KnifeObject();
-        gamePanel.object[0].worldX = GamePanel.TILE_SIZE * 23;
-        gamePanel.object[0].worldY = GamePanel.TILE_SIZE * 7;
 
-        gamePanel.object[1] = new KeyObject();
-        gamePanel.object[1].worldX = GamePanel.TILE_SIZE * 23;
-        gamePanel.object[1].worldY = GamePanel.TILE_SIZE * 40;
+    }
 
-        gamePanel.object[2] = new DogObject();
-        gamePanel.object[2].worldX = GamePanel.TILE_SIZE * 38;
-        gamePanel.object[2].worldY = GamePanel.TILE_SIZE * 12;
+    public void setNpc() {
+        gamePanel.npc[0] = new NPC_Woman3(gamePanel);
+        gamePanel.npc[0].worldX = GamePanel.TILE_SIZE * 21;
+        gamePanel.npc[0].worldY = GamePanel.TILE_SIZE * 21;
 
-        gamePanel.object[3] = new DoorObject();
-        gamePanel.object[3].worldX = GamePanel.TILE_SIZE * 10;
-        gamePanel.object[3].worldY = GamePanel.TILE_SIZE * 11;
-
-        gamePanel.object[4] = new DoorObject();
-        gamePanel.object[4].worldX = GamePanel.TILE_SIZE * 8;
-        gamePanel.object[4].worldY = GamePanel.TILE_SIZE * 28;
-
-        gamePanel.object[5] = new DoorObject();
-        gamePanel.object[5].worldX = GamePanel.TILE_SIZE * 12;
-        gamePanel.object[5].worldY = GamePanel.TILE_SIZE * 22;
-
-        gamePanel.object[6] = new ChestObject();
-        gamePanel.object[6].worldX = GamePanel.TILE_SIZE * 10;
-        gamePanel.object[6].worldY = GamePanel.TILE_SIZE * 7;
-
-        gamePanel.object[7] = new KeyObject();
-        gamePanel.object[7].worldX = GamePanel.TILE_SIZE * 40;
-        gamePanel.object[7].worldY = GamePanel.TILE_SIZE * 12;
-
-        gamePanel.object[8] = new KeyObject();
-        gamePanel.object[8].worldX = GamePanel.TILE_SIZE * 21;
-        gamePanel.object[8].worldY = GamePanel.TILE_SIZE * 7;
-
-        gamePanel.object[9] = new BootsObject();
-        gamePanel.object[9].worldX = GamePanel.TILE_SIZE * 33;
-        gamePanel.object[9].worldY = GamePanel.TILE_SIZE * 36;
     }
 }
