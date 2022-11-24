@@ -1,9 +1,9 @@
 package main.java.com.khomsi.game.main;
 
 import main.java.com.khomsi.game.entity.Entity;
+import main.java.com.khomsi.game.objects.SuperObject;
 
 public class CheckCollision {
-
     GamePanel panel;
 
     public CheckCollision(GamePanel panel) {
@@ -60,6 +60,7 @@ public class CheckCollision {
         }
     }
 
+
     public int checkObject(Entity entity, boolean player) {
         int index = 999;
 
@@ -75,23 +76,24 @@ public class CheckCollision {
                         + panel.object[i].solidArea.x;
                 panel.object[i].solidArea.y = panel.object[i].worldY
                         + panel.object[i].solidArea.y;
+
                 switch (entity.direction) {
                     case "up" -> {
                         entity.solidArea.y -= entity.speed;
-                        index = checkCollisionGetIndex(entity, player, index, i);
+                        index = checkCollisionForPlayer(entity, player, index, i, panel.object);
                         //if it's npc or someone else, they can't pick up tools
                     }
                     case "down" -> {
                         entity.solidArea.y += entity.speed;
-                        index = checkCollisionGetIndex(entity, player, index, i);
+                        index = checkCollisionForPlayer(entity, player, index, i, panel.object);
                     }
                     case "left" -> {
                         entity.solidArea.x -= entity.speed;
-                        index = checkCollisionGetIndex(entity, player, index, i);
+                        index = checkCollisionForPlayer(entity, player, index, i, panel.object);
                     }
                     case "right" -> {
                         entity.solidArea.x += entity.speed;
-                        index = checkCollisionGetIndex(entity, player, index, i);
+                        index = checkCollisionForPlayer(entity, player, index, i, panel.object);
                     }
                 }
                 entity.solidArea.x = entity.solidAreaDefaultX;
@@ -103,9 +105,9 @@ public class CheckCollision {
         return index;
     }
 
-    private int checkCollisionGetIndex(Entity entity, boolean player, int index, int i) {
-        if (entity.solidArea.intersects(panel.object[i].solidArea)) {
-            if (panel.object[i].collision) {
+    private int checkCollisionForPlayer(Entity entity, boolean player, int index, int i, SuperObject[] object) {
+        if (entity.solidArea.intersects(object[i].solidArea)) {
+            if (object[i].collision) {
                 entity.collisionOn = true;
             }
             if (player) {
@@ -113,5 +115,99 @@ public class CheckCollision {
             }
         }
         return index;
+    }
+
+    //NPC/Enemies collision
+    public int checkEntity(Entity entity, Entity[] entities) {
+        int index = 999;
+
+        for (int i = 0; i < entities.length; i++) {
+
+            if (entities[i] != null) {
+                //get entity's solid area pos
+                entity.solidArea.x = entity.worldX + entity.solidArea.x;
+                entity.solidArea.y = entity.worldY + entity.solidArea.y;
+
+                //get the  entity's solid pos
+                entities[i].solidArea.x = entities[i].worldX
+                        + entities[i].solidArea.x;
+                entities[i].solidArea.y = entities[i].worldY
+                        + entities[i].solidArea.y;
+                switch (entity.direction) {
+                    case "up" -> {
+                        entity.solidArea.y -= entity.speed;
+                        index = checkCollisionForNPC(entity, entities, index, i);
+                    }
+                    case "down" -> {
+                        entity.solidArea.y += entity.speed;
+                        index = checkCollisionForNPC(entity, entities, index, i);
+                    }
+                    case "left" -> {
+                        entity.solidArea.x -= entity.speed;
+                        index = checkCollisionForNPC(entity, entities, index, i);
+                    }
+                    case "right" -> {
+                        entity.solidArea.x += entity.speed;
+                        index = checkCollisionForNPC(entity, entities, index, i);
+                    }
+                }
+                entity.solidArea.x = entity.solidAreaDefaultX;
+                entity.solidArea.y = entity.solidAreaDefaultY;
+                entities[i].solidArea.x = entities[i].solidAreaDefaultX;
+                entities[i].solidArea.y = entities[i].solidAreaDefaultY;
+            }
+        }
+        return index;
+    }
+
+    private int checkCollisionForNPC(Entity entity, Entity[] entities, int index, int i) {
+        if (entity.solidArea.intersects(entities[i].solidArea)) {
+            entity.collisionOn = true;
+            index = i;
+        }
+        return index;
+    }
+
+    public void checkPlayer(Entity entity) {
+        //get entity's solid area pos
+        entity.solidArea.x = entity.worldX + entity.solidArea.x;
+        entity.solidArea.y = entity.worldY + entity.solidArea.y;
+
+        //get the obj's solid pos
+        panel.player.solidArea.x = panel.player.worldX
+                + panel.player.solidArea.x;
+        panel.player.solidArea.y = panel.player.worldY
+                + panel.player.solidArea.y;
+
+        switch (entity.direction) {
+            case "up" -> {
+                entity.solidArea.y -= entity.speed;
+                if (entity.solidArea.intersects(panel.player.solidArea)) {
+                    entity.collisionOn = true;
+                }
+            }
+            case "down" -> {
+                entity.solidArea.y += entity.speed;
+                if (entity.solidArea.intersects(panel.player.solidArea)) {
+                    entity.collisionOn = true;
+                }
+            }
+            case "left" -> {
+                entity.solidArea.x -= entity.speed;
+                if (entity.solidArea.intersects(panel.player.solidArea)) {
+                    entity.collisionOn = true;
+                }
+            }
+            case "right" -> {
+                entity.solidArea.x += entity.speed;
+                if (entity.solidArea.intersects(panel.player.solidArea)) {
+                    entity.collisionOn = true;
+                }
+            }
+        }
+        entity.solidArea.x = entity.solidAreaDefaultX;
+        entity.solidArea.y = entity.solidAreaDefaultY;
+        panel.player.solidArea.x = panel.player.solidAreaDefaultX;
+        panel.player.solidArea.y = panel.player.solidAreaDefaultY;
     }
 }

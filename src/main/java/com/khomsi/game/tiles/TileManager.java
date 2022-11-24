@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class TileManager {
-    //TODO Добавить анимацию воды, как тут в ссылке(https://stackoverflow.com/questions/17387028/java-water-tile-animation)
-    //Использовать тот же принцип, как и с игроком, но так же обновлять еще тайлы
     GamePanel gamePanel;
     public Tiles[] tiles;
     public int[][] mapTileNum;
@@ -28,6 +26,7 @@ public class TileManager {
         this.gamePanel = gamePanel;
 
         //here change the path to tile data(collision, names)
+
         InputStream input = getClass().getResourceAsStream(resourcePath[1] + "tiledata.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 Objects.requireNonNull(input)));
@@ -56,9 +55,9 @@ public class TileManager {
             String line1 = reader.readLine();
             String[] maxTile = line1.split(" ");
 
-            GamePanel.MAX_WORLD_COL = maxTile.length;
-            GamePanel.MAX_WORLD_ROW = maxTile.length;
-            mapTileNum = new int[GamePanel.MAX_WORLD_COL][GamePanel.MAX_WORLD_ROW];
+            GamePanel.maxWorldCol = maxTile.length;
+            GamePanel.maxWorldRow = maxTile.length;
+            mapTileNum = new int[GamePanel.maxWorldCol][GamePanel.maxWorldRow];
             reader.close();
         } catch (IOException e) {
             System.err.println("Exception in TileManage in " + getClass().getSimpleName());
@@ -79,7 +78,6 @@ public class TileManager {
      We handle all duplicated lines, like initialization import img, scale, set collision in this method
      */
     public void setup(int index, String imageName, boolean collision) {
-        Tools tools = new Tools();
         try {
             tiles[index] = new Tiles();
             tiles[index].image = ImageIO.read(Objects.requireNonNull(
@@ -99,9 +97,9 @@ public class TileManager {
                      Objects.requireNonNull(inputStream)))) {
             int col = 0;
             int row = 0;
-            while (col < GamePanel.MAX_WORLD_COL && row < GamePanel.MAX_WORLD_ROW) {
+            while (col < GamePanel.maxWorldCol && row < GamePanel.maxWorldRow) {
                 String line = reader.readLine();
-                while (col < GamePanel.MAX_WORLD_COL) {
+                while (col < GamePanel.maxWorldCol) {
                     String[] numbers = line.split(" ");
 
                     int number = Integer.parseInt(numbers[col]); //use col as index for array
@@ -109,7 +107,7 @@ public class TileManager {
                     mapTileNum[col][row] = number;
                     col++;
                 }
-                if (col == GamePanel.MAX_WORLD_COL) {
+                if (col == GamePanel.maxWorldCol) {
                     col = 0;
                     row++;
                 }
@@ -124,7 +122,7 @@ public class TileManager {
         int worldCol = 0;
         int worldRow = 0;
 
-        while (worldCol < GamePanel.MAX_WORLD_COL && worldRow < GamePanel.MAX_WORLD_ROW) {
+        while (worldCol < GamePanel.maxWorldCol && worldRow < GamePanel.maxWorldRow) {
 
             int tileNum = mapTileNum[worldCol][worldRow];
             //coords for world map
@@ -135,7 +133,7 @@ public class TileManager {
             int screenY = worldY - gamePanel.player.worldY + gamePanel.player.screenY;
             tools.optimizeMapDraw(graphics2D, tiles[tileNum].image, gamePanel, screenX, screenY, worldX, worldY);
             worldCol++;
-            if (worldCol == GamePanel.MAX_WORLD_COL) {
+            if (worldCol == GamePanel.maxWorldCol) {
                 worldCol = 0;
 
                 worldRow++;

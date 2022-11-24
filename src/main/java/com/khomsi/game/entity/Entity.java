@@ -22,14 +22,80 @@ public class Entity {
     public int standCounter = 0;
     public int spriteNum = 0;
     //Default values for every entity
-    public Rectangle solidArea = new Rectangle(10, 16, 28, 28);
+    public Rectangle solidArea = new Rectangle(8, 16, 31, 32);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
+    public int lockCounter = 0;
+    String[] dialogues = new String[20];
+    int dialogIndex = 0;
     GamePanel gamePanel;
     Tools tools = new Tools();
 
     public Entity(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
+    }
+
+    public void setAction() {
+
+    }
+
+    public void speak() {
+        if (dialogues[dialogIndex] == null) {
+            dialogIndex = 0;
+        }
+        gamePanel.ui.currentDialog = dialogues[dialogIndex];
+        dialogIndex++;
+        switch (gamePanel.player.direction) {
+            case "up" -> direction = "down";
+            case "down" -> direction = "up";
+            case "left" -> direction = "right";
+            case "right" -> direction = "left";
+        }
+    }
+
+    public void update() {
+        setAction();
+        collisionOn = false;
+        gamePanel.checkCollision.checkTile(this);
+        gamePanel.checkCollision.checkObject(this, false);
+        gamePanel.checkCollision.checkPlayer(this);
+
+        spriteMovement();
+    }
+
+    public void spriteMovement() {
+        if (!collisionOn) {
+            switch (direction) {
+                case "up" -> worldY -= speed;
+                case "down" -> worldY += speed;
+                case "left" -> worldX -= speed;
+                case "right" -> worldX += speed;
+            }
+        }
+        //Changing sprites, depends on nums
+        spriteCounter++;
+        if (spriteCounter <= 13) {
+            spriteNum = 1;
+        }
+        if (spriteCounter > 13 && spriteCounter <= 23) {
+            spriteNum = 2;
+        }
+        if (spriteCounter > 23 && spriteCounter <= 33) {
+            spriteNum = 3;
+        }
+        if (spriteCounter > 33 && spriteCounter <= 42) {
+            spriteNum = 2;
+        }
+        if (spriteCounter > 42) {
+            spriteCounter = 0;
+        } else {
+            standCounter++;
+            //timer before the idle anim starts
+            if (standCounter == 42) {
+                spriteNum = 0;  // Idle sprite
+                standCounter = 0;
+            }
+        }
     }
 
     public void draw(Graphics2D graphics2D) {

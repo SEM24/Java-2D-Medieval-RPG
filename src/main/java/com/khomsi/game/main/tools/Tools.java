@@ -32,21 +32,4 @@ public class Tools {
                     GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
         }
     }
-//    public void stopCameraMovement(GamePanel gamePanel, int screenX, int screenY, int worldX, int worldY) {
-//        // STOP MOVING CAMERA
-//        if (worldX < screenX) {
-//            screenX = worldX;
-//        }
-//        if (worldY < screenY) {
-//            screenY = worldY;
-//        }
-//        int rightOffset = GamePanel.SCREEN_WIDTH - screenX;
-//        if (rightOffset > gamePanel.worldWidth - worldX) {
-//            screenX = GamePanel.SCREEN_WIDTH - (gamePanel.worldWidth - worldX);
-//        }
-//        int bottomOffset = GamePanel.SCREEN_HEIGHT - gamePanel.player.screenY;
-//        if (bottomOffset > gamePanel.worldHeight - worldY) {
-//            screenY = GamePanel.SCREEN_HEIGHT - (gamePanel.worldHeight - worldY);
-//        }
-//    }
 }

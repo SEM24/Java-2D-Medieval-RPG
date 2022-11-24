@@ -26,11 +26,11 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW; //576 pixels
 
     //World settings
-    public static int MAX_WORLD_COL;
+    public static int maxWorldCol;
 
-    public static int MAX_WORLD_ROW;
+    public static int maxWorldRow;
 
-    KeyHandler keyHandler = new KeyHandler(this);
+    public KeyHandler keyHandler = new KeyHandler(this);
     public TileManager tileManager = new TileManager(this);
     Sound music = new Sound();
     Sound se = new Sound();
@@ -40,13 +40,15 @@ public class GamePanel extends JPanel implements Runnable {
     public CheckCollision checkCollision = new CheckCollision(this);
     public PlaceObjects placeObjects = new PlaceObjects(this);
     public Player player = new Player(this, keyHandler);
-    //TODO расширить метод, как появится больше обьектом
+    //TODO расширить метод, как появится больше обьектов (ключи, сундуки и тд)
     public SuperObject[] object = new SuperObject[10];
     public Entity[] npc = new Entity[10];
 
     public static final int FPS = 60;
     //GameState
     public int gameState;
+    public final int titleState = 0;
+    public final int dialogueState = 3;
     public final int playState = 1;
     //depends on situation, draw dif keyInput
     public final int pauseState = 2;
@@ -56,7 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         //set size of this class
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        this.setBackground(Color.WHITE);
+        this.setBackground(Color.BLACK);
         //if true, everything drawing from this comp will be done in an offscreen painting buffer.
         //it can improve the performance of rendering
         this.setDoubleBuffered(true);
@@ -68,7 +70,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         placeObjects.setObject();
         placeObjects.setNpc();
-        playMusic(0);
+//        playMusic(0);
         gameState = playState;
     }
 
@@ -112,10 +114,16 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (gameState == playState)
+        //player
+        if (gameState == playState) {
             player.update();
+            //npc
+            for (Entity entity : npc) {
+                if (entity != null) entity.update();
+            }
+        }
         if (gameState == pauseState) {
-            //todo None
+            //todo make game to stop
         }
     }
 
@@ -131,22 +139,31 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyHandler.debugMode)
             drawStart = System.nanoTime();
 
-        tileManager.draw(graphics2D);
-        //object
-        for (SuperObject superObject : object) {
-            if (superObject != null) {
-                superObject.draw(graphics2D, this);
+
+        //title screen
+//        if (gameState == titleState) {
+//            ui.draw(graphics2D);
+//        }
+        //others
+//        else {
+            tileManager.draw(graphics2D);
+
+            //object
+            for (SuperObject superObject : object) {
+                if (superObject != null) {
+                    superObject.draw(graphics2D, this);
+                }
             }
-        }
-        for (Entity character : npc) {
-            if (character != null) {
-                character.draw(graphics2D);
+            for (Entity character : npc) {
+                if (character != null) {
+                    character.draw(graphics2D);
+                }
             }
-        }
-        //player
-        player.draw(graphics2D);
-        //UI(text)
-        ui.draw(graphics2D);
+            //player
+            player.draw(graphics2D);
+            //UI(text)
+            ui.draw(graphics2D);
+//        }
         //TODO Debug function
         if (keyHandler.debugMode) {
             long drawEnd = System.nanoTime();
@@ -186,6 +203,7 @@ public class GamePanel extends JPanel implements Runnable {
         music.loop();
     }
 
+    //TODO suppose to use this in future
     public void stopMusic() {
         music.stop();
     }

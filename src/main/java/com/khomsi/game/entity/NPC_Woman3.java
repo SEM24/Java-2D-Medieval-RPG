@@ -2,6 +2,8 @@ package main.java.com.khomsi.game.entity;
 
 import main.java.com.khomsi.game.main.GamePanel;
 
+import java.util.Random;
+
 public class NPC_Woman3 extends Entity {
 
     public NPC_Woman3(GamePanel gamePanel) {
@@ -9,6 +11,7 @@ public class NPC_Woman3 extends Entity {
         direction = "down";
         speed = 2;
         getImage();
+        setDialog();
     }
 
     public void getImage() {
@@ -28,5 +31,40 @@ public class NPC_Woman3 extends Entity {
         right1 = setup("/npc/woman3_right_1");
         right2 = setup("/npc/woman3_right_2");
         right3 = setup("/npc/woman3_right_3");
+    }
+
+    public void setDialog() {
+        dialogues[0] = "Hello young man!";
+        dialogues[1] = "How are you today?\nIt's a nice weather, isn't it?";
+        dialogues[2] = "Are you a adventure traveler?";
+        dialogues[3] = "Well, I wish you good luck to\nfind something interesting!";
+        dialogues[4] = "If you need something,\nI'll be happy to help you!";
+    }
+
+    //set npc movement
+    public void setAction() {
+        lockCounter++;
+        if (lockCounter == 120) {
+            Random random = new Random();
+            int i = random.nextInt(100) + 1;
+            if (i <= 30) {
+                direction = "up";
+            }
+            if (i > 30 && i <= 50) {
+                direction = "down";
+            }
+            if (i > 50 && i <= 75) {
+                direction = "left";
+            }
+            if (i > 75) {
+                direction = "right";
+            }
+            lockCounter = 0;
+        }
+    }
+
+    //Maybe add special stuff, different custom text for this character
+    public void speak() {
+        super.speak();
     }
 }

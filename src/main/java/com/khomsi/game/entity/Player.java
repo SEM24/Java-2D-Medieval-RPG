@@ -2,14 +2,12 @@ package main.java.com.khomsi.game.entity;
 
 import main.java.com.khomsi.game.main.GamePanel;
 import main.java.com.khomsi.game.main.tools.KeyHandler;
-import main.java.com.khomsi.game.main.tools.Tools;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
     KeyHandler keyHandler;
-    Tools tools = new Tools();
     private final String playerPath = "/player/";
     public final int screenX, screenY;
 
@@ -21,15 +19,15 @@ public class Player extends Entity {
         screenY = GamePanel.SCREEN_HEIGHT / 2 - (GamePanel.TILE_SIZE / 2);
 
         solidArea = new Rectangle();
-        solidArea.x = 10;
+        solidArea.x = 8;
         solidArea.y = 16;
 
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         //boundaries of player
         //TODO adjust it if needed
-        solidArea.width = 28;
-        solidArea.height = 28;
+        solidArea.width = 31;
+        solidArea.height = 32;
 
         setDefaultValues();
         getPlayerImage();
@@ -85,40 +83,20 @@ public class Player extends Entity {
             //Check obj collision
             int objIndex = gamePanel.checkCollision.checkObject(this, true);
             takeObject(objIndex);
+            int npcIndex = gamePanel.checkCollision.checkEntity(this, gamePanel.npc);
+            interactNpc(npcIndex);
             //If collision false, play player move
-            if (!collisionOn) {
-                switch (direction) {
-                    case "up" -> worldY -= speed;
-                    case "down" -> worldY += speed;
-                    case "left" -> worldX -= speed;
-                    case "right" -> worldX += speed;
-                }
-            }
-            //Changing sprites, depends on nums
-            spriteCounter++;
-            if (spriteCounter <= 13) {
-                spriteNum = 1;
-            }
-            if (spriteCounter > 13 && spriteCounter <= 23) {
-                spriteNum = 2;
-            }
-            if (spriteCounter > 23 && spriteCounter <= 33) {
-                spriteNum = 3;
-            }
-            if (spriteCounter > 33 && spriteCounter <= 42) {
-                spriteNum = 2;
-            }
-            if (spriteCounter > 42) {
-                spriteCounter = 0;
-            }
-        } else {
-            standCounter++;
-            //timer before the idle anim starts
-            if (standCounter == 42) {
-                spriteNum = 0;  // Idle sprite
-                standCounter = 0;
-            }
+            spriteMovement();
         }
+    }
+
+    private void interactNpc(int npcIndex) {
+        //if index not 999 - player touches the npc
+        if (npcIndex != 999 && gamePanel.keyHandler.enterPressed) {
+            gamePanel.gameState = gamePanel.dialogueState;
+            gamePanel.npc[npcIndex].speak();
+        }
+        gamePanel.keyHandler.enterPressed = false;
     }
 
     public void takeObject(int index) {
