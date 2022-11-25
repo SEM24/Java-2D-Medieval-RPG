@@ -88,14 +88,18 @@ public class Entity {
         }
         if (spriteCounter > 42) {
             spriteCounter = 0;
-        } else {
-            standCounter++;
-            //timer before the idle anim starts
-            if (standCounter == 42) {
-                spriteNum = 0;  // Idle sprite
-                standCounter = 0;
-            }
         }
+        //FIXME не будет появляться спрайт, когда стоит,
+        // тк там это происходило при условии, что кнопки не нажаты, а тут нпс, как тогда
+        // Лучше будет разделить этот счетчик и счетчик нпс, тк могут быть конфликты
+//        else {
+//            standCounter++;
+//            //timer before the idle anim starts
+//            if (standCounter == 42) {
+//                spriteNum = 0;  // Idle sprite
+//                standCounter = 0;
+//            }
+//        }
     }
 
     public void draw(Graphics2D graphics2D) {

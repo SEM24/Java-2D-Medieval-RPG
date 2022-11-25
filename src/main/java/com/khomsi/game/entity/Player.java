@@ -87,6 +87,13 @@ public class Player extends Entity {
             interactNpc(npcIndex);
             //If collision false, play player move
             spriteMovement();
+        } else {
+            standCounter++;
+            //timer before the idle anim starts
+            if (standCounter == 42) {
+                spriteNum = 0;  // Idle sprite
+                standCounter = 0;
+            }
         }
     }
 

@@ -9,7 +9,7 @@ public class NPC_Woman3 extends Entity {
     public NPC_Woman3(GamePanel gamePanel) {
         super(gamePanel);
         direction = "down";
-        speed = 2;
+        speed = 1;
         getImage();
         setDialog();
     }
@@ -47,6 +47,9 @@ public class NPC_Woman3 extends Entity {
         if (lockCounter == 120) {
             Random random = new Random();
             int i = random.nextInt(100) + 1;
+            if (i <= 30) {
+                direction = "up";
+            }
             if (i <= 30) {
                 direction = "up";
             }

@@ -71,7 +71,7 @@ public class GamePanel extends JPanel implements Runnable {
         placeObjects.setObject();
         placeObjects.setNpc();
 //        playMusic(0);
-        gameState = playState;
+        gameState = titleState;
     }
 
     public void startGameThread() {
@@ -141,11 +141,11 @@ public class GamePanel extends JPanel implements Runnable {
 
 
         //title screen
-//        if (gameState == titleState) {
-//            ui.draw(graphics2D);
-//        }
+        if (gameState == titleState) {
+            ui.draw(graphics2D);
+        }
         //others
-//        else {
+        else {
             tileManager.draw(graphics2D);
 
             //object
@@ -163,7 +163,7 @@ public class GamePanel extends JPanel implements Runnable {
             player.draw(graphics2D);
             //UI(text)
             ui.draw(graphics2D);
-//        }
+        }
         //TODO Debug function
         if (keyHandler.debugMode) {
             long drawEnd = System.nanoTime();
