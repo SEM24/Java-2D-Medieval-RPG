@@ -1,23 +1,20 @@
 package main.java.com.khomsi.game.objects;
 
-import main.java.com.khomsi.game.main.GamePanel;
+import main.java.com.khomsi.game.entity.Entity;
+import main.java.com.khomsi.game.main.GameManager;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.Objects;
+public class DoorObject extends Entity {
 
-public class DoorObject extends SuperObject {
-
-    public DoorObject() {
+    public DoorObject(GameManager gameManager) {
+        super(gameManager);
         name = "Door";
-        try {
-            image = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream("/objects/door.png")));
-            tools.scaledImage(image, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
-        } catch (IOException e) {
-            System.err.println("Error in " + getClass().getSimpleName());
-            e.printStackTrace();
-        }
+        down = setup("/objects/door");
         collision = true;
+        solidArea.x = 0;
+        solidArea.y = 16;
+        solidArea.width = 48;
+        solidArea.height = 32;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
     }
 }

@@ -1,6 +1,6 @@
 package main.java.com.khomsi.game.tiles;
 
-import main.java.com.khomsi.game.main.GamePanel;
+import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.main.tools.Tools;
 
 import javax.imageio.ImageIO;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class TileManager {
-    GamePanel gamePanel;
+    GameManager gameManager;
     public Tiles[] tiles;
     public int[][] mapTileNum;
     private final String[] resourcePath = {"/tiles/", "/maps/"};
@@ -22,8 +22,8 @@ public class TileManager {
     List<String> collisionStatus = new ArrayList<>();
     Tools tools = new Tools();
 
-    public TileManager(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
+    public TileManager(GameManager gameManager) {
+        this.gameManager = gameManager;
 
         //here change the path to tile data(collision, names)
 
@@ -55,9 +55,9 @@ public class TileManager {
             String line1 = reader.readLine();
             String[] maxTile = line1.split(" ");
 
-            GamePanel.maxWorldCol = maxTile.length;
-            GamePanel.maxWorldRow = maxTile.length;
-            mapTileNum = new int[GamePanel.maxWorldCol][GamePanel.maxWorldRow];
+            GameManager.maxWorldCol = maxTile.length;
+            GameManager.maxWorldRow = maxTile.length;
+            mapTileNum = new int[GameManager.maxWorldCol][GameManager.maxWorldRow];
             reader.close();
         } catch (IOException e) {
             System.err.println("Exception in TileManage in " + getClass().getSimpleName());
@@ -82,7 +82,7 @@ public class TileManager {
             tiles[index] = new Tiles();
             tiles[index].image = ImageIO.read(Objects.requireNonNull(
                     getClass().getResourceAsStream(resourcePath[0] + imageName)));
-            tiles[index].image = tools.scaledImage(tiles[index].image, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
+            tiles[index].image = tools.scaledImage(tiles[index].image, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
             tiles[index].collision = collision;
 
         } catch (IOException e) {
@@ -97,9 +97,9 @@ public class TileManager {
                      Objects.requireNonNull(inputStream)))) {
             int col = 0;
             int row = 0;
-            while (col < GamePanel.maxWorldCol && row < GamePanel.maxWorldRow) {
+            while (col < GameManager.maxWorldCol && row < GameManager.maxWorldRow) {
                 String line = reader.readLine();
-                while (col < GamePanel.maxWorldCol) {
+                while (col < GameManager.maxWorldCol) {
                     String[] numbers = line.split(" ");
 
                     int number = Integer.parseInt(numbers[col]); //use col as index for array
@@ -107,7 +107,7 @@ public class TileManager {
                     mapTileNum[col][row] = number;
                     col++;
                 }
-                if (col == GamePanel.maxWorldCol) {
+                if (col == GameManager.maxWorldCol) {
                     col = 0;
                     row++;
                 }
@@ -122,18 +122,18 @@ public class TileManager {
         int worldCol = 0;
         int worldRow = 0;
 
-        while (worldCol < GamePanel.maxWorldCol && worldRow < GamePanel.maxWorldRow) {
+        while (worldCol < GameManager.maxWorldCol && worldRow < GameManager.maxWorldRow) {
 
             int tileNum = mapTileNum[worldCol][worldRow];
             //coords for world map
-            int worldX = worldCol * GamePanel.TILE_SIZE;
-            int worldY = worldRow * GamePanel.TILE_SIZE;
+            int worldX = worldCol * GameManager.TILE_SIZE;
+            int worldY = worldRow * GameManager.TILE_SIZE;
             //actual coords to draw the stuff on game screen
-            int screenX = worldX - gamePanel.player.worldX + gamePanel.player.screenX;
-            int screenY = worldY - gamePanel.player.worldY + gamePanel.player.screenY;
-            tools.optimizeMapDraw(graphics2D, tiles[tileNum].image, gamePanel, screenX, screenY, worldX, worldY);
+            int screenX = worldX - gameManager.player.worldX + gameManager.player.screenX;
+            int screenY = worldY - gameManager.player.worldY + gameManager.player.screenY;
+            tools.optimizeMapDraw(graphics2D, tiles[tileNum].image, gameManager, screenX, screenY, worldX, worldY);
             worldCol++;
-            if (worldCol == GamePanel.maxWorldCol) {
+            if (worldCol == GameManager.maxWorldCol) {
                 worldCol = 0;
 
                 worldRow++;
