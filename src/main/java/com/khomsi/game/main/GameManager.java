@@ -2,17 +2,17 @@ package main.java.com.khomsi.game.main;
 
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.entity.Player;
-import main.java.com.khomsi.game.main.tools.KeyHandler;
-import main.java.com.khomsi.game.main.tools.PlaceObjects;
-import main.java.com.khomsi.game.main.tools.Sound;
-import main.java.com.khomsi.game.main.tools.UI;
-import main.java.com.khomsi.game.objects.SuperObject;
+import main.java.com.khomsi.game.main.tools.*;
 import main.java.com.khomsi.game.tiles.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-public class GamePanel extends JPanel implements Runnable {
+public class GameManager extends JPanel implements Runnable {
     //Screen settings
 
     static final int ORIGINAL_TILE_SIZE = 16; //16x16 tiles
@@ -40,9 +40,11 @@ public class GamePanel extends JPanel implements Runnable {
     public CheckCollision checkCollision = new CheckCollision(this);
     public PlaceObjects placeObjects = new PlaceObjects(this);
     public Player player = new Player(this, keyHandler);
+    public EventHandler eventHandler = new EventHandler(this);
     //TODO расширить метод, как появится больше обьектов (ключи, сундуки и тд)
-    public SuperObject[] object = new SuperObject[10];
+    public Entity[] object = new Entity[10];
     public Entity[] npc = new Entity[10];
+    List<Entity> entities = new ArrayList<>();
 
     public static final int FPS = 60;
     //GameState
@@ -55,7 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
     //until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
 
-    public GamePanel() {
+    public GameManager() {
         //set size of this class
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.BLACK);
@@ -70,7 +72,6 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         placeObjects.setObject();
         placeObjects.setNpc();
-//        playMusic(0);
         gameState = titleState;
     }
 
@@ -146,21 +147,26 @@ public class GamePanel extends JPanel implements Runnable {
         }
         //others
         else {
+            //Draw Tiles
             tileManager.draw(graphics2D);
+            entities.add(player);
 
-            //object
-            for (SuperObject superObject : object) {
-                if (superObject != null) {
-                    superObject.draw(graphics2D, this);
-                }
+            for (Entity entityNpc : npc) {
+                if (entityNpc != null)
+                    entities.add(entityNpc);
             }
-            for (Entity character : npc) {
-                if (character != null) {
-                    character.draw(graphics2D);
-                }
+            for (Entity entityObj : object) {
+                if (entityObj != null)
+                    entities.add(entityObj);
             }
-            //player
-            player.draw(graphics2D);
+            //Sort entities
+            entities.sort(new EntityComparator());
+            //Draw them
+            for (Entity entity : entities) {
+                entity.draw(graphics2D);
+            }
+            //Make list empty to not overload it
+            entities.clear();
             //UI(text)
             ui.draw(graphics2D);
         }
@@ -203,7 +209,7 @@ public class GamePanel extends JPanel implements Runnable {
         music.loop();
     }
 
-    //TODO suppose to use this in future
+    //TODO supposed to be used in future
     public void stopMusic() {
         music.stop();
     }

@@ -1,23 +1,27 @@
 package main.java.com.khomsi.game.entity;
 
-import main.java.com.khomsi.game.main.GamePanel;
+import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.main.tools.Tools;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Objects;
 
 //parent class for player, monster ect
 public class Entity {
+    public BufferedImage image, image2, image3;
+    public String name;
+    public boolean collision = false;
     //Set default position
     public int worldX, worldY;
     public int speed;
     //we store our images in this variables
     public BufferedImage up, up1, up2, up3, down, down1, down2, down3,
             left, left1, left2, left3, right, right1, right2, right3;
-    public String direction;
+    public String direction = "down";
     public int spriteCounter = 0;
     public int standCounter = 0;
     public int spriteNum = 0;
@@ -27,12 +31,15 @@ public class Entity {
     public boolean collisionOn = false;
     public int lockCounter = 0;
     String[] dialogues = new String[20];
+    //Char status
+    public int maxHp;
+    public int hp;
     int dialogIndex = 0;
-    GamePanel gamePanel;
-    Tools tools = new Tools();
+    GameManager gameManager;
+    public Tools tools = new Tools();
 
-    public Entity(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
+    public Entity(GameManager gameManager) {
+        this.gameManager = gameManager;
     }
 
     public void setAction() {
@@ -43,9 +50,9 @@ public class Entity {
         if (dialogues[dialogIndex] == null) {
             dialogIndex = 0;
         }
-        gamePanel.ui.currentDialog = dialogues[dialogIndex];
+        gameManager.ui.currentDialog = dialogues[dialogIndex];
         dialogIndex++;
-        switch (gamePanel.player.direction) {
+        switch (gameManager.player.direction) {
             case "up" -> direction = "down";
             case "down" -> direction = "up";
             case "left" -> direction = "right";
@@ -56,9 +63,9 @@ public class Entity {
     public void update() {
         setAction();
         collisionOn = false;
-        gamePanel.checkCollision.checkTile(this);
-        gamePanel.checkCollision.checkObject(this, false);
-        gamePanel.checkCollision.checkPlayer(this);
+        gameManager.checkCollision.checkTile(this);
+        gameManager.checkCollision.checkObject(this, false);
+        gameManager.checkCollision.checkPlayer(this);
 
         spriteMovement();
     }
@@ -104,10 +111,10 @@ public class Entity {
 
     public void draw(Graphics2D graphics2D) {
         //actual coords to draw the stuff on game screen
-        int screenX = worldX - gamePanel.player.worldX + gamePanel.player.screenX;
-        int screenY = worldY - gamePanel.player.worldY + gamePanel.player.screenY;
+        int screenX = worldX - gameManager.player.worldX + gameManager.player.screenX;
+        int screenY = worldY - gameManager.player.worldY + gameManager.player.screenY;
         BufferedImage image = characterSpriteDirection();
-        tools.optimizeMapDraw(graphics2D, image, gamePanel, screenX, screenY, worldX, worldY);
+        tools.optimizeMapDraw(graphics2D, image, gameManager, screenX, screenY, worldX, worldY);
     }
 
     //Use this method to change the sprite direction of character
@@ -148,11 +155,12 @@ public class Entity {
         try {
             image = ImageIO.read(Objects.requireNonNull(
                     getClass().getResourceAsStream(imagePath + ".png")));
-            image = tools.scaledImage(image, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
+            image = tools.scaledImage(image, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
         } catch (IOException e) {
             System.err.println("Error in setup in " + getClass().getSimpleName());
             e.printStackTrace();
         }
         return image;
     }
+
 }

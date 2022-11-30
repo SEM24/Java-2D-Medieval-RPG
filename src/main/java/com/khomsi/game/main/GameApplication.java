@@ -15,15 +15,15 @@ public class GameApplication {
         //can't resize window
         window.setResizable(false);
         window.setTitle("My 2D Adventure Game");
-        GamePanel gamePanel = new GamePanel();
-        window.add(gamePanel);
+        GameManager gameManager = new GameManager();
+        window.add(gameManager);
         window.pack();
 
         //the window will be displayed in the center of the screen
         window.setLocationRelativeTo(null);
         //we can see the window
         window.setVisible(true);
-        gamePanel.setupGame();
-        gamePanel.startGameThread();
+        gameManager.setupGame();
+        gameManager.startGameThread();
     }
 }

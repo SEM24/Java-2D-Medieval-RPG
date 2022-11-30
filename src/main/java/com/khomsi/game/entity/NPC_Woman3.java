@@ -1,13 +1,13 @@
 package main.java.com.khomsi.game.entity;
 
-import main.java.com.khomsi.game.main.GamePanel;
+import main.java.com.khomsi.game.main.GameManager;
 
 import java.util.Random;
 
 public class NPC_Woman3 extends Entity {
 
-    public NPC_Woman3(GamePanel gamePanel) {
-        super(gamePanel);
+    public NPC_Woman3(GameManager gameManager) {
+        super(gameManager);
         direction = "down";
         speed = 1;
         getImage();

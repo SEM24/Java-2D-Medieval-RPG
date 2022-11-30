@@ -1,12 +1,11 @@
 package main.java.com.khomsi.game.main;
 
 import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.objects.SuperObject;
 
 public class CheckCollision {
-    GamePanel panel;
+    GameManager panel;
 
-    public CheckCollision(GamePanel panel) {
+    public CheckCollision(GameManager panel) {
         this.panel = panel;
     }
 
@@ -17,34 +16,34 @@ public class CheckCollision {
         int entityTopWorldY = entity.worldY + entity.solidArea.y;
         int entityBottomWorldY = entity.worldY + entity.solidArea.y + entity.solidArea.height;
 
-        int entityLeftCol = entityLeftWorldX / GamePanel.TILE_SIZE;
-        int entityRightCol = entityRightWorldX / GamePanel.TILE_SIZE;
-        int entityTopRow = entityTopWorldY / GamePanel.TILE_SIZE;
-        int entityBottomRow = entityBottomWorldY / GamePanel.TILE_SIZE;
+        int entityLeftCol = entityLeftWorldX / GameManager.TILE_SIZE;
+        int entityRightCol = entityRightWorldX / GameManager.TILE_SIZE;
+        int entityTopRow = entityTopWorldY / GameManager.TILE_SIZE;
+        int entityBottomRow = entityBottomWorldY / GameManager.TILE_SIZE;
 
         int tileNum1, tileNum2;
 
         switch (entity.direction) {
             case "up" -> {
-                entityTopRow = (entityTopWorldY - entity.speed) / GamePanel.TILE_SIZE;
+                entityTopRow = (entityTopWorldY - entity.speed) / GameManager.TILE_SIZE;
                 tileNum1 = panel.tileManager.mapTileNum[entityLeftCol][entityTopRow];
                 tileNum2 = panel.tileManager.mapTileNum[entityRightCol][entityTopRow];
                 activateCollision(entity, tileNum1, tileNum2);
             }
             case "down" -> {
-                entityBottomRow = (entityBottomWorldY + entity.speed) / GamePanel.TILE_SIZE;
+                entityBottomRow = (entityBottomWorldY + entity.speed) / GameManager.TILE_SIZE;
                 tileNum1 = panel.tileManager.mapTileNum[entityLeftCol][entityBottomRow];
                 tileNum2 = panel.tileManager.mapTileNum[entityRightCol][entityBottomRow];
                 activateCollision(entity, tileNum1, tileNum2);
             }
             case "left" -> {
-                entityLeftCol = (entityLeftWorldX - entity.speed) / GamePanel.TILE_SIZE;
+                entityLeftCol = (entityLeftWorldX - entity.speed) / GameManager.TILE_SIZE;
                 tileNum1 = panel.tileManager.mapTileNum[entityLeftCol][entityTopRow];
                 tileNum2 = panel.tileManager.mapTileNum[entityLeftCol][entityBottomRow];
                 activateCollision(entity, tileNum1, tileNum2);
             }
             case "right" -> {
-                entityRightCol = (entityRightWorldX + entity.speed) / GamePanel.TILE_SIZE;
+                entityRightCol = (entityRightWorldX + entity.speed) / GameManager.TILE_SIZE;
                 tileNum1 = panel.tileManager.mapTileNum[entityRightCol][entityTopRow];
                 tileNum2 = panel.tileManager.mapTileNum[entityRightCol][entityBottomRow];
                 activateCollision(entity, tileNum1, tileNum2);
@@ -105,7 +104,7 @@ public class CheckCollision {
         return index;
     }
 
-    private int checkCollisionForPlayer(Entity entity, boolean player, int index, int i, SuperObject[] object) {
+    private int checkCollisionForPlayer(Entity entity, boolean player, int index, int i, Entity[] object) {
         if (entity.solidArea.intersects(object[i].solidArea)) {
             if (object[i].collision) {
                 entity.collisionOn = true;
