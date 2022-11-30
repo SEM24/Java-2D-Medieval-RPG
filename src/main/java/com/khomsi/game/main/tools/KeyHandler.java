@@ -1,18 +1,18 @@
 package main.java.com.khomsi.game.main.tools;
 
-import main.java.com.khomsi.game.main.GamePanel;
+import main.java.com.khomsi.game.main.GameManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
-    GamePanel gamePanel;
+    GameManager gameManager;
     public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
     //Debug
     public boolean debugMode = false;
 
-    public KeyHandler(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
+    public KeyHandler(GameManager gameManager) {
+        this.gameManager = gameManager;
     }
 
     @Override
@@ -26,48 +26,86 @@ public class KeyHandler implements KeyListener {
         //for example, 17-ctrl, 8-backspace, 10-enter
         int code = e.getKeyCode();
         //Title state
-        if (gamePanel.gameState == gamePanel.titleState) {
-            if (code == KeyEvent.VK_W) {
-                gamePanel.ui.commandNum--;
-                if (gamePanel.ui.commandNum < 0) gamePanel.ui.commandNum = 2;
-            }
-            if (code == KeyEvent.VK_S) {
-                gamePanel.ui.commandNum++;
-                if (gamePanel.ui.commandNum > 2) gamePanel.ui.commandNum = 0;
-            }
-            if (code == KeyEvent.VK_ENTER) {
-                switch (gamePanel.ui.commandNum) {
-                    case 0 -> {
-                        gamePanel.gameState = gamePanel.playState;
-                        gamePanel.playMusic(0);
+        if (gameManager.gameState == gameManager.titleState) {
+            if (gameManager.ui.titleScreenState == 0) {
+                if (code == KeyEvent.VK_W) {
+                    gameManager.ui.commandNum--;
+                    if (gameManager.ui.commandNum < 0) gameManager.ui.commandNum = 2;
+                }
+                if (code == KeyEvent.VK_S) {
+                    gameManager.ui.commandNum++;
+                    if (gameManager.ui.commandNum > 2) gameManager.ui.commandNum = 0;
+                }
+                if (code == KeyEvent.VK_ENTER) {
+                    switch (gameManager.ui.commandNum) {
+                        case 0 -> {
+                            gameManager.ui.titleScreenState = 1;
+                        }
+                        case 1 -> {
+                            //TODO
+                        }
+                        case 2 -> System.exit(0);
                     }
-                    case 1 -> {
-                        //TODO
+                }
+            } else if (gameManager.ui.titleScreenState == 1) {
+                if (code == KeyEvent.VK_W) {
+                    gameManager.ui.commandNum--;
+                    if (gameManager.ui.commandNum < 0) gameManager.ui.commandNum = 2;
+                }
+                if (code == KeyEvent.VK_S) {
+                    gameManager.ui.commandNum++;
+                    if (gameManager.ui.commandNum > 2) gameManager.ui.commandNum = 0;
+                }
+                if (code == KeyEvent.VK_ENTER) {
+                    //Set character's stats and skin, depends on chose
+                    switch (gameManager.ui.commandNum) {
+                        case 0 -> {
+                            //change the skin of character and stats
+                            gameManager.player.playerSkin = 0;
+//                            gamePanel.player.speed -= 1;
+                            gameManager.player.maxHp = 7;
+                            gameManager.player.hp = gameManager.player.maxHp;
+
+                            gameManager.player.getPlayerImage();
+                            gameManager.gameState = gameManager.playState;
+                            gameManager.playMusic(0);
+                        }
+                        case 1 -> {
+                            //change the skin of character and stats
+                            gameManager.player.playerSkin = 1;
+                            gameManager.player.speed += 1;
+//                            gamePanel.player.maxHp = 6;
+//                            gamePanel.player.hp = gamePanel.player.maxHp;
+
+                            gameManager.player.getPlayerImage();
+                            gameManager.gameState = gameManager.playState;
+                            gameManager.playMusic(0);
+                        }
+                        case 2 -> gameManager.ui.titleScreenState = 0;
                     }
-                    case 2 -> System.exit(0);
                 }
             }
         }
         //play state
-        if (gamePanel.gameState == gamePanel.playState) {
+        if (gameManager.gameState == gameManager.playState) {
             if (code == KeyEvent.VK_W) upPressed = true;
             if (code == KeyEvent.VK_S) downPressed = true;
             if (code == KeyEvent.VK_A) leftPressed = true;
             if (code == KeyEvent.VK_D) rightPressed = true;
             //Pause the game
-            if (code == KeyEvent.VK_P) gamePanel.gameState = gamePanel.pauseState;
+            if (code == KeyEvent.VK_P) gameManager.gameState = gameManager.pauseState;
             if (code == KeyEvent.VK_ENTER) enterPressed = true;
-            //TODO Debug
+            //TODO Debug menu
             if (code == KeyEvent.VK_F9) debugMode = !debugMode;
-            if (code == KeyEvent.VK_F8) gamePanel.tileManager.loadMap("/maps/world01.txt");
+            if (code == KeyEvent.VK_F8) gameManager.tileManager.loadMap("/maps/world01.txt");
         }
         //pause state
-        else if (gamePanel.gameState == gamePanel.pauseState) {
-            if (code == KeyEvent.VK_P) gamePanel.gameState = gamePanel.playState;
+        else if (gameManager.gameState == gameManager.pauseState) {
+            if (code == KeyEvent.VK_P) gameManager.gameState = gameManager.playState;
         }
         //dialog state
-        else if (gamePanel.gameState == gamePanel.dialogueState) {
-            if (code == KeyEvent.VK_ENTER) gamePanel.gameState = gamePanel.playState;
+        else if (gameManager.gameState == gameManager.dialogueState) {
+            if (code == KeyEvent.VK_ENTER) gameManager.gameState = gameManager.playState;
         }
     }
 
@@ -81,12 +119,12 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D) rightPressed = false;
         //TODO when player press shift, character runs faster
         if (code == KeyEvent.VK_SHIFT) {
-            if (!gamePanel.playerRun) {
-                gamePanel.playerRun = true;
-                gamePanel.player.speed = 4;
+            if (!gameManager.playerRun) {
+                gameManager.playerRun = true;
+                gameManager.player.speed += 1;
             } else {
-                gamePanel.playerRun = false;
-                gamePanel.player.speed = 3;
+                gameManager.playerRun = false;
+                gameManager.player.speed -= 1;
             }
         }
     }
