@@ -1,5 +1,6 @@
-package main.java.com.khomsi.game.entity;
+package main.java.com.khomsi.game.entity.npc;
 
+import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
 
 import java.util.Random;
@@ -33,7 +34,7 @@ public class NPC_Woman3 extends Entity {
         right3 = setup("/npc/woman3_right_3");
     }
 
-    public void setDialog() {
+    private void setDialog() {
         dialogues[0] = "Hello young man!";
         dialogues[1] = "How are you today?\nIt's a nice weather, isn't it?";
         dialogues[2] = "Are you a adventure traveler?";

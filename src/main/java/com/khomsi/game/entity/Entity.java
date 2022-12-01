@@ -25,12 +25,16 @@ public class Entity {
     public int standCounter = 0;
     public int spriteNum = 0;
     //Default values for every entity
-    public Rectangle solidArea = new Rectangle(8, 16, 31, 32);
+    public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int lockCounter = 0;
-    String[] dialogues = new String[20];
-    //Char status
+    public String[] dialogues = new String[20];
+    public boolean invincible = false;
+    public int invincibleCounter;
+    //0 = player, 1 = npc, 2 = mob
+    public int type;
+    //Entity stats
     public int maxHp;
     public int hp;
     int dialogIndex = 0;
@@ -64,7 +68,17 @@ public class Entity {
         collisionOn = false;
         gameManager.checkCollision.checkTile(this);
         gameManager.checkCollision.checkObject(this, false);
-        gameManager.checkCollision.checkPlayer(this);
+        gameManager.checkCollision.checkEntity(this, gameManager.npcList);
+        gameManager.checkCollision.checkEntity(this, gameManager.mobs);
+        boolean interactPlayer = gameManager.checkCollision.checkPlayer(this);
+        //If it's monster and it touches the player, receive the dmg
+        if (this.type == 2 && interactPlayer) {
+            //Check if player can receive the dmg
+            if (!gameManager.player.invincible) {
+                gameManager.player.hp -= 1;
+                gameManager.player.invincible = true;
+            }
+        }
 
         spriteMovement();
     }

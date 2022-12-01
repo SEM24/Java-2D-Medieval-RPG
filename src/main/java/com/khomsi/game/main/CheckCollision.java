@@ -76,25 +76,10 @@ public class CheckCollision {
                 panel.object[i].solidArea.y = panel.object[i].worldY
                         + panel.object[i].solidArea.y;
 
-                switch (entity.direction) {
-                    case "up" -> {
-                        entity.solidArea.y -= entity.speed;
-                        index = checkCollisionForPlayer(entity, player, index, i, panel.object);
-                        //if it's npc or someone else, they can't pick up tools
-                    }
-                    case "down" -> {
-                        entity.solidArea.y += entity.speed;
-                        index = checkCollisionForPlayer(entity, player, index, i, panel.object);
-                    }
-                    case "left" -> {
-                        entity.solidArea.x -= entity.speed;
-                        index = checkCollisionForPlayer(entity, player, index, i, panel.object);
-                    }
-                    case "right" -> {
-                        entity.solidArea.x += entity.speed;
-                        index = checkCollisionForPlayer(entity, player, index, i, panel.object);
-                    }
-                }
+                //Change the movement collision and detect it
+                entityDirectionSpeed(entity);
+                index = checkCollisionForPlayer(entity, player, index, i, panel.object);
+
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
                 panel.object[i].solidArea.x = panel.object[i].solidAreaDefaultX;
@@ -102,6 +87,15 @@ public class CheckCollision {
             }
         }
         return index;
+    }
+
+    private void entityDirectionSpeed(Entity entity) {
+        switch (entity.direction) {
+            case "up" -> entity.solidArea.y -= entity.speed;
+            case "down" -> entity.solidArea.y += entity.speed;
+            case "left" -> entity.solidArea.x -= entity.speed;
+            case "right" -> entity.solidArea.x += entity.speed;
+        }
     }
 
     private int checkCollisionForPlayer(Entity entity, boolean player, int index, int i, Entity[] object) {
@@ -132,24 +126,11 @@ public class CheckCollision {
                         + entities[i].solidArea.x;
                 entities[i].solidArea.y = entities[i].worldY
                         + entities[i].solidArea.y;
-                switch (entity.direction) {
-                    case "up" -> {
-                        entity.solidArea.y -= entity.speed;
-                        index = checkCollisionForNPC(entity, entities, index, i);
-                    }
-                    case "down" -> {
-                        entity.solidArea.y += entity.speed;
-                        index = checkCollisionForNPC(entity, entities, index, i);
-                    }
-                    case "left" -> {
-                        entity.solidArea.x -= entity.speed;
-                        index = checkCollisionForNPC(entity, entities, index, i);
-                    }
-                    case "right" -> {
-                        entity.solidArea.x += entity.speed;
-                        index = checkCollisionForNPC(entity, entities, index, i);
-                    }
-                }
+
+                //Change the movement collision and detect it
+                entityDirectionSpeed(entity);
+                index = checkCollisionForEntity(entity, entities, index, i);
+
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
                 entities[i].solidArea.x = entities[i].solidAreaDefaultX;
@@ -159,15 +140,19 @@ public class CheckCollision {
         return index;
     }
 
-    private int checkCollisionForNPC(Entity entity, Entity[] entities, int index, int i) {
+    private int checkCollisionForEntity(Entity entity, Entity[] entities, int index, int i) {
+
         if (entity.solidArea.intersects(entities[i].solidArea)) {
-            entity.collisionOn = true;
-            index = i;
+            if (entities[i] != entity) {
+                entity.collisionOn = true;
+                index = i;
+            }
         }
         return index;
     }
 
-    public void checkPlayer(Entity entity) {
+    public boolean checkPlayer(Entity entity) {
+        boolean interactPlayer = false;
         //get entity's solid area pos
         entity.solidArea.x = entity.worldX + entity.solidArea.x;
         entity.solidArea.y = entity.worldY + entity.solidArea.y;
@@ -178,35 +163,17 @@ public class CheckCollision {
         panel.player.solidArea.y = panel.player.worldY
                 + panel.player.solidArea.y;
 
-        switch (entity.direction) {
-            case "up" -> {
-                entity.solidArea.y -= entity.speed;
-                if (entity.solidArea.intersects(panel.player.solidArea)) {
-                    entity.collisionOn = true;
-                }
-            }
-            case "down" -> {
-                entity.solidArea.y += entity.speed;
-                if (entity.solidArea.intersects(panel.player.solidArea)) {
-                    entity.collisionOn = true;
-                }
-            }
-            case "left" -> {
-                entity.solidArea.x -= entity.speed;
-                if (entity.solidArea.intersects(panel.player.solidArea)) {
-                    entity.collisionOn = true;
-                }
-            }
-            case "right" -> {
-                entity.solidArea.x += entity.speed;
-                if (entity.solidArea.intersects(panel.player.solidArea)) {
-                    entity.collisionOn = true;
-                }
-            }
+        //Change the movement collision and detect it
+        entityDirectionSpeed(entity);
+
+        if (entity.solidArea.intersects(panel.player.solidArea)) {
+            entity.collisionOn = true;
+            interactPlayer = true;
         }
         entity.solidArea.x = entity.solidAreaDefaultX;
         entity.solidArea.y = entity.solidAreaDefaultY;
         panel.player.solidArea.x = panel.player.solidAreaDefaultX;
         panel.player.solidArea.y = panel.player.solidAreaDefaultY;
+        return interactPlayer;
     }
 }

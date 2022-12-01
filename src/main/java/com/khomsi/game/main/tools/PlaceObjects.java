@@ -1,8 +1,8 @@
 package main.java.com.khomsi.game.main.tools;
 
-import main.java.com.khomsi.game.entity.NPC_Woman3;
+import main.java.com.khomsi.game.entity.npc.NPC_Woman3;
 import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.objects.DoorObject;
+import main.java.com.khomsi.game.entity.mobs.MOB_Slime;
 
 public class PlaceObjects {
     GameManager gameManager;
@@ -12,23 +12,17 @@ public class PlaceObjects {
     }
 
     public void setObject() {
-        gameManager.object[0] = new DoorObject(gameManager);
-        gameManager.object[0].worldX = GameManager.TILE_SIZE * 21;
-        gameManager.object[0].worldY = GameManager.TILE_SIZE * 24;
-
-        gameManager.object[1] = new DoorObject(gameManager);
-        gameManager.object[1].worldX = GameManager.TILE_SIZE * 23;
-        gameManager.object[1].worldY = GameManager.TILE_SIZE * 24;
     }
 
     public void setNpc() {
-        gameManager.npc[0] = new NPC_Woman3(gameManager);
-        gameManager.npc[0].worldX = GameManager.TILE_SIZE * 21;
-        gameManager.npc[0].worldY = GameManager.TILE_SIZE * 21;
+        gameManager.npcList[0] = new NPC_Woman3(gameManager);
+        gameManager.npcList[0].worldX = GameManager.TILE_SIZE * 21;
+        gameManager.npcList[0].worldY = GameManager.TILE_SIZE * 21;
+    }
 
-        gameManager.npc[1] = new NPC_Woman3(gameManager);
-        gameManager.npc[1].worldX = GameManager.TILE_SIZE * 23;
-        gameManager.npc[1].worldY = GameManager.TILE_SIZE * 23;
-
+    public void setMobs() {
+        gameManager.mobs[0] = new MOB_Slime(gameManager);
+        gameManager.mobs[0].worldX = GameManager.TILE_SIZE * 24;
+        gameManager.mobs[0].worldY = GameManager.TILE_SIZE * 21;
     }
 }

@@ -12,6 +12,7 @@ public class Player extends Entity {
     //Standard playerType
     public int playerSkin = 0;
     public final int screenX, screenY;
+    int playerIndex = 999;
 
     public Player(GameManager gameManager, KeyHandler keyHandler) {
         super(gameManager);
@@ -37,7 +38,7 @@ public class Player extends Entity {
         getPlayerImage();
     }
 
-    public void setDefaultValues() {
+    private void setDefaultValues() {
         //player position of player
         worldX = GameManager.TILE_SIZE * 23;
         worldY = GameManager.TILE_SIZE * 21;
@@ -90,8 +91,13 @@ public class Player extends Entity {
             //Check obj collision
             int objIndex = gameManager.checkCollision.checkObject(this, true);
             takeObject(objIndex);
-            int npcIndex = gameManager.checkCollision.checkEntity(this, gameManager.npc);
+            //Check npc collision
+            int npcIndex = gameManager.checkCollision.checkEntity(this, gameManager.npcList);
             interactNpc(npcIndex);
+
+            //Check mob's collision
+            int mobIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
+            interactMob(mobIndex);
             //Check Event
             gameManager.eventHandler.checkEvent();
             gameManager.keyHandler.enterPressed = false;
@@ -105,25 +111,49 @@ public class Player extends Entity {
                 standCounter = 0;
             }
         }
-    }
-
-    private void interactNpc(int npcIndex) {
-        //if index not 999 - player touches the npc
-        if (npcIndex != 999 && gameManager.keyHandler.enterPressed) {
-            gameManager.gameState = gameManager.dialogueState;
-            gameManager.npc[npcIndex].speak();
+        //Make player invisible for 1 sec after receiving the damage
+        if (invincible) {
+            invincibleCounter++;
+            //1 sec
+            if (invincibleCounter > 60) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
         }
     }
 
-    public void takeObject(int index) {
+    private void interactMob(int mobIndex) {
+        //TODO
+        if (mobIndex != playerIndex && !invincible) {
+            hp -= 1;
+            invincible = true;
+        }
+    }
+
+
+    private void interactNpc(int npcIndex) {
+        //if index not 999 - player touches the npc
+        if (npcIndex != playerIndex && gameManager.keyHandler.enterPressed) {
+            gameManager.gameState = gameManager.dialogueState;
+            gameManager.npcList[npcIndex].speak();
+        }
+    }
+
+    private void takeObject(int index) {
         //if index is not player, make a reaction on obj
-        if (index != 999) {
+        if (index != playerIndex) {
             //TODO interact any object with player
         }
     }
 
     public void draw(Graphics2D graphics2D) {
         BufferedImage image = characterSpriteDirection();
+        //Make the player partly transparent
+        if (invincible)
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8F));
+
         graphics2D.drawImage(image, screenX, screenY, null);
+        //Reset alfa
+        graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
     }
 }

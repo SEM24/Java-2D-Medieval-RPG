@@ -28,6 +28,7 @@ public class GameManager extends JPanel implements Runnable {
 
     public static int maxWorldRow;
 
+    //TOOLS FOR GAME
     public KeyHandler keyHandler = new KeyHandler(this);
     public TileManager tileManager = new TileManager(this);
     Sound music = new Sound();
@@ -37,12 +38,17 @@ public class GameManager extends JPanel implements Runnable {
     public Thread gameThread;
     public CheckCollision checkCollision = new CheckCollision(this);
     public PlaceObjects placeObjects = new PlaceObjects(this);
-    public Player player = new Player(this, keyHandler);
     public EventHandler eventHandler = new EventHandler(this);
+
+    //ENTITY AND OBJECTS
     //TODO extend the massive, when you'll have more objects
     public Entity[] object = new Entity[10];
-    public Entity[] npc = new Entity[10];
+    public Entity[] npcList = new Entity[10];
+    public Entity[] mobs = new Entity[10];
     List<Entity> entities = new ArrayList<>();
+
+    public Player player = new Player(this, keyHandler);
+
 
     public static final int FPS = 60;
     //GameState
@@ -70,6 +76,8 @@ public class GameManager extends JPanel implements Runnable {
     public void setupGame() {
         placeObjects.setObject();
         placeObjects.setNpc();
+        placeObjects.setMobs();
+
         gameState = titleState;
     }
 
@@ -117,8 +125,11 @@ public class GameManager extends JPanel implements Runnable {
         if (gameState == playState) {
             player.update();
             //npc
-            for (Entity entity : npc) {
-                if (entity != null) entity.update();
+            for (Entity npc : npcList) {
+                if (npc != null) npc.update();
+            }
+            for (Entity mob : mobs) {
+                if (mob != null) mob.update();
             }
         }
         if (gameState == pauseState) {
@@ -138,7 +149,6 @@ public class GameManager extends JPanel implements Runnable {
         if (keyHandler.debugMode)
             drawStart = System.nanoTime();
 
-
         //title screen
         if (gameState == titleState) {
             ui.draw(graphics2D);
@@ -147,18 +157,25 @@ public class GameManager extends JPanel implements Runnable {
         else {
             //Draw Tiles
             tileManager.draw(graphics2D);
-            entities.add(player);
 
-            for (Entity entityNpc : npc) {
-                if (entityNpc != null)
+            entities.add(player);
+            //Add npc, obj, mobs to draw list
+            for (Entity entityNpc : npcList) {
+                if (entityNpc != null) {
                     entities.add(entityNpc);
+                }
             }
             for (Entity entityObj : object) {
                 if (entityObj != null)
                     entities.add(entityObj);
             }
+            for (Entity mob : mobs) {
+                if (mob != null)
+                    entities.add(mob);
+            }
             //Sort entities
             entities.sort(new EntityComparator());
+
             //Draw them
             for (Entity entity : entities) {
                 entity.draw(graphics2D);
@@ -184,6 +201,8 @@ public class GameManager extends JPanel implements Runnable {
             graphics2D.drawString("Col: " + (player.worldX + player.solidArea.x) / TILE_SIZE, x, y);
             y += lineHeight;
             graphics2D.drawString("Row: : " + (player.worldY + player.solidArea.y) / TILE_SIZE, x, y);
+            y += lineHeight;
+            graphics2D.drawString("Invincible: : " + player.invincibleCounter, x, y);
             y += lineHeight;
             graphics2D.drawString("Draw Time: " + passed, x, y);
             y += lineHeight;
