@@ -8,8 +8,6 @@ import main.java.com.khomsi.game.tiles.TileManager;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class GameManager extends JPanel implements Runnable {
@@ -41,7 +39,7 @@ public class GameManager extends JPanel implements Runnable {
     public PlaceObjects placeObjects = new PlaceObjects(this);
     public Player player = new Player(this, keyHandler);
     public EventHandler eventHandler = new EventHandler(this);
-    //TODO расширить метод, как появится больше обьектов (ключи, сундуки и тд)
+    //TODO extend the massive, when you'll have more objects
     public Entity[] object = new Entity[10];
     public Entity[] npc = new Entity[10];
     List<Entity> entities = new ArrayList<>();
@@ -124,7 +122,7 @@ public class GameManager extends JPanel implements Runnable {
             }
         }
         if (gameState == pauseState) {
-            //todo make game to stop
+            //Stop game
         }
     }
 
@@ -170,7 +168,7 @@ public class GameManager extends JPanel implements Runnable {
             //UI(text)
             ui.draw(graphics2D);
         }
-        //TODO Debug function
+        //Debug function
         if (keyHandler.debugMode) {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;

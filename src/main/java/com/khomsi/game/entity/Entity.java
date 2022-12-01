@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.Objects;
 
 //parent class for player, monster ect
@@ -96,9 +95,6 @@ public class Entity {
         if (spriteCounter > 42) {
             spriteCounter = 0;
         }
-        //FIXME не будет появляться спрайт, когда стоит,
-        // тк там это происходило при условии, что кнопки не нажаты, а тут нпс, как тогда
-        // Лучше будет разделить этот счетчик и счетчик нпс, тк могут быть конфликты
 //        else {
 //            standCounter++;
 //            //timer before the idle anim starts

@@ -95,7 +95,7 @@ public class KeyHandler implements KeyListener {
             //Pause the game
             if (code == KeyEvent.VK_P) gameManager.gameState = gameManager.pauseState;
             if (code == KeyEvent.VK_ENTER) enterPressed = true;
-            //TODO Debug menu
+            //Debug menu
             if (code == KeyEvent.VK_F9) debugMode = !debugMode;
             if (code == KeyEvent.VK_F8) gameManager.tileManager.loadMap("/maps/world01.txt");
         }
@@ -117,7 +117,7 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_S) downPressed = false;
         if (code == KeyEvent.VK_A) leftPressed = false;
         if (code == KeyEvent.VK_D) rightPressed = false;
-        //TODO when player press shift, character runs faster
+        //When player press shift, character runs faster
         if (code == KeyEvent.VK_SHIFT) {
             if (!gameManager.playerRun) {
                 gameManager.playerRun = true;

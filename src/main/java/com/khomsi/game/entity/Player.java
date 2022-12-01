@@ -27,7 +27,7 @@ public class Player extends Entity {
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         //boundaries of player
-        //TODO adjust it if needed
+        //adjust it if needed
         solidArea.width = 31;
         solidArea.height = 32;
 
@@ -118,7 +118,7 @@ public class Player extends Entity {
     public void takeObject(int index) {
         //if index is not player, make a reaction on obj
         if (index != 999) {
-            //TODO
+            //TODO interact any object with player
         }
     }
 
