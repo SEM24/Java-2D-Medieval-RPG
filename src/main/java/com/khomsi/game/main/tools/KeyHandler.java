@@ -77,7 +77,7 @@ public class KeyHandler implements KeyListener {
                 switch (gameManager.ui.commandNum) {
                     case 0 -> gameManager.ui.titleScreenState = 1;
                     case 1 -> {
-                        //TODO
+                        //TODO load menu
                     }
                     case 2 -> System.exit(0);
                 }

@@ -42,7 +42,6 @@ public class UI {
     }
 
 
-    //TODO remove if it's not usable
     public void addMessage(String text) {
         message.add(text);
         messageCounter.add(0);
@@ -307,7 +306,7 @@ public class UI {
             int y = GameManager.TILE_SIZE * 3;
             drawShadowAndText(text, x, y, 5, 5);
 
-            //FIXME remove this line and use the logo of game instead
+            //FIXME remove this lines and use the logo of game instead
             //Image of player, center it
             x = GameManager.SCREEN_WIDTH / 2 - (GameManager.TILE_SIZE * 2) / 2;
             y += GameManager.TILE_SIZE * 2;

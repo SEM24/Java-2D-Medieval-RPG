@@ -234,7 +234,6 @@ public class GameManager extends JPanel implements Runnable {
         music.loop();
     }
 
-    //TODO supposed to be used in future
     public void stopMusic() {
         music.stop();
     }
