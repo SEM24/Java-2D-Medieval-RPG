@@ -37,34 +37,39 @@ public class EventHandler {
             canTouchEvent = true;
         }
         if (canTouchEvent) {
-            if (interact(28, 16, "any")) damageEvent(28, 16, gameManager.dialogueState);
+            if (interact(28, 16, "any")) damagePit(28, 16, gameManager.dialogueState);
             if (interact(34, 33, "up")) healingPool(34, 33, gameManager.dialogueState);
         }
 
     }
 
-    private void damageEvent(int col, int row, int gameState) {
+    private void damagePit(int col, int row, int gameState) {
+        //TODO gameManager.playerSE();
         gameManager.gameState = gameState;
-        gameManager.ui.currentDialog = "You fall into a pit!";
+        gameManager.ui.currentDialog = "You felt into a pit!";
+        //TODO draw different sprites from character char_one char_pit_fall
         gameManager.player.hp -= 1;
-//        teleport(gameState);
+        teleport(gameState);
         canTouchEvent = false;
     }
 
     private void healingPool(int col, int row, int gameState) {
         if (gameManager.keyHandler.enterPressed) {
+            //TODO gameManager.playerSE();
+            gameManager.player.attackCanceled = true;
             gameManager.gameState = gameState;
             gameManager.ui.currentDialog = "You thrown the coin!\nYour Hp was recovered!";
             gameManager.player.hp = gameManager.player.maxHp;
+            gameManager.placeObjects.setMobs();
         }
     }
 
-//    private void teleport(int gameState) {
-//        gameManager.gameState = gameState;
-//        gameManager.ui.currentDialog = "Teleport!";
-//        gameManager.player.worldX = GameManager.TILE_SIZE * 37;
-//        gameManager.player.worldY = GameManager.TILE_SIZE * 10;
-//    }
+    private void teleport(int gameState) {
+        gameManager.gameState = gameState;
+        gameManager.ui.currentDialog = "You felt into a pit!";
+        gameManager.player.worldX = GameManager.TILE_SIZE * 37;
+        gameManager.player.worldY = GameManager.TILE_SIZE * 10;
+    }
 
     public boolean interact(int col, int row, String direction) {
         boolean interact = false;

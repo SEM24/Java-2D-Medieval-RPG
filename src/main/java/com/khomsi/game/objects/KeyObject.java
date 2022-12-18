@@ -3,10 +3,6 @@ package main.java.com.khomsi.game.objects;
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.Objects;
-
 public class KeyObject extends Entity {
 
 
@@ -14,5 +10,6 @@ public class KeyObject extends Entity {
         super(gameManager);
         name = "Key";
         down = setup("/objects/key");
+        itemDescription = "[" + name + "]\n" + "Key opens the door.";
     }
 }

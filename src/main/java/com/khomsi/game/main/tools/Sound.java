@@ -20,7 +20,11 @@ public class Sound {
         soundURL[5] = getClass().getResource(resourcePath + "mus_doorclose.wav");
         soundURL[6] = getClass().getResource(resourcePath + "snd_power.wav");
         soundURL[7] = getClass().getResource(resourcePath + "snd_victory.wav");
-
+        soundURL[8] = getClass().getResource(resourcePath + "hitmonster.wav");
+        soundURL[9] = getClass().getResource(resourcePath + "receivedamage.wav");
+        soundURL[10] = getClass().getResource(resourcePath + "sword-swipes.wav");
+        soundURL[11] = getClass().getResource(resourcePath + "level_up.wav");
+        soundURL[12] = getClass().getResource(resourcePath + "cursor.wav");
     }
 
     public void setFile(int i) {
@@ -37,6 +41,7 @@ public class Sound {
     public void play() {
         clip.start();
     }
+
 
     public void loop() {
         clip.loop(Clip.LOOP_CONTINUOUSLY);

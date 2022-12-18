@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GameManager extends JPanel implements Runnable {
     //Screen settings
@@ -58,6 +59,7 @@ public class GameManager extends JPanel implements Runnable {
     public final int playState = 1;
     //depends on situation, draw dif keyInput
     public final int pauseState = 2;
+    public final int characterState = 4;
     //until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
 
@@ -128,8 +130,15 @@ public class GameManager extends JPanel implements Runnable {
             for (Entity npc : npcList) {
                 if (npc != null) npc.update();
             }
-            for (Entity mob : mobs) {
-                if (mob != null) mob.update();
+            for (int i = 0; i < mobs.length; i++) {
+                if (mobs[i] != null) {
+                    if (mobs[i].alive && !mobs[i].die) {
+                        mobs[i].update();
+                    }
+                    if (!mobs[i].alive) {
+                        mobs[i] = null;
+                    }
+                }
             }
         }
         if (gameState == pauseState) {
@@ -214,7 +223,6 @@ public class GameManager extends JPanel implements Runnable {
             graphics2D.drawRect(player.screenX + player.solidArea.x, player.screenY + player.solidArea.y,
                     player.solidArea.width, player.solidArea.height);
         }
-
         //save some memory
         graphics2D.dispose();
     }
@@ -229,6 +237,13 @@ public class GameManager extends JPanel implements Runnable {
     //TODO supposed to be used in future
     public void stopMusic() {
         music.stop();
+    }
+
+    public void pauseMusic(int time) {
+        stopMusic();
+        Timer timer = new Timer(time * 1000, arg0 -> playMusic(0));
+        timer.setRepeats(false); // Only execute once
+        timer.start(); // Go go go!
     }
 
     public void playSE(int i) {

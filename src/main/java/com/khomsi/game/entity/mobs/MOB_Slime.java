@@ -20,6 +20,10 @@ public class MOB_Slime extends Entity {
         //4 = 2 hearts
         maxHp = 4;
         hp = maxHp;
+        attack = 5;
+        defense = 0;
+        xp = 2;
+
         //Boundaries
         solidArea.x = 3;
         solidArea.y = 18;
@@ -51,6 +55,7 @@ public class MOB_Slime extends Entity {
         right3 = setup("/mobs/slime_down_1");
     }
 
+    @Override
     public void setAction() {
         lockCounter++;
         if (lockCounter == 120) {
@@ -73,5 +78,12 @@ public class MOB_Slime extends Entity {
             }
             lockCounter = 0;
         }
+    }
+
+    @Override
+    public void damageReaction() {
+        lockCounter = 0;
+        //Monster moves away
+        direction = gameManager.player.direction;
     }
 }
