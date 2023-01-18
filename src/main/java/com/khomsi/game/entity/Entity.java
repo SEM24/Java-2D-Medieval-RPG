@@ -29,6 +29,7 @@ public class Entity {
     public int invincibleCounter;
     int dieCounter = 0;
     int hpBarCounter = 0;
+    public int shootAvailableCounter = 0;
 
     //State
     public String direction = "down";
@@ -47,7 +48,10 @@ public class Entity {
     public int maxHp;
     public int hp;
     public int level;
+    public int maxMana;
+    public int mana;
     public int strength;
+    public int ammo;
     public int agility;
     public int attack;
     public int defense;
@@ -61,8 +65,17 @@ public class Entity {
     public int attackValue;
     public int defenseValue;
     public String itemDescription = "";
+    //Cost of shooting the tile
+    public int useCost;
     //0 = player, 1 = npc, 2 = mob
     public int type;
+    public final int typePlayer = 0;
+    public final int typeNpc = 1;
+    public final int typeMob = 2;
+    public final int typeSword = 3;
+    public final int typeAxe = 4;
+    public final int typeShield = 5;
+    public final int typeConsumable = 6;
     //TOOLS
     int dialogIndex = 0;
     public String[] dialogues = new String[20];
@@ -73,6 +86,7 @@ public class Entity {
     public int solidAreaDefaultX, solidAreaDefaultY;
     public GameManager gameManager;
     public Tools tools = new Tools();
+    public ProjectTile projectTile;
 
     public Entity(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -82,6 +96,10 @@ public class Entity {
     }
 
     public void damageReaction() {
+    }
+
+    public void use(Entity entity) {
+
     }
 
     public void speak() {
@@ -107,17 +125,8 @@ public class Entity {
         gameManager.checkCollision.checkEntity(this, gameManager.mobs);
         boolean interactPlayer = gameManager.checkCollision.checkPlayer(this);
         //If it's monster, and it touches the player, receive the dmg
-        if (this.type == 2 && interactPlayer) {
-            //Check if player can receive the dmg
-            if (!gameManager.player.invincible) {
-                gameManager.playSE(9);
-                int damage = attack - gameManager.player.defense;
-                if (damage < 0) {
-                    damage = 0;
-                }
-                gameManager.player.hp -= damage;
-                gameManager.player.invincible = true;
-            }
+        if (this.type == typeMob && interactPlayer) {
+            damagePlayer(attack);
         }
         if (!collisionOn) {
             switch (direction) {
@@ -135,6 +144,22 @@ public class Entity {
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+        if (shootAvailableCounter < 30) {
+            shootAvailableCounter++;
+        }
+    }
+
+    public void damagePlayer(int attack) {
+        //Check if player can receive the dmg
+        if (!gameManager.player.invincible) {
+            gameManager.playSE(9);
+            int damage = attack - gameManager.player.defense;
+            if (damage < 0) {
+                damage = 0;
+            }
+            gameManager.player.hp -= damage;
+            gameManager.player.invincible = true;
         }
     }
 
@@ -169,7 +194,7 @@ public class Entity {
                 worldY - GameManager.TILE_SIZE < gameManager.player.worldY + gameManager.player.screenY) {
 
             //Monster Hp bar
-            if (type == 2 && hpBarOn) {
+            if (type == typeMob && hpBarOn) {
                 //Get the length of hp bar, if hp - 4, then the scale is 12 pixels (4 times)
                 double oneScale = (double) GameManager.TILE_SIZE / maxHp;
                 double hpBarValue = oneScale * hp;
@@ -206,7 +231,8 @@ public class Entity {
         dieCounter++;
 
         int sec = 5;
-        //todo to use death animation of mob - create extra sprites and add them
+        //TODO to use death animation of mob rather than the color
+        // changing - create extra sprites and add them
         //switch them instead of change alfa
         //Every 5 frame switch monster alfa
         if (dieCounter <= sec) changeAlfa(graphics2D, 0F);
@@ -218,7 +244,6 @@ public class Entity {
         if (dieCounter > sec * 6 && dieCounter <= sec * 7) changeAlfa(graphics2D, 0F);
         if (dieCounter > sec * 7 && dieCounter <= sec * 8) changeAlfa(graphics2D, 1F);
         if (dieCounter > sec * 8) {
-            die = false;
             alive = false;
         }
     }

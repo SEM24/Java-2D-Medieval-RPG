@@ -27,7 +27,7 @@ public class TileManager {
 
         //here change the path to tile data(collision, names)
 
-        InputStream input = getClass().getResourceAsStream(resourcePath[1] + "tiledata.txt");
+        InputStream input = getClass().getResourceAsStream(resourcePath[1] + "tiledata01.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 Objects.requireNonNull(input)));
         String line;

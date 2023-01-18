@@ -2,7 +2,8 @@ package main.java.com.khomsi.game.main.tools;
 
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.objects.HeartObject;
+import main.java.com.khomsi.game.objects.gui.HeartObject;
+import main.java.com.khomsi.game.objects.gui.ManaObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,7 +16,7 @@ public class UI {
     GameManager gameManager;
     Graphics2D graphics2D;
     Font playMeGames;
-    BufferedImage heart_full, heart_half, heart_empty;
+    BufferedImage heart_full, heart_half, heart_empty, mana_full, mana_empty;
     List<String> message = new ArrayList<>();
     List<Integer> messageCounter = new ArrayList<>();
     public String currentDialog = "";
@@ -39,6 +40,9 @@ public class UI {
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_empty = heart.image3;
+        Entity mana = new ManaObject(gameManager);
+        mana_full = mana.image;
+        mana_empty = mana.image2;
     }
 
 
@@ -93,6 +97,16 @@ public class UI {
 
         //Draw player's items
         for (int i = 0; i < gameManager.player.inventory.size(); i++) {
+
+            //Equip cursor
+            if (gameManager.player.inventory.get(i).equals(gameManager.player.currentWeapon) ||
+                    gameManager.player.inventory.get(i).equals(gameManager.player.currentShield)) {
+                int alpha = 200; // % transparent
+                graphics2D.setColor(new Color(255, 255, 255, alpha));
+
+                graphics2D.fillRect(slotX, slotY, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
+            }
+
             graphics2D.drawImage(gameManager.player.inventory.get(i).down, slotX, slotY, null);
             slotX += slotSize;
             if (i == 4 || i == 9 || i == 14) {
@@ -120,18 +134,16 @@ public class UI {
         graphics2D.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
 
         //Description frame
-        int dFrameX = frameX;
         int dFrameY = frameY + frameHeight + 3;
-        int dFrameWidth = frameWidth;
         int dFrameHeight = GameManager.TILE_SIZE * 3;
 
-        drawSubWindow(dFrameX, dFrameY, dFrameWidth, dFrameHeight);
         //Draw description text
-        int textX = dFrameX + 20;
+        int textX = frameX + 20;
         int textY = dFrameY + GameManager.TILE_SIZE;
         graphics2D.setFont(graphics2D.getFont().deriveFont(26F));
         int itemIndex = getItemIndexOnSlot();
         if (itemIndex < gameManager.player.inventory.size()) {
+            drawSubWindow(frameX, dFrameY, frameWidth, dFrameHeight);
             for (String line : gameManager.player.inventory.get(itemIndex).itemDescription.split("\n")) {
                 graphics2D.drawString(line, textX, textY);
                 textY += 40;
@@ -139,7 +151,7 @@ public class UI {
         }
     }
 
-    private int getItemIndexOnSlot() {
+    public int getItemIndexOnSlot() {
         return slotCol + (slotRow * 5);
     }
 
@@ -184,14 +196,16 @@ public class UI {
         //Names
         graphics2D.drawString("Level", textX, textY);
         textY += lineHeight;
-        graphics2D.drawString("Hp", textX, textY);
+        graphics2D.drawString("Health", textX, textY);
+        textY += lineHeight;
+        graphics2D.drawString("Mana", textX, textY);
         textY += lineHeight;
         graphics2D.drawString("Strength", textX, textY);
         textY += lineHeight;
         graphics2D.drawString("Agility", textX, textY);
         textY += lineHeight;
-        graphics2D.drawString("CRT Speed", textX, textY);
-        textY += lineHeight;
+//        graphics2D.drawString("Speed", textX, textY);
+//        textY += lineHeight;
         graphics2D.drawString("Attack", textX, textY);
         textY += lineHeight;
         graphics2D.drawString("Defense", textX, textY);
@@ -222,6 +236,11 @@ public class UI {
         graphics2D.drawString(value, textX, textY);
         textY += lineHeight;
 
+        value = gameManager.player.mana + "/" + gameManager.player.maxMana;
+        textX = getXAlignToRightText(value, tailX);
+        graphics2D.drawString(value, textX, textY);
+        textY += lineHeight;
+
         value = String.valueOf(gameManager.player.strength);
         textX = getXAlignToRightText(value, tailX);
         graphics2D.drawString(value, textX, textY);
@@ -232,10 +251,10 @@ public class UI {
         graphics2D.drawString(value, textX, textY);
         textY += lineHeight;
 
-        value = String.valueOf(gameManager.player.speed);
-        textX = getXAlignToRightText(value, tailX);
-        graphics2D.drawString(value, textX, textY);
-        textY += lineHeight;
+//        value = String.valueOf(gameManager.player.speed);
+//        textX = getXAlignToRightText(value, tailX);
+//        graphics2D.drawString(value, textX, textY);
+//        textY += lineHeight;
 
         value = String.valueOf(gameManager.player.attack);
         textX = getXAlignToRightText(value, tailX);
@@ -264,7 +283,7 @@ public class UI {
 
         graphics2D.drawImage(gameManager.player.currentWeapon.down, tailX - GameManager.TILE_SIZE + 18, textY - 25, null);
         textY += GameManager.TILE_SIZE;
-        graphics2D.drawImage(gameManager.player.currentShield.down, tailX - GameManager.TILE_SIZE + 20, textY - 20, null);
+        graphics2D.drawImage(gameManager.player.currentShield.down, tailX - GameManager.TILE_SIZE + 20, textY - 25, null);
 
     }
 
@@ -291,6 +310,26 @@ public class UI {
             i++;
             x += GameManager.TILE_SIZE;
         }
+
+        //Draw the player's max mana
+        x = GameManager.TILE_SIZE / 2;
+        y = (int) (GameManager.TILE_SIZE * 1.6);
+        i = 0;
+        while (i < gameManager.player.maxMana) {
+            graphics2D.drawImage(mana_empty, x, y, null);
+            i++;
+            x += GameManager.TILE_SIZE;
+        }
+        //Draw mana
+        x = GameManager.TILE_SIZE / 2;
+        y = (int) (GameManager.TILE_SIZE * 1.6);
+        i = 0;
+        while (i < gameManager.player.mana) {
+            graphics2D.drawImage(mana_full, x, y, null);
+            i++;
+            x += GameManager.TILE_SIZE;
+        }
+
     }
 
     public void drawTitleScreen() {

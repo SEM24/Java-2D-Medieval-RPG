@@ -11,7 +11,7 @@ public class GameApplication {
         JFrame window = new JFrame();
 
         //let window close properly, when use press close (x) button
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //can't resize window
         window.setResizable(false);
         window.setTitle("My 2D Adventure Game");

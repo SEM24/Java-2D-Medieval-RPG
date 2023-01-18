@@ -2,9 +2,9 @@ package main.java.com.khomsi.game.entity;
 
 import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.main.tools.KeyHandler;
-import main.java.com.khomsi.game.objects.KeyObject;
-import main.java.com.khomsi.game.objects.MetalShieldObject;
-import main.java.com.khomsi.game.objects.MetalSwordObject;
+import main.java.com.khomsi.game.objects.equipment.MetalShieldObject;
+import main.java.com.khomsi.game.objects.equipment.MetalSwordObject;
+import main.java.com.khomsi.game.objects.projectTiles.FireBallObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -20,7 +20,7 @@ public class Player extends Entity {
     int playerIndex = 999;
     public boolean attackCanceled = false;
     public List<Entity> inventory = new ArrayList<>();
-    public final int maxInventorySize = 20;
+    public int maxInventorySize = 24;
 
     public Player(GameManager gameManager, KeyHandler keyHandler) {
         super(gameManager);
@@ -39,8 +39,6 @@ public class Player extends Entity {
         //adjust it if needed
         solidArea.width = 31;
         solidArea.height = 32;
-        attackArea.width = 36;
-        attackArea.height = 36;
 
         setDefaultValues();
         setItems();
@@ -54,13 +52,17 @@ public class Player extends Entity {
         //player position of player
         worldX = GameManager.TILE_SIZE * 23;
         worldY = GameManager.TILE_SIZE * 21;
-        speed = 2;
+        speed = 3;
         direction = "down";
 
         //player hp, 6 = 3 hearts, 6 = 2.5 hearts
         level = 1;
         maxHp = 6;
         hp = maxHp;
+        maxMana = 4;
+        mana = maxMana;
+        //TODO basic var for arrows, future realisation
+//        ammo = 10;
         //more strength = more given damage
         strength = 1;
         //more agility = less received damage
@@ -70,6 +72,13 @@ public class Player extends Entity {
         coin = 0;
         currentWeapon = new MetalSwordObject(gameManager);
         currentShield = new MetalShieldObject(gameManager);
+        //In the beginning of the game, player has this skill.
+        //TODO make it optional when you choose the screen sections
+        //Think how to make an magic animation
+        projectTile = new FireBallObject(gameManager);
+        //TODO for arrows
+//        projectTile = new MagicArrowObject(gameManager);
+
         attack = getAttack();
         defense = getDefense();
     }
@@ -77,11 +86,10 @@ public class Player extends Entity {
     private void setItems() {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new KeyObject(gameManager));
-        inventory.add(new KeyObject(gameManager));
     }
 
     private int getAttack() {
+        attackArea = currentWeapon.attackArea;
         return strength * currentWeapon.attackValue;
     }
 
@@ -114,25 +122,50 @@ public class Player extends Entity {
         int attackUpDownH = GameManager.TILE_SIZE * 2;
         int attackLRW = GameManager.TILE_SIZE * 2;
         int attackLRH = GameManager.TILE_SIZE;
-        attackUp = setup(playerPath[playerSkin] + "/attackSword/player_up_attack", attackUpDownW, attackUpDownH);
-        attackUp1 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_1", attackUpDownW, attackUpDownH);
-        attackUp2 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_2", attackUpDownW, attackUpDownH);
-        attackUp3 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_3", attackUpDownW, attackUpDownH);
-        attackDown = setup(playerPath[playerSkin] + "/attackSword/player_down_attack", attackUpDownW, attackUpDownH);
-        attackDown1 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_1", attackUpDownW, attackUpDownH);
-        attackDown2 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_2", attackUpDownW, attackUpDownH);
-        attackDown3 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_3", attackUpDownW, attackUpDownH);
-        attackLeft = setup(playerPath[playerSkin] + "/attackSword/player_left_attack", attackLRW, attackLRH);
-        attackLeft1 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_1", attackLRW, attackLRH);
-        attackLeft2 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_2", attackLRW, attackLRH);
-        attackLeft3 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_3", attackLRW, attackLRH);
-        attackRight = setup(playerPath[playerSkin] + "/attackSword/player_right_attack", attackLRW, attackLRH);
-        attackRight1 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_1", attackLRW, attackLRH);
-        attackRight2 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_2", attackLRW, attackLRH);
-        attackRight3 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_3", attackLRW, attackLRH);
+        //TODO Each tool can be having diff colors,add index to the class and write the num here.
+        //If the sword is chosen
+        if (currentWeapon.type == typeSword) {
+            attackUp = setup(playerPath[playerSkin] + "/attackSword/player_up_attack", attackUpDownW, attackUpDownH);
+            attackUp1 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_1", attackUpDownW, attackUpDownH);
+            attackUp2 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_2", attackUpDownW, attackUpDownH);
+            attackUp3 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_3", attackUpDownW, attackUpDownH);
+            attackDown = setup(playerPath[playerSkin] + "/attackSword/player_down_attack", attackUpDownW, attackUpDownH);
+            attackDown1 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_1", attackUpDownW, attackUpDownH);
+            attackDown2 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_2", attackUpDownW, attackUpDownH);
+            attackDown3 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_3", attackUpDownW, attackUpDownH);
+            attackLeft = setup(playerPath[playerSkin] + "/attackSword/player_left_attack", attackLRW, attackLRH);
+            attackLeft1 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_1", attackLRW, attackLRH);
+            attackLeft2 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_2", attackLRW, attackLRH);
+            attackLeft3 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_3", attackLRW, attackLRH);
+            attackRight = setup(playerPath[playerSkin] + "/attackSword/player_right_attack", attackLRW, attackLRH);
+            attackRight1 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_1", attackLRW, attackLRH);
+            attackRight2 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_2", attackLRW, attackLRH);
+            attackRight3 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_3", attackLRW, attackLRH);
+        }
+        //If the axe is chosen TODO add the axe sprites to the game
+        if (currentWeapon.type == typeAxe) {
+            attackUp = setup(playerPath[playerSkin] + "/attackSword/player_up_attack", attackUpDownW, attackUpDownH);
+            attackUp1 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_1", attackUpDownW, attackUpDownH);
+            attackUp2 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_2", attackUpDownW, attackUpDownH);
+            attackUp3 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_3", attackUpDownW, attackUpDownH);
+            attackDown = setup(playerPath[playerSkin] + "/attackSword/player_down_attack", attackUpDownW, attackUpDownH);
+            attackDown1 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_1", attackUpDownW, attackUpDownH);
+            attackDown2 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_2", attackUpDownW, attackUpDownH);
+            attackDown3 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_3", attackUpDownW, attackUpDownH);
+            attackLeft = setup(playerPath[playerSkin] + "/attackSword/player_left_attack", attackLRW, attackLRH);
+            attackLeft1 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_1", attackLRW, attackLRH);
+            attackLeft2 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_2", attackLRW, attackLRH);
+            attackLeft3 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_3", attackLRW, attackLRH);
+            attackRight = setup(playerPath[playerSkin] + "/attackSword/player_right_attack", attackLRW, attackLRH);
+            attackRight1 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_1", attackLRW, attackLRH);
+            attackRight2 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_2", attackLRW, attackLRH);
+            attackRight3 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_3", attackLRW, attackLRH);
+        }
     }
 
+    //TODO clean up the code
     //This method updates player's coordinates
+    @Override
     public void update() {
         if (attacking) {
             playerAttack();
@@ -141,15 +174,25 @@ public class Player extends Entity {
         else if (keyHandler.upPressed || keyHandler.downPressed ||
                 keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.enterPressed) {
 
+//            //Record the current worldX and worldY first.
+//            int tempWorldX = worldX;
+//            int tempWorldY = worldY;
             //use else if to avoid diagonal movement, if it's not needed, use just if
             if (keyHandler.upPressed) {
                 direction = "up";
-            } else if (keyHandler.downPressed) {
+//                worldY -= speed;
+            }
+            if (keyHandler.downPressed) {
                 direction = "down";
-            } else if (keyHandler.leftPressed) {
+//                worldY += speed;
+            }
+            if (keyHandler.leftPressed) {
                 direction = "left";
-            } else if (keyHandler.rightPressed) {
+//                worldX -= speed;
+            }
+            if (keyHandler.rightPressed) {
                 direction = "right";
+//                worldX += speed;
             }
             //Check tile collision
             collisionOn = false;
@@ -168,7 +211,6 @@ public class Player extends Entity {
             //Check Event
             gameManager.eventHandler.checkEvent();
 
-            //If collision false, play player move
             if (!collisionOn && !keyHandler.enterPressed) {
                 switch (direction) {
                     case "up" -> worldY -= speed;
@@ -176,6 +218,11 @@ public class Player extends Entity {
                     case "left" -> worldX -= speed;
                     case "right" -> worldX += speed;
                 }
+                // If collisionOn is true, restore the saved worldX and worldY
+//                if (collisionOn) {
+//                    worldX = tempWorldX;
+//                    worldY = tempWorldY;
+//                }
                 spriteMovement();
             }
         } else {
@@ -185,6 +232,21 @@ public class Player extends Entity {
                 spriteNum = 0;  // Idle sprite
                 standCounter = 0;
             }
+        }
+        //Shoot projectTiles, if the previous tile is still on the screen,
+        // you can't shoot next one
+        if (keyHandler.shootKeyPressed && !projectTile.alive
+                && shootAvailableCounter == 30 && projectTile.haveResource(this)) {
+            //Set default coord, direction, alive state and entity
+            projectTile.set(worldX, worldY, direction, true, this);
+            //Subtract the cost
+            projectTile.subtractResource(this);
+
+            //Add this projTile to list
+            gameManager.projectilesList.add(projectTile);
+            shootAvailableCounter = 0;
+            //TODO change soundEffect
+            gameManager.playSE(1);
         }
         //To prevent sword swing when interact with events by enter press
         if (keyHandler.enterPressed && !attackCanceled) {
@@ -205,9 +267,13 @@ public class Player extends Entity {
                 invincibleCounter = 0;
             }
         }
+        //Timer for shooting the tiles, you wait 30 frames
+        if (shootAvailableCounter < 30) {
+            shootAvailableCounter++;
+        }
     }
 
-    private void playerAttack() {
+    public void playerAttack() {
         spriteCounter++;
 
         if (spriteCounter <= 5) {
@@ -238,8 +304,8 @@ public class Player extends Entity {
             solidArea.height = attackArea.height;
             //Check monster collision
             int monsterIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
-            damageMob(monsterIndex);
-            //After checking collision, restore org data
+            damageMob(monsterIndex, attack);
+            //After checking collision, restore original data
             worldX = currentWorldX;
             worldY = currentWorldY;
             solidArea.width = solidAreaWidth;
@@ -253,7 +319,7 @@ public class Player extends Entity {
         }
     }
 
-    private void damageMob(int monsterIndex) {
+    public void damageMob(int monsterIndex, int attack) {
         if (monsterIndex != playerIndex) {
             if (!gameManager.mobs[monsterIndex].invincible) {
                 gameManager.playSE(8);
@@ -278,7 +344,6 @@ public class Player extends Entity {
     }
 
     private void interactMob(int mobIndex) {
-        //TODO when the mob dies and player touches the mob - player receives the damage(not logical)
         if (mobIndex != playerIndex && !invincible && !gameManager.mobs[mobIndex].die) {
             gameManager.playSE(8);
             int damage = gameManager.mobs[mobIndex].attack - defense;
@@ -305,7 +370,6 @@ public class Player extends Entity {
     private void checkLevelUp() {
         if (xp >= nextLevelXp) {
             level++;
-            //TODO test it
             //This will make it so the exp resets but also takes into
             // account any exp collected that is over the nextLevelExp
             xp = xp - nextLevelXp;
@@ -323,13 +387,43 @@ public class Player extends Entity {
         }
     }
 
-    private void takeObject(int index) {
-        //if index is not player, make a reaction on obj
-        if (index != playerIndex) {
-            //TODO interact any object with player
+    public void selectItem() {
+        int itemIndex = gameManager.ui.getItemIndexOnSlot();
+        if (itemIndex < inventory.size()) {
+            Entity selectedItem = inventory.get(itemIndex);
+            if (selectedItem.type == typeSword || selectedItem.type == typeAxe) {
+                currentWeapon = selectedItem;
+                attack = getAttack();
+                getPlayerAttackImage();
+            }
+            if (selectedItem.type == typeShield) {
+                currentShield = selectedItem;
+                defense = getDefense();
+            }
+            if (selectedItem.type == typeConsumable) {
+                selectedItem.use(this);
+                inventory.remove(itemIndex);
+            }
         }
     }
 
+    private void takeObject(int index) {
+        //if index is not player, make a reaction on obj
+        if (index != playerIndex) {
+            String text;
+            if (inventory.size() != maxInventorySize) {
+                inventory.add(gameManager.object[index]);
+                gameManager.playSE(2);
+                text = "Got a " + gameManager.object[index].name + "!";
+            } else {
+                text = "You can't pick up the item anymore!";
+            }
+            gameManager.ui.addMessage(text);
+            gameManager.object[index] = null;
+        }
+    }
+
+    @Override
     public void draw(Graphics2D graphics2D) {
         int tempScreenX = screenX;
         int tempScreenY = screenY;

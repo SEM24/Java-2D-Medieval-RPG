@@ -7,7 +7,8 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     GameManager gameManager;
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
+    public boolean upPressed, downPressed, leftPressed,
+            rightPressed, enterPressed, shootKeyPressed;
     //Debug
     public boolean debugMode = false;
 
@@ -58,6 +59,13 @@ public class KeyHandler implements KeyListener {
         //Pause the game
         if (code == KeyEvent.VK_P) gameManager.gameState = gameManager.pauseState;
         if (code == KeyEvent.VK_ENTER) enterPressed = true;
+
+        if (code == KeyEvent.VK_CONTROL) shootKeyPressed = true;
+        //When player pressed shift, he runs
+        if (code == KeyEvent.VK_SHIFT && gameManager.gameState != gameManager.characterState) {
+            gameManager.playerRun = true;
+            gameManager.player.speed += 1;
+        }
         //Debug menu
         if (code == KeyEvent.VK_F9) debugMode = !debugMode;
         if (code == KeyEvent.VK_F8) gameManager.tileManager.loadMap("/maps/world01.txt");
@@ -77,7 +85,7 @@ public class KeyHandler implements KeyListener {
                 switch (gameManager.ui.commandNum) {
                     case 0 -> gameManager.ui.titleScreenState = 1;
                     case 1 -> {
-                        //TODO load menu
+                        //TODO add load menu in future
                     }
                     case 2 -> System.exit(0);
                 }
@@ -99,10 +107,8 @@ public class KeyHandler implements KeyListener {
                     case 0 -> {
                         //change the skin of character and stats
                         gameManager.player.playerSkin = 0;
-//                            gamePanel.player.speed -= 1;
-                        gameManager.player.maxHp = 7;
+//                        gameManager.player.maxHp = 8;
                         gameManager.player.hp = gameManager.player.maxHp;
-
                         gameManager.player.getPlayerImage();
                         gameManager.player.getPlayerAttackImage();
                         gameManager.gameState = gameManager.playState;
@@ -114,7 +120,6 @@ public class KeyHandler implements KeyListener {
                         gameManager.player.speed += 1;
 //                            gamePanel.player.maxHp = 6;
 //                            gamePanel.player.hp = gamePanel.player.maxHp;
-
                         gameManager.player.getPlayerImage();
                         gameManager.player.getPlayerAttackImage();
                         gameManager.gameState = gameManager.playState;
@@ -150,6 +155,9 @@ public class KeyHandler implements KeyListener {
                 gameManager.ui.slotCol++;
             gameManager.playSE(12);
         }
+        if (code == KeyEvent.VK_ENTER) {
+            gameManager.player.selectItem();
+        }
     }
 
     private void dialogState(int code) {
@@ -168,15 +176,11 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_S) downPressed = false;
         if (code == KeyEvent.VK_A) leftPressed = false;
         if (code == KeyEvent.VK_D) rightPressed = false;
-        //When player press shift, character runs faster
-        if (code == KeyEvent.VK_SHIFT) {
-            if (!gameManager.playerRun) {
-                gameManager.playerRun = true;
-                gameManager.player.speed += 1;
-            } else {
-                gameManager.playerRun = false;
-                gameManager.player.speed -= 1;
-            }
+        //When player unpressed shift, he walks
+        if (code == KeyEvent.VK_SHIFT && gameManager.gameState != gameManager.characterState) {
+            gameManager.playerRun = false;
+            gameManager.player.speed -= 1;
         }
+        if (code == KeyEvent.VK_CONTROL) shootKeyPressed = false;
     }
 }

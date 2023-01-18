@@ -3,6 +3,7 @@ package main.java.com.khomsi.game.main;
 import main.java.com.khomsi.game.entity.Entity;
 
 public class CheckCollision {
+    //TODO clean up the code
     GameManager panel;
 
     public CheckCollision(GameManager panel) {
@@ -21,7 +22,18 @@ public class CheckCollision {
         int entityTopRow = entityTopWorldY / GameManager.TILE_SIZE;
         int entityBottomRow = entityBottomWorldY / GameManager.TILE_SIZE;
 
+
+//        int tileNum1, tileNum2, tileNum3, tileNum4;
         int tileNum1, tileNum2;
+
+        //Then based on the current worldX and worldY, check the tile number of these 4 tiles. Basically we find out what the solidArea's 4 corners are hitting.
+
+//        tileNum1 = panel.tileManager.mapTileNum[entityLeftCol][entityTopRow];
+//        tileNum2 = panel.tileManager.mapTileNum[entityRightCol][entityTopRow];
+//        tileNum3 = panel.tileManager.mapTileNum[entityLeftCol][entityBottomRow];
+//        tileNum4 = panel.tileManager.mapTileNum[entityRightCol][entityBottomRow];
+//
+//        activateCollision(entity, tileNum1, tileNum2, tileNum3, tileNum4);
 
         switch (entity.direction) {
             case "up" -> {
@@ -58,6 +70,15 @@ public class CheckCollision {
             entity.collisionOn = true;
         }
     }
+
+    //Check if any side of tile has collision
+//    private void activateCollision(Entity entity, int tileNum1, int tileNum2, int tileNum3, int tileNum4) {
+//        //Then check if any of them are solid tile.
+//        if (panel.tileManager.tiles[tileNum1].collision || panel.tileManager.tiles[tileNum2].collision ||
+//                panel.tileManager.tiles[tileNum3].collision || panel.tileManager.tiles[tileNum4].collision) {
+//            entity.collisionOn = true;
+//        }
+//    }
 
 
     public int checkObject(Entity entity, boolean player) {

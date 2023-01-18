@@ -37,10 +37,10 @@ public class EventHandler {
             canTouchEvent = true;
         }
         if (canTouchEvent) {
-            if (interact(28, 16, "any")) damagePit(28, 16, gameManager.dialogueState);
-            if (interact(34, 33, "up")) healingPool(34, 33, gameManager.dialogueState);
+            //TODO add new events to game
+            if (interact(29, 19, "any")) damagePit(29, 19, gameManager.dialogueState);
+            if (interact(30, 21, "right")) healingPool(31, 21, gameManager.dialogueState);
         }
-
     }
 
     private void damagePit(int col, int row, int gameState) {
@@ -55,11 +55,12 @@ public class EventHandler {
 
     private void healingPool(int col, int row, int gameState) {
         if (gameManager.keyHandler.enterPressed) {
+            gameManager.gameState = gameState;
             //TODO gameManager.playerSE();
             gameManager.player.attackCanceled = true;
-            gameManager.gameState = gameState;
-            gameManager.ui.currentDialog = "You thrown the coin!\nYour Hp was recovered!";
+            gameManager.ui.currentDialog = "You thrown the coin!\nYour Hp and Mana were recovered!";
             gameManager.player.hp = gameManager.player.maxHp;
+            gameManager.player.mana = gameManager.player.maxMana;
             gameManager.placeObjects.setMobs();
         }
     }
@@ -92,7 +93,6 @@ public class EventHandler {
         gameManager.player.solidArea.y = gameManager.player.solidAreaDefaultY;
         eventRect[col][row].x = eventRect[col][row].eventRectDefaultX;
         eventRect[col][row].y = eventRect[col][row].eventRectDefaultY;
-
 
         return interact;
     }

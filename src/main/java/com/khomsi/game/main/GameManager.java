@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class GameManager extends JPanel implements Runnable {
     //Screen settings
@@ -47,6 +46,7 @@ public class GameManager extends JPanel implements Runnable {
     public Entity[] npcList = new Entity[10];
     public Entity[] mobs = new Entity[10];
     List<Entity> entities = new ArrayList<>();
+    public List<Entity> projectilesList = new ArrayList<>();
 
     public Player player = new Player(this, keyHandler);
 
@@ -123,13 +123,15 @@ public class GameManager extends JPanel implements Runnable {
     }
 
     public void update() {
-        //player
+        //player loop
         if (gameState == playState) {
             player.update();
-            //npc
+            //npc loop
             for (Entity npc : npcList) {
                 if (npc != null) npc.update();
             }
+
+            //Mob loop
             for (int i = 0; i < mobs.length; i++) {
                 if (mobs[i] != null) {
                     if (mobs[i].alive && !mobs[i].die) {
@@ -137,6 +139,17 @@ public class GameManager extends JPanel implements Runnable {
                     }
                     if (!mobs[i].alive) {
                         mobs[i] = null;
+                    }
+                }
+            }
+            //ProjectTiles loop
+            for (int i = 0; i < projectilesList.size(); i++) {
+                if (projectilesList.get(i) != null) {
+                    if (projectilesList.get(i).alive) {
+                        projectilesList.get(i).update();
+                    }
+                    if (!projectilesList.get(i).alive) {
+                        projectilesList.remove(i);
                     }
                 }
             }
@@ -168,7 +181,7 @@ public class GameManager extends JPanel implements Runnable {
             tileManager.draw(graphics2D);
 
             entities.add(player);
-            //Add npc, obj, mobs to draw list
+            //Add and render npc, obj, mobs, projectiles to draw list
             for (Entity entityNpc : npcList) {
                 if (entityNpc != null) {
                     entities.add(entityNpc);
@@ -181,6 +194,11 @@ public class GameManager extends JPanel implements Runnable {
             for (Entity mob : mobs) {
                 if (mob != null)
                     entities.add(mob);
+            }
+
+            for (Entity projectile : projectilesList) {
+                if (projectile != null)
+                    entities.add(projectile);
             }
             //Sort entities
             entities.sort(new EntityComparator());
@@ -214,6 +232,8 @@ public class GameManager extends JPanel implements Runnable {
             graphics2D.drawString("Invincible: : " + player.invincibleCounter, x, y);
             y += lineHeight;
             graphics2D.drawString("Draw Time: " + passed, x, y);
+            y += lineHeight;
+            graphics2D.drawString("Player's speed: " + player.speed, x, y);
             y += lineHeight;
             graphics2D.drawString("Press Ctrl+F9 after ed map", x, y);
             y += lineHeight;

@@ -2,6 +2,7 @@ package main.java.com.khomsi.game.entity.mobs;
 
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
+import main.java.com.khomsi.game.objects.projectTiles.RockObject;
 
 import java.util.Random;
 
@@ -14,7 +15,7 @@ public class MOB_Slime extends Entity {
 
     private void setDefaultValues() {
         name = "Slime";
-        type = 2;
+        type = typeMob;
         speed = 1;
         direction = "down";
         //4 = 2 hearts
@@ -23,7 +24,7 @@ public class MOB_Slime extends Entity {
         attack = 5;
         defense = 0;
         xp = 2;
-
+        projectTile = new RockObject(gameManager);
         //Boundaries
         solidArea.x = 3;
         solidArea.y = 18;
@@ -77,6 +78,12 @@ public class MOB_Slime extends Entity {
                 direction = "right";
             }
             lockCounter = 0;
+        }
+        int rand = new Random().nextInt(100) + 1;
+        if (rand > 99 && !projectTile.alive && shootAvailableCounter == 30) {
+            projectTile.set(worldX, worldY, direction, true, this);
+            gameManager.projectilesList.add(projectTile);
+            shootAvailableCounter = 0;
         }
     }
 
