@@ -3,7 +3,6 @@ package main.java.com.khomsi.game.main;
 import main.java.com.khomsi.game.entity.Entity;
 
 public class CheckCollision {
-    //TODO clean up the code
     GameManager panel;
 
     public CheckCollision(GameManager panel) {
@@ -22,42 +21,31 @@ public class CheckCollision {
         int entityTopRow = entityTopWorldY / GameManager.TILE_SIZE;
         int entityBottomRow = entityBottomWorldY / GameManager.TILE_SIZE;
 
-
-//        int tileNum1, tileNum2, tileNum3, tileNum4;
         int tileNum1, tileNum2;
-
-        //Then based on the current worldX and worldY, check the tile number of these 4 tiles. Basically we find out what the solidArea's 4 corners are hitting.
-
-//        tileNum1 = panel.tileManager.mapTileNum[entityLeftCol][entityTopRow];
-//        tileNum2 = panel.tileManager.mapTileNum[entityRightCol][entityTopRow];
-//        tileNum3 = panel.tileManager.mapTileNum[entityLeftCol][entityBottomRow];
-//        tileNum4 = panel.tileManager.mapTileNum[entityRightCol][entityBottomRow];
-//
-//        activateCollision(entity, tileNum1, tileNum2, tileNum3, tileNum4);
 
         switch (entity.direction) {
             case "up" -> {
                 entityTopRow = (entityTopWorldY - entity.speed) / GameManager.TILE_SIZE;
-                tileNum1 = panel.tileManager.mapTileNum[entityLeftCol][entityTopRow];
-                tileNum2 = panel.tileManager.mapTileNum[entityRightCol][entityTopRow];
+                tileNum1 = panel.tileManager.mapTileNum[panel.currentMap][entityLeftCol][entityTopRow];
+                tileNum2 = panel.tileManager.mapTileNum[panel.currentMap][entityRightCol][entityTopRow];
                 activateCollision(entity, tileNum1, tileNum2);
             }
             case "down" -> {
                 entityBottomRow = (entityBottomWorldY + entity.speed) / GameManager.TILE_SIZE;
-                tileNum1 = panel.tileManager.mapTileNum[entityLeftCol][entityBottomRow];
-                tileNum2 = panel.tileManager.mapTileNum[entityRightCol][entityBottomRow];
+                tileNum1 = panel.tileManager.mapTileNum[panel.currentMap][entityLeftCol][entityBottomRow];
+                tileNum2 = panel.tileManager.mapTileNum[panel.currentMap][entityRightCol][entityBottomRow];
                 activateCollision(entity, tileNum1, tileNum2);
             }
             case "left" -> {
                 entityLeftCol = (entityLeftWorldX - entity.speed) / GameManager.TILE_SIZE;
-                tileNum1 = panel.tileManager.mapTileNum[entityLeftCol][entityTopRow];
-                tileNum2 = panel.tileManager.mapTileNum[entityLeftCol][entityBottomRow];
+                tileNum1 = panel.tileManager.mapTileNum[panel.currentMap][entityLeftCol][entityTopRow];
+                tileNum2 = panel.tileManager.mapTileNum[panel.currentMap][entityLeftCol][entityBottomRow];
                 activateCollision(entity, tileNum1, tileNum2);
             }
             case "right" -> {
                 entityRightCol = (entityRightWorldX + entity.speed) / GameManager.TILE_SIZE;
-                tileNum1 = panel.tileManager.mapTileNum[entityRightCol][entityTopRow];
-                tileNum2 = panel.tileManager.mapTileNum[entityRightCol][entityBottomRow];
+                tileNum1 = panel.tileManager.mapTileNum[panel.currentMap][entityRightCol][entityTopRow];
+                tileNum2 = panel.tileManager.mapTileNum[panel.currentMap][entityRightCol][entityBottomRow];
                 activateCollision(entity, tileNum1, tileNum2);
             }
         }
@@ -71,31 +59,21 @@ public class CheckCollision {
         }
     }
 
-    //Check if any side of tile has collision
-//    private void activateCollision(Entity entity, int tileNum1, int tileNum2, int tileNum3, int tileNum4) {
-//        //Then check if any of them are solid tile.
-//        if (panel.tileManager.tiles[tileNum1].collision || panel.tileManager.tiles[tileNum2].collision ||
-//                panel.tileManager.tiles[tileNum3].collision || panel.tileManager.tiles[tileNum4].collision) {
-//            entity.collisionOn = true;
-//        }
-//    }
-
-
     public int checkObject(Entity entity, boolean player) {
         int index = 999;
 
-        for (int i = 0; i < panel.object.length; i++) {
+        for (int i = 0; i < panel.object[1].length; i++) {
 
-            if (panel.object[i] != null) {
+            if (panel.object[panel.currentMap][i] != null) {
                 //get entity's solid area pos
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
 
                 //get the obj's solid pos
-                panel.object[i].solidArea.x = panel.object[i].worldX
-                        + panel.object[i].solidArea.x;
-                panel.object[i].solidArea.y = panel.object[i].worldY
-                        + panel.object[i].solidArea.y;
+                panel.object[panel.currentMap][i].solidArea.x = panel.object[panel.currentMap][i].worldX
+                        + panel.object[panel.currentMap][i].solidArea.x;
+                panel.object[panel.currentMap][i].solidArea.y = panel.object[panel.currentMap][i].worldY
+                        + panel.object[panel.currentMap][i].solidArea.y;
 
                 //Change the movement collision and detect it
                 entityDirectionSpeed(entity);
@@ -103,8 +81,10 @@ public class CheckCollision {
 
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
-                panel.object[i].solidArea.x = panel.object[i].solidAreaDefaultX;
-                panel.object[i].solidArea.y = panel.object[i].solidAreaDefaultY;
+                panel.object[panel.currentMap][i].solidArea.x =
+                        panel.object[panel.currentMap][i].solidAreaDefaultX;
+                panel.object[panel.currentMap][i].solidArea.y =
+                        panel.object[panel.currentMap][i].solidAreaDefaultY;
             }
         }
         return index;
@@ -119,9 +99,9 @@ public class CheckCollision {
         }
     }
 
-    private int checkCollisionForPlayer(Entity entity, boolean player, int index, int i, Entity[] object) {
-        if (entity.solidArea.intersects(object[i].solidArea)) {
-            if (object[i].collision) {
+    private int checkCollisionForPlayer(Entity entity, boolean player, int index, int i, Entity[][] object) {
+        if (entity.solidArea.intersects(object[panel.currentMap][i].solidArea)) {
+            if (object[panel.currentMap][i].collision) {
                 entity.collisionOn = true;
             }
             if (player) {
@@ -132,21 +112,22 @@ public class CheckCollision {
     }
 
     //NPC/Enemies collision
-    public int checkEntity(Entity entity, Entity[] entities) {
+    public int checkEntity(Entity entity, Entity[][] entities) {
         int index = 999;
 
-        for (int i = 0; i < entities.length; i++) {
+        for (int i = 0; i < entities[1].length; i++) {
 
-            if (entities[i] != null) {
+            if (entities[panel.currentMap][i] != null) {
                 //get entity's solid area pos
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
 
                 //get the  entity's solid pos
-                entities[i].solidArea.x = entities[i].worldX
-                        + entities[i].solidArea.x;
-                entities[i].solidArea.y = entities[i].worldY
-                        + entities[i].solidArea.y;
+                entities[panel.currentMap][i].solidArea.x =
+                        entities[panel.currentMap][i].worldX
+                                + entities[panel.currentMap][i].solidArea.x;
+                entities[panel.currentMap][i].solidArea.y =
+                        entities[panel.currentMap][i].worldY + entities[panel.currentMap][i].solidArea.y;
 
                 //Change the movement collision and detect it
                 entityDirectionSpeed(entity);
@@ -154,17 +135,16 @@ public class CheckCollision {
 
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
-                entities[i].solidArea.x = entities[i].solidAreaDefaultX;
-                entities[i].solidArea.y = entities[i].solidAreaDefaultY;
+                entities[panel.currentMap][i].solidArea.x = entities[panel.currentMap][i].solidAreaDefaultX;
+                entities[panel.currentMap][i].solidArea.y = entities[panel.currentMap][i].solidAreaDefaultY;
             }
         }
         return index;
     }
 
-    private int checkCollisionForEntity(Entity entity, Entity[] entities, int index, int i) {
-
-        if (entity.solidArea.intersects(entities[i].solidArea)) {
-            if (entities[i] != entity) {
+    private int checkCollisionForEntity(Entity entity, Entity[][] entities, int index, int i) {
+        if (entity.solidArea.intersects(entities[panel.currentMap][i].solidArea)) {
+            if (entities[panel.currentMap][i] != entity) {
                 entity.collisionOn = true;
                 index = i;
             }

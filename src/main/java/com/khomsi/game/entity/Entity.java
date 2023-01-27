@@ -39,6 +39,7 @@ public class Entity {
     boolean attacking = false;
     public boolean alive = true;
     public boolean die = false;
+    public boolean fallIntoPit = false;
     boolean hpBarOn = false;
 
     //Entity stats
@@ -62,6 +63,7 @@ public class Entity {
     public Entity currentShield;
 
     //Item attributes
+    public int value;
     public int attackValue;
     public int defenseValue;
     public String itemDescription = "";
@@ -76,6 +78,8 @@ public class Entity {
     public final int typeAxe = 4;
     public final int typeShield = 5;
     public final int typeConsumable = 6;
+    public final int typePickUpOnly = 7;
+
     //TOOLS
     int dialogIndex = 0;
     public String[] dialogues = new String[20];
@@ -92,14 +96,18 @@ public class Entity {
         this.gameManager = gameManager;
     }
 
-    public void setAction() {
-    }
 
-    public void damageReaction() {
-    }
-
-    public void use(Entity entity) {
-
+    public void dropItem(Entity droppedItem) {
+        //Scan array and set the item
+        for (int i = 0; i < gameManager.object[1].length; i++) {
+            if (gameManager.object[gameManager.currentMap][i] == null) {
+                gameManager.object[gameManager.currentMap][i] = droppedItem;
+                //Coord of died mob
+                gameManager.object[gameManager.currentMap][i].worldX = worldX;
+                gameManager.object[gameManager.currentMap][i].worldY = worldY;
+                break;
+            }
+        }
     }
 
     public void speak() {
@@ -123,6 +131,7 @@ public class Entity {
         gameManager.checkCollision.checkObject(this, false);
         gameManager.checkCollision.checkEntity(this, gameManager.npcList);
         gameManager.checkCollision.checkEntity(this, gameManager.mobs);
+        gameManager.checkCollision.checkEntity(this, gameManager.interactiveTile);
         boolean interactPlayer = gameManager.checkCollision.checkPlayer(this);
         //If it's monster, and it touches the player, receive the dmg
         if (this.type == typeMob && interactPlayer) {
@@ -221,8 +230,8 @@ public class Entity {
             if (die) {
                 dieAnimation(graphics2D);
             }
-            graphics2D.drawImage(characterSpriteDirectionImage(), screenX, screenY,
-                    GameManager.TILE_SIZE, GameManager.TILE_SIZE, null);
+            graphics2D.drawImage(characterSpriteDirectionImage(),
+                    screenX, screenY, null);
             changeAlfa(graphics2D, 1F);
         }
     }
@@ -251,6 +260,7 @@ public class Entity {
     private void changeAlfa(Graphics2D graphics2D, float alfaValue) {
         graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alfaValue));
     }
+
 
     //Use this method to change the sprite direction of character
     public BufferedImage characterSpriteDirectionImage() {
@@ -301,5 +311,62 @@ public class Entity {
     //Method with default values for images
     public BufferedImage setup(String imageName) {
         return setup(imageName, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
+    }
+
+
+    //WARNING! We always override these methods by subclasses
+    //so there's no need to have logic inside them
+    public void generateParticle(Entity generator, Entity target) {
+        Color color = generator.getParticleColor();
+        int size = generator.getParticleSize();
+        int speedNew = generator.getParticleSpeed();
+        int maxHpNew = generator.getParticleMaxHp();
+
+        Particle particleTL = new Particle(gameManager, target, color, size,
+                speedNew, maxHpNew, -2, -1);
+        Particle particleTR = new Particle(gameManager, target, color, size,
+                speedNew, maxHpNew, 2, -1);
+        Particle particleDL = new Particle(gameManager, target, color, size,
+                speedNew, maxHpNew, -2, 1);
+        Particle particleDR = new Particle(gameManager, target, color, size,
+                speedNew, maxHpNew, 2, 1);
+        gameManager.particleList.add(particleTL);
+        gameManager.particleList.add(particleTR);
+        gameManager.particleList.add(particleDL);
+        gameManager.particleList.add(particleDR);
+    }
+
+    public Color getParticleColor() {
+        return null;
+    }
+
+    public int getParticleSize() {
+        int size = 0;
+        return size;
+    }
+
+    public int getParticleSpeed() {
+        int speed = 0;
+        return speed; //speed of particle
+    }
+
+    public int getParticleMaxHp() {
+        int maxHp = 0;
+        return maxHp;
+    }
+
+    public void setAction() {
+
+    }
+
+    public void damageReaction() {
+    }
+
+    public void use(Entity entity) {
+
+    }
+
+    public void checkDrop() {
+
     }
 }

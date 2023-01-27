@@ -3,13 +3,15 @@ package main.java.com.khomsi.game.main;
 import javax.swing.*;
 
 public class GameApplication {
+    public static JFrame window;
+
     public static void main(String[] args) {
         new GameApplication().startGame();
     }
 
     private void startGame() {
-        JFrame window = new JFrame();
-
+        window = new JFrame();
+        System.setProperty("sun.java2d.d3d", "false");
         //let window close properly, when use press close (x) button
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //can't resize window
@@ -17,6 +19,10 @@ public class GameApplication {
         window.setTitle("My 2D Adventure Game");
         GameManager gameManager = new GameManager();
         window.add(gameManager);
+        gameManager.config.loadConfig();
+        if (gameManager.fullScreenOn) {
+            window.setUndecorated(true);
+        }
         window.pack();
 
         //the window will be displayed in the center of the screen

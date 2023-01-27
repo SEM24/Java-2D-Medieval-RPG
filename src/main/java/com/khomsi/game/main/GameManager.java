@@ -4,9 +4,11 @@ import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.entity.Player;
 import main.java.com.khomsi.game.main.tools.*;
 import main.java.com.khomsi.game.tiles.TileManager;
+import main.java.com.khomsi.game.tilesinteractive.InteractiveTile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,38 +20,50 @@ public class GameManager extends JPanel implements Runnable {
     //we need to scale the size of hero and game, because on big screens it'll be too small
     static final int SCALE = 3;
     public static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE; //48x48 tiles
-    public static final int MAX_SCREEN_COL = 16; //16 tiles horizontal
+    public static final int MAX_SCREEN_COL = 20; //20 tiles horizontal
     public static final int MAX_SCREEN_ROW = 12; //12 tiles vertical
-    public static final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL; //768 pixels
+    public static final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL; //960 pixels
     public static final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW; //576 pixels
 
     //World settings
-    public static int maxWorldCol;
+    public static int maxWorldCol = 50;
 
-    public static int maxWorldRow;
+    public static int maxWorldRow = 50;
+    //TODO change if need to create more maps
+    public final int maxMap = 10;
+    public int currentMap = 0;
+
+    //For full screen
+    int screenWidthFull = SCREEN_WIDTH;
+    int screenHeightFull = SCREEN_HEIGHT;
+    BufferedImage tempScreen;
+    Graphics2D g2d;
+
 
     //TOOLS FOR GAME
     public KeyHandler keyHandler = new KeyHandler(this);
     public TileManager tileManager = new TileManager(this);
-    Sound music = new Sound();
-    Sound se = new Sound();
+    public Sound music = new Sound();
+    public Sound se = new Sound();
     public UI ui = new UI(this);
     //use threads to start, stop,repeat actions.
     public Thread gameThread;
+    public Config config = new Config(this);
     public CheckCollision checkCollision = new CheckCollision(this);
     public PlaceObjects placeObjects = new PlaceObjects(this);
     public EventHandler eventHandler = new EventHandler(this);
 
     //ENTITY AND OBJECTS
     //TODO extend the massive, when you'll have more objects
-    public Entity[] object = new Entity[10];
-    public Entity[] npcList = new Entity[10];
-    public Entity[] mobs = new Entity[10];
+    public Entity[][] object = new Entity[maxMap][20];
+    public Entity[][] npcList = new Entity[maxMap][10];
+    public Entity[][] mobs = new Entity[maxMap][10];
     List<Entity> entities = new ArrayList<>();
+    public InteractiveTile interactiveTile[][] = new InteractiveTile[maxMap][50];
     public List<Entity> projectilesList = new ArrayList<>();
+    public List<Entity> particleList = new ArrayList<>();
 
     public Player player = new Player(this, keyHandler);
-
 
     public static final int FPS = 60;
     //GameState
@@ -60,8 +74,11 @@ public class GameManager extends JPanel implements Runnable {
     //depends on situation, draw dif keyInput
     public final int pauseState = 2;
     public final int characterState = 4;
-    //until player doesn't press shift, he doesn't run
+    public final int optionState = 5;
+    public final int gameOverState = 6;
+    //Until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
+    public boolean fullScreenOn = false;
 
     public GameManager() {
         //set size of this class
@@ -76,11 +93,46 @@ public class GameManager extends JPanel implements Runnable {
     }
 
     public void setupGame() {
+        setDefaultObjects();
+        gameState = titleState;
+
+        tempScreen = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        //Everything will be recorded in buff tempScreen
+        g2d = (Graphics2D) tempScreen.getGraphics();
+        if (fullScreenOn)
+            setFullScreen();
+    }
+
+    public void retry() {
+        player.setDefaultPosition();
+        player.restoreHpMana();
+        placeObjects.setNpc();
+        placeObjects.setMobs();
+    }
+
+    public void restart() {
+        player.setDefaultValues();
+//        player.setDefaultPosition();
+//        player.restoreHpMana();
+        player.setItems();
+        setDefaultObjects();
+    }
+
+    private void setDefaultObjects() {
         placeObjects.setObject();
         placeObjects.setNpc();
         placeObjects.setMobs();
+        placeObjects.setInteractiveTiles();
+    }
 
-        gameState = titleState;
+    public void setFullScreen() {
+        //Get local screen device
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice graphicsDevice = ge.getDefaultScreenDevice();
+        graphicsDevice.setFullScreenWindow(GameApplication.window);
+        //Get full screen width/height
+        screenWidthFull = GameApplication.window.getWidth();
+        screenHeightFull = GameApplication.window.getHeight();
     }
 
     public void startGameThread() {
@@ -110,7 +162,8 @@ public class GameManager extends JPanel implements Runnable {
                 //update info as character position
                 update();
                 //draw the screen info with updated info
-                repaint();
+                drawToTempScreen();
+                drawToScreen();
                 delta--;
                 drawCount++;
             }
@@ -123,34 +176,35 @@ public class GameManager extends JPanel implements Runnable {
     }
 
     public void update() {
-        //player loop
+        //Player loop
         if (gameState == playState) {
             player.update();
-            //npc loop
-            for (Entity npc : npcList) {
-                if (npc != null) npc.update();
-            }
+            //Npc loop
+            for (Entity npc : npcList[currentMap])
+                if (npc != null)
+                    npc.update();
 
             //Mob loop
-            for (int i = 0; i < mobs.length; i++) {
-                if (mobs[i] != null) {
-                    if (mobs[i].alive && !mobs[i].die) {
-                        mobs[i].update();
-                    }
-                    if (!mobs[i].alive) {
-                        mobs[i] = null;
+            for (int i = 0; i < mobs[1].length; i++) {
+                if (mobs[currentMap][i] != null) {
+                    if (mobs[currentMap][i].alive && !mobs[currentMap][i].die)
+                        mobs[currentMap][i].update();
+
+                    if (!mobs[currentMap][i].alive) {
+                        mobs[currentMap][i].checkDrop();
+                        mobs[currentMap][i] = null;
                     }
                 }
             }
             //ProjectTiles loop
-            for (int i = 0; i < projectilesList.size(); i++) {
-                if (projectilesList.get(i) != null) {
-                    if (projectilesList.get(i).alive) {
-                        projectilesList.get(i).update();
-                    }
-                    if (!projectilesList.get(i).alive) {
-                        projectilesList.remove(i);
-                    }
+            updateLoopArrays(projectilesList);
+
+            //ParticleTiles loop
+            updateLoopArrays(particleList);
+            //Interactive tiles loop
+            for (InteractiveTile tile : interactiveTile[currentMap]) {
+                if (tile != null) {
+                    tile.update();
                 }
             }
         }
@@ -160,12 +214,7 @@ public class GameManager extends JPanel implements Runnable {
     }
 
     //method to draw the components on screen
-    @Override
-    public void paintComponent(Graphics graphics) {
-
-        super.paintComponent(graphics);
-        //extends graphic class and provide more control on geometry, color managment ect.
-        Graphics2D graphics2D = (Graphics2D) graphics;
+    public void drawToTempScreen() {
         //object
         long drawStart = 0;
         if (keyHandler.debugMode)
@@ -173,45 +222,52 @@ public class GameManager extends JPanel implements Runnable {
 
         //title screen
         if (gameState == titleState) {
-            ui.draw(graphics2D);
+            ui.draw(g2d);
         }
         //others
         else {
             //Draw Tiles
-            tileManager.draw(graphics2D);
-
+            tileManager.draw(g2d);
             entities.add(player);
             //Add and render npc, obj, mobs, projectiles to draw list
-            for (Entity entityNpc : npcList) {
-                if (entityNpc != null) {
-                    entities.add(entityNpc);
-                }
-            }
-            for (Entity entityObj : object) {
-                if (entityObj != null)
-                    entities.add(entityObj);
-            }
-            for (Entity mob : mobs) {
-                if (mob != null)
-                    entities.add(mob);
-            }
+            drawMethodArray(npcList);
+            //Interactive tiles
+            drawMethodArray(interactiveTile);
+            drawMethodArray(object);
+            drawMethodArray(mobs);
+            drawMethodList(projectilesList);
+            drawMethodList(particleList);
 
-            for (Entity projectile : projectilesList) {
-                if (projectile != null)
-                    entities.add(projectile);
-            }
             //Sort entities
             entities.sort(new EntityComparator());
 
             //Draw them
             for (Entity entity : entities) {
-                entity.draw(graphics2D);
+                entity.draw(g2d);
             }
             //Make list empty to not overload it
             entities.clear();
             //UI(text)
-            ui.draw(graphics2D);
+            ui.draw(g2d);
         }
+        debugFunction(g2d, drawStart);
+    }
+
+    private void drawMethodList(List<Entity> list) {
+        for (Entity object : list) {
+            if (object != null)
+                entities.add(object);
+        }
+    }
+
+    private void drawMethodArray(Entity[][] array) {
+        for (Entity element : array[currentMap]) {
+            if (element != null)
+                entities.add(element);
+        }
+    }
+
+    private void debugFunction(Graphics2D graphics2D, long drawStart) {
         //Debug function
         if (keyHandler.debugMode) {
             long drawEnd = System.nanoTime();
@@ -240,11 +296,29 @@ public class GameManager extends JPanel implements Runnable {
             graphics2D.drawString("Press F8 to reload tiles", x, y);
             //Show player bounds
             graphics2D.setColor(Color.RED);
+            graphics2D.setStroke(new BasicStroke(2));
             graphics2D.drawRect(player.screenX + player.solidArea.x, player.screenY + player.solidArea.y,
                     player.solidArea.width, player.solidArea.height);
         }
-        //save some memory
-        graphics2D.dispose();
+    }
+
+    public void updateLoopArrays(List<Entity> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) != null) {
+                if (list.get(i).alive) {
+                    list.get(i).update();
+                }
+                if (!list.get(i).alive) {
+                    list.remove(i);
+                }
+            }
+        }
+    }
+
+    public void drawToScreen() {
+        Graphics graphics = getGraphics();
+        graphics.drawImage(tempScreen, 0, 0, screenWidthFull, screenHeightFull, null);
+        graphics.dispose();
     }
 
     //use method to loop the main music
