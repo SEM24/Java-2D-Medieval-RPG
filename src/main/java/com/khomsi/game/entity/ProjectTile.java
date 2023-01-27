@@ -42,6 +42,7 @@ public class ProjectTile extends Entity {
             int mobIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
             if (mobIndex != gameManager.player.playerIndex) {
                 gameManager.player.damageMob(mobIndex, attack);
+                generateParticle(entity.projectTile, gameManager.mobs[gameManager.currentMap][mobIndex]);
                 //After hitting the mob, projectile disappear
                 alive = false;
             }
@@ -50,6 +51,7 @@ public class ProjectTile extends Entity {
             boolean contactPlayer = gameManager.checkCollision.checkPlayer(this);
             if (!gameManager.player.invincible && contactPlayer) {
                 damagePlayer(attack);
+                generateParticle(entity.projectTile, gameManager.player);
                 alive = false;
             }
         }

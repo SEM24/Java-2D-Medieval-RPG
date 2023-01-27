@@ -8,7 +8,7 @@ public class MetalShieldObject extends Entity {
         super(gameManager);
         type = typeShield;
         name = "Metal Shield";
-        down = setup("/objects/shield_metal");
+        down = setup("/objects/equipment/shield_metal");
         defenseValue = 2;
         itemDescription = "[" + name + "]\n" + "Usual metal shield with\n" + defenseValue + " defense.";
     }

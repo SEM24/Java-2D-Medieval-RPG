@@ -39,13 +39,97 @@ public class KeyHandler implements KeyListener {
         else if (gameManager.gameState == gameManager.pauseState) {
             pauseState(code);
         }
-        //dialog state
+        //Dialog state
         else if (gameManager.gameState == gameManager.dialogueState) {
             dialogState(code);
         }
         //Character state
         else if (gameManager.gameState == gameManager.characterState) {
             characterState(code);
+        }
+        //Option state
+        else if (gameManager.gameState == gameManager.optionState) {
+            optionState(code);
+        }
+        //Game Over state
+        else if (gameManager.gameState == gameManager.gameOverState) {
+            gameOverState(code);
+        }
+    }
+
+    private void gameOverState(int code) {
+        if (code == KeyEvent.VK_W) {
+            gameManager.ui.commandNum--;
+            if (gameManager.ui.commandNum < 0) {
+                gameManager.ui.commandNum = 1;
+            }
+            gameManager.playSE(12);
+        }
+        if (code == KeyEvent.VK_S) {
+            gameManager.ui.commandNum++;
+            if (gameManager.ui.commandNum > 1) {
+                gameManager.ui.commandNum = 0;
+            }
+            gameManager.playSE(12);
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            if (gameManager.ui.commandNum == 0) {
+                gameManager.gameState = gameManager.playState;
+                gameManager.retry();
+                gameManager.playMusic(0);
+            } else if (gameManager.ui.commandNum == 1) {
+                gameManager.ui.titleScreenState = 0;
+                gameManager.gameState = gameManager.titleState;
+                gameManager.restart();
+            }
+        }
+    }
+
+    private void optionState(int code) {
+        if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = gameManager.playState;
+        if (code == KeyEvent.VK_ENTER) enterPressed = true;
+
+        int maxCommandNum = 0;
+        switch (gameManager.ui.subState) {
+            case 0 -> maxCommandNum = 5;
+            case 3 -> maxCommandNum = 1;
+        }
+        if (code == KeyEvent.VK_W) {
+            gameManager.ui.commandNum--;
+            gameManager.playSE(12);
+            if (gameManager.ui.commandNum < 0) gameManager.ui.commandNum = maxCommandNum;
+        }
+        if (code == KeyEvent.VK_S) {
+            gameManager.ui.commandNum++;
+            gameManager.playSE(12);
+            if (gameManager.ui.commandNum > maxCommandNum) gameManager.ui.commandNum = 0;
+        }
+        //Change volume
+        if (code == KeyEvent.VK_A) {
+            if (gameManager.ui.subState == 0) {
+                if (gameManager.ui.commandNum == 1 && gameManager.music.volumeScale > 0) {
+                    gameManager.music.volumeScale--;
+                    gameManager.music.checkVolume();
+                    gameManager.playSE(12);
+                }
+                if (gameManager.ui.commandNum == 2 && gameManager.se.volumeScale > 0) {
+                    gameManager.se.volumeScale--;
+                    gameManager.playSE(12);
+                }
+            }
+        }
+        if (code == KeyEvent.VK_D) {
+            if (gameManager.ui.subState == 0) {
+                if (gameManager.ui.commandNum == 1 && gameManager.music.volumeScale < 5) {
+                    gameManager.music.volumeScale++;
+                    gameManager.music.checkVolume();
+                    gameManager.playSE(12);
+                }
+                if (gameManager.ui.commandNum == 2 && gameManager.se.volumeScale < 5) {
+                    gameManager.se.volumeScale++;
+                    gameManager.playSE(12);
+                }
+            }
         }
     }
 
@@ -61,6 +145,7 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_ENTER) enterPressed = true;
 
         if (code == KeyEvent.VK_CONTROL) shootKeyPressed = true;
+        if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = gameManager.optionState;
         //When player pressed shift, he runs
         if (code == KeyEvent.VK_SHIFT && gameManager.gameState != gameManager.characterState) {
             gameManager.playerRun = true;
@@ -68,7 +153,12 @@ public class KeyHandler implements KeyListener {
         }
         //Debug menu
         if (code == KeyEvent.VK_F9) debugMode = !debugMode;
-        if (code == KeyEvent.VK_F8) gameManager.tileManager.loadMap("/maps/world01.txt");
+        if (code == KeyEvent.VK_F8) {
+            switch (gameManager.currentMap) {
+                case 0 -> gameManager.tileManager.loadMap("/maps/world01.txt", 0);
+                case 1 -> gameManager.tileManager.loadMap("/maps/interior01.txt", 1);
+            }
+        }
     }
 
     private void titleState(int code) {
@@ -104,32 +194,14 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_ENTER) {
                 //Set character's stats and skin, depends on chose
                 switch (gameManager.ui.commandNum) {
-                    case 0 -> {
-                        //change the skin of character and stats
-                        gameManager.player.playerSkin = 0;
-//                        gameManager.player.maxHp = 8;
-                        gameManager.player.hp = gameManager.player.maxHp;
-                        gameManager.player.getPlayerImage();
-                        gameManager.player.getPlayerAttackImage();
-                        gameManager.gameState = gameManager.playState;
-                        gameManager.playMusic(0);
-                    }
-                    case 1 -> {
-                        //change the skin of character and stats
-                        gameManager.player.playerSkin = 1;
-                        gameManager.player.speed += 1;
-//                            gamePanel.player.maxHp = 6;
-//                            gamePanel.player.hp = gamePanel.player.maxHp;
-                        gameManager.player.getPlayerImage();
-                        gameManager.player.getPlayerAttackImage();
-                        gameManager.gameState = gameManager.playState;
-                        gameManager.playMusic(0);
-                    }
+                    case 0 -> gameManager.player.createNewPlayer(0, 0, 0);
+                    case 1 -> gameManager.player.createNewPlayer(1, 0, 1);
                     case 2 -> gameManager.ui.titleScreenState = 0;
                 }
             }
         }
     }
+
 
     private void characterState(int code) {
         if (code == KeyEvent.VK_C) gameManager.gameState = gameManager.playState;

@@ -8,7 +8,7 @@ public class AxeObject extends Entity {
         super(gameManager);
         type = typeAxe;
         name = "Axe";
-        down = setup("/objects/axe");
+        down = setup("/objects/equipment/axe");
         attackValue = 2;
         attackArea.width = 30;
         attackArea.height = 30;

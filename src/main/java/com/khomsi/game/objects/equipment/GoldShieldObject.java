@@ -8,7 +8,7 @@ public class GoldShieldObject extends Entity {
         super(gameManager);
         type = typeShield;
         name = "Gold Shield";
-        down = setup("/objects/shield_gold");
+        down = setup("/objects/equipment/shield_gold");
         defenseValue = 3;
         itemDescription = "[" + name + "]\n" + "Gold shield with\n" + defenseValue + " defense.";
     }

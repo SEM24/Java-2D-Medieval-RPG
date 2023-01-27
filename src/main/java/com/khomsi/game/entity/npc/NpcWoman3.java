@@ -5,9 +5,9 @@ import main.java.com.khomsi.game.main.GameManager;
 
 import java.util.Random;
 
-public class NPC_Woman3 extends Entity {
+public class NpcWoman3 extends Entity {
 
-    public NPC_Woman3(GameManager gameManager) {
+    public NpcWoman3(GameManager gameManager) {
         super(gameManager);
         direction = "down";
         speed = 1;

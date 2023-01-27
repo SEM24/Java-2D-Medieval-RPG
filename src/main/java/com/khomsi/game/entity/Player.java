@@ -48,12 +48,13 @@ public class Player extends Entity {
 //        getPlayerAttackImage();
     }
 
-    private void setDefaultValues() {
+    public void setDefaultValues() {
         //player position of player
         worldX = GameManager.TILE_SIZE * 23;
         worldY = GameManager.TILE_SIZE * 21;
         speed = 3;
         direction = "down";
+        invincible = false;
 
         //player hp, 6 = 3 hearts, 6 = 2.5 hearts
         level = 1;
@@ -83,7 +84,21 @@ public class Player extends Entity {
         defense = getDefense();
     }
 
-    private void setItems() {
+    public void setDefaultPosition() {
+        //player position of player
+        worldX = GameManager.TILE_SIZE * 21;
+        worldY = GameManager.TILE_SIZE * 22;
+        direction = "down";
+    }
+
+    public void restoreHpMana() {
+        hp = maxHp;
+        mana = maxMana;
+        invincible = false;
+    }
+
+    public void setItems() {
+        inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
     }
@@ -91,6 +106,18 @@ public class Player extends Entity {
     private int getAttack() {
         attackArea = currentWeapon.attackArea;
         return strength * currentWeapon.attackValue;
+    }
+
+    //Change the skin of character and stats
+    public void createNewPlayer(int skinType, int maxHp, int buffSpeed) {
+        gameManager.player.playerSkin = skinType;
+        gameManager.player.speed += buffSpeed;
+//                        gameManager.player.maxHp = 8;
+//        gameManager.player.hp = gameManager.player.maxHp;
+        gameManager.player.getPlayerImage();
+        gameManager.player.getPlayerAttackImage();
+        gameManager.gameState = gameManager.playState;
+        gameManager.playMusic(0);
     }
 
     private int getDefense() {
@@ -142,28 +169,26 @@ public class Player extends Entity {
             attackRight2 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_2", attackLRW, attackLRH);
             attackRight3 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_3", attackLRW, attackLRH);
         }
-        //If the axe is chosen TODO add the axe sprites to the game
         if (currentWeapon.type == typeAxe) {
-            attackUp = setup(playerPath[playerSkin] + "/attackSword/player_up_attack", attackUpDownW, attackUpDownH);
-            attackUp1 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_1", attackUpDownW, attackUpDownH);
-            attackUp2 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_2", attackUpDownW, attackUpDownH);
-            attackUp3 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_3", attackUpDownW, attackUpDownH);
-            attackDown = setup(playerPath[playerSkin] + "/attackSword/player_down_attack", attackUpDownW, attackUpDownH);
-            attackDown1 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_1", attackUpDownW, attackUpDownH);
-            attackDown2 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_2", attackUpDownW, attackUpDownH);
-            attackDown3 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_3", attackUpDownW, attackUpDownH);
-            attackLeft = setup(playerPath[playerSkin] + "/attackSword/player_left_attack", attackLRW, attackLRH);
-            attackLeft1 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_1", attackLRW, attackLRH);
-            attackLeft2 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_2", attackLRW, attackLRH);
-            attackLeft3 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_3", attackLRW, attackLRH);
-            attackRight = setup(playerPath[playerSkin] + "/attackSword/player_right_attack", attackLRW, attackLRH);
-            attackRight1 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_1", attackLRW, attackLRH);
-            attackRight2 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_2", attackLRW, attackLRH);
-            attackRight3 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_3", attackLRW, attackLRH);
+            attackUp = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe", attackUpDownW, attackUpDownH);
+            attackUp1 = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe_1", attackUpDownW, attackUpDownH);
+            attackUp2 = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe_2", attackUpDownW, attackUpDownH);
+            attackUp3 = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe_3", attackUpDownW, attackUpDownH);
+            attackDown = setup(playerPath[playerSkin] + "/attackAxe/player_down_axe", attackUpDownW, attackUpDownH);
+            attackDown1 = setup(playerPath[playerSkin] + "/attackAxe/player_down_axe_1", attackUpDownW, attackUpDownH);
+            attackDown2 = setup(playerPath[playerSkin] + "/attackAxe/player_down_axe_2", attackUpDownW, attackUpDownH);
+            attackDown3 = setup(playerPath[playerSkin] + "/attackAxe/player_down_axe_3", attackUpDownW, attackUpDownH);
+            attackLeft = setup(playerPath[playerSkin] + "/attackAxe/player_left_axe", attackLRW, attackLRH);
+            attackLeft1 = setup(playerPath[playerSkin] + "/attackAxe/player_left_axe_1", attackLRW, attackLRH);
+            attackLeft2 = setup(playerPath[playerSkin] + "/attackAxe/player_left_axe_2", attackLRW, attackLRH);
+            attackLeft3 = setup(playerPath[playerSkin] + "/attackAxe/player_left_axe_3", attackLRW, attackLRH);
+            attackRight = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe", attackLRW, attackLRH);
+            attackRight1 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_1", attackLRW, attackLRH);
+            attackRight2 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_2", attackLRW, attackLRH);
+            attackRight3 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_3", attackLRW, attackLRH);
         }
     }
 
-    //TODO clean up the code
     //This method updates player's coordinates
     @Override
     public void update() {
@@ -174,43 +199,21 @@ public class Player extends Entity {
         else if (keyHandler.upPressed || keyHandler.downPressed ||
                 keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.enterPressed) {
 
-//            //Record the current worldX and worldY first.
-//            int tempWorldX = worldX;
-//            int tempWorldY = worldY;
             //use else if to avoid diagonal movement, if it's not needed, use just if
             if (keyHandler.upPressed) {
                 direction = "up";
-//                worldY -= speed;
-            }
-            if (keyHandler.downPressed) {
+            } else if (keyHandler.downPressed) {
                 direction = "down";
-//                worldY += speed;
-            }
-            if (keyHandler.leftPressed) {
+            } else if (keyHandler.leftPressed) {
                 direction = "left";
-//                worldX -= speed;
-            }
-            if (keyHandler.rightPressed) {
+            } else if (keyHandler.rightPressed) {
                 direction = "right";
-//                worldX += speed;
             }
-            //Check tile collision
-            collisionOn = false;
-            gameManager.checkCollision.checkTile(this);
 
-            //Check obj collision
-            int objIndex = gameManager.checkCollision.checkObject(this, true);
-            takeObject(objIndex);
-            //Check npc collision
-            int npcIndex = gameManager.checkCollision.checkEntity(this, gameManager.npcList);
-            interactNpc(npcIndex);
-
-            //Check mob's collision
-            int mobIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
-            interactMob(mobIndex);
+            turnOnCollision();
             //Check Event
             gameManager.eventHandler.checkEvent();
-
+            //Change the direction of player
             if (!collisionOn && !keyHandler.enterPressed) {
                 switch (direction) {
                     case "up" -> worldY -= speed;
@@ -218,14 +221,20 @@ public class Player extends Entity {
                     case "left" -> worldX -= speed;
                     case "right" -> worldX += speed;
                 }
-                // If collisionOn is true, restore the saved worldX and worldY
-//                if (collisionOn) {
-//                    worldX = tempWorldX;
-//                    worldY = tempWorldY;
-//                }
-                spriteMovement();
             }
-        } else {
+            //To prevent sword swing when interact with events by enter press
+            if (keyHandler.enterPressed && !attackCanceled) {
+                gameManager.playSE(10);
+                attacking = true;
+                spriteCounter = 0;
+            }
+            attackCanceled = false;
+            gameManager.keyHandler.enterPressed = false;
+            //Change the player's walk/attack sprites
+            spriteMovement();
+        }
+        //Use standing sprites with stand counter
+        else {
             standCounter++;
             //timer before the idle anim starts
             if (standCounter == 42) {
@@ -233,8 +242,9 @@ public class Player extends Entity {
                 standCounter = 0;
             }
         }
+
         //Shoot projectTiles, if the previous tile is still on the screen,
-        // you can't shoot next one
+        //you can't shoot next one
         if (keyHandler.shootKeyPressed && !projectTile.alive
                 && shootAvailableCounter == 30 && projectTile.haveResource(this)) {
             //Set default coord, direction, alive state and entity
@@ -248,16 +258,6 @@ public class Player extends Entity {
             //TODO change soundEffect
             gameManager.playSE(1);
         }
-        //To prevent sword swing when interact with events by enter press
-        if (keyHandler.enterPressed && !attackCanceled) {
-            gameManager.playSE(10);
-            attacking = true;
-            spriteCounter = 0;
-        }
-        attackCanceled = false;
-
-        gameManager.keyHandler.enterPressed = false;
-
         //Make player invisible for 1 sec after receiving the damage
         if (invincible) {
             invincibleCounter++;
@@ -270,6 +270,47 @@ public class Player extends Entity {
         //Timer for shooting the tiles, you wait 30 frames
         if (shootAvailableCounter < 30) {
             shootAvailableCounter++;
+        }
+        lifeManaConditions();
+    }
+
+    private void turnOnCollision() {
+        //Check tile collision
+        collisionOn = false;
+        gameManager.checkCollision.checkTile(this);
+
+        //Check obj collision
+        int objIndex = gameManager.checkCollision.checkObject(this, true);
+        takeObject(objIndex);
+        //Check npc collision
+        int npcIndex = gameManager.checkCollision.checkEntity(this, gameManager.npcList);
+        interactNpc(npcIndex);
+
+        //Check mob's collision
+        int mobIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
+        interactMob(mobIndex);
+
+        //Check interactive tiles collision
+        gameManager.checkCollision.checkEntity(this, gameManager.interactiveTile);
+    }
+
+    private void lifeManaConditions() {
+        //If player's life > than max life, set the maxLife
+        if (hp > maxHp) {
+            hp = maxHp;
+        }
+        //If player's mana > than max mana, set the maxMana
+        if (mana > maxMana) {
+            mana = maxMana;
+        }
+        if (hp <= 0) {
+            gameManager.gameState = gameManager.gameOverState;
+            //To prevent pressing immediate retry, while you was pressing enter(attack)
+            gameManager.ui.commandNum = -1;
+            gameManager.stopMusic();
+            //TODO add another music while the player lost the game
+            //gameManager.playMusic(index);
+            gameManager.playSE(14);
         }
     }
 
@@ -305,12 +346,14 @@ public class Player extends Entity {
             //Check monster collision
             int monsterIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
             damageMob(monsterIndex, attack);
+
+            int interTileIndex = gameManager.checkCollision.checkEntity(this, gameManager.interactiveTile);
+            damageInteractiveTiles(interTileIndex);
             //After checking collision, restore original data
             worldX = currentWorldX;
             worldY = currentWorldY;
             solidArea.width = solidAreaWidth;
             solidArea.height = solidAreaHeight;
-
         }
         if (spriteCounter > 24) {
             spriteCounter = 0;
@@ -319,24 +362,43 @@ public class Player extends Entity {
         }
     }
 
+    private void damageInteractiveTiles(int index) {
+        if (index != playerIndex
+                && gameManager.interactiveTile[gameManager.currentMap][index].destructible
+                && gameManager.interactiveTile[gameManager.currentMap][index].isCorrectWeapon(this)
+                && !gameManager.interactiveTile[gameManager.currentMap][index].invincible) {
+            gameManager.interactiveTile[gameManager.currentMap][index].playSE();
+            gameManager.interactiveTile[gameManager.currentMap][index].hp--;
+            gameManager.interactiveTile[gameManager.currentMap][index].invincible = true;
+            //Generate particles
+            generateParticle(gameManager.interactiveTile[gameManager.currentMap][index],
+                    gameManager.interactiveTile[gameManager.currentMap][index]);
+
+            if (gameManager.interactiveTile[gameManager.currentMap][index].hp == 0) {
+                gameManager.interactiveTile[gameManager.currentMap][index] =
+                        gameManager.interactiveTile[gameManager.currentMap][index].getDestroyedForm();
+            }
+        }
+    }
+
     public void damageMob(int monsterIndex, int attack) {
         if (monsterIndex != playerIndex) {
-            if (!gameManager.mobs[monsterIndex].invincible) {
+            if (!gameManager.mobs[gameManager.currentMap][monsterIndex].invincible) {
                 gameManager.playSE(8);
 
-                int damage = attack - gameManager.mobs[monsterIndex].defense;
+                int damage = attack - gameManager.mobs[gameManager.currentMap][monsterIndex].defense;
                 if (damage < 0) {
                     damage = 0;
                 }
-                gameManager.mobs[monsterIndex].hp -= damage;
+                gameManager.mobs[gameManager.currentMap][monsterIndex].hp -= damage;
                 gameManager.ui.addMessage(damage + " damage!");
-                gameManager.mobs[monsterIndex].invincible = true;
-                gameManager.mobs[monsterIndex].damageReaction();
-                if (gameManager.mobs[monsterIndex].hp <= 0) {
-                    gameManager.mobs[monsterIndex].die = true;
-                    gameManager.ui.addMessage("Killed the " + gameManager.mobs[monsterIndex].name + "!");
-                    gameManager.ui.addMessage("Xp + " + gameManager.mobs[monsterIndex].xp);
-                    xp += gameManager.mobs[monsterIndex].xp;
+                gameManager.mobs[gameManager.currentMap][monsterIndex].invincible = true;
+                gameManager.mobs[gameManager.currentMap][monsterIndex].damageReaction();
+                if (gameManager.mobs[gameManager.currentMap][monsterIndex].hp <= 0) {
+                    gameManager.mobs[gameManager.currentMap][monsterIndex].die = true;
+                    gameManager.ui.addMessage("Killed the " + gameManager.mobs[gameManager.currentMap][monsterIndex].name + "!");
+                    gameManager.ui.addMessage("Xp + " + gameManager.mobs[gameManager.currentMap][monsterIndex].xp);
+                    xp += gameManager.mobs[gameManager.currentMap][monsterIndex].xp;
                     checkLevelUp();
                 }
             }
@@ -344,9 +406,9 @@ public class Player extends Entity {
     }
 
     private void interactMob(int mobIndex) {
-        if (mobIndex != playerIndex && !invincible && !gameManager.mobs[mobIndex].die) {
+        if (mobIndex != playerIndex && !invincible && !gameManager.mobs[gameManager.currentMap][mobIndex].die) {
             gameManager.playSE(8);
-            int damage = gameManager.mobs[mobIndex].attack - defense;
+            int damage = gameManager.mobs[gameManager.currentMap][mobIndex].attack - defense;
             if (damage < 0) {
                 damage = 0;
             }
@@ -362,7 +424,7 @@ public class Player extends Entity {
             if (npcIndex != playerIndex) {
                 attackCanceled = true;
                 gameManager.gameState = gameManager.dialogueState;
-                gameManager.npcList[npcIndex].speak();
+                gameManager.npcList[gameManager.currentMap][npcIndex].speak();
             }
         }
     }
@@ -410,16 +472,22 @@ public class Player extends Entity {
     private void takeObject(int index) {
         //if index is not player, make a reaction on obj
         if (index != playerIndex) {
-            String text;
-            if (inventory.size() != maxInventorySize) {
-                inventory.add(gameManager.object[index]);
-                gameManager.playSE(2);
-                text = "Got a " + gameManager.object[index].name + "!";
+            //Take only items
+            if (gameManager.object[gameManager.currentMap][index].type == typePickUpOnly) {
+                gameManager.object[gameManager.currentMap][index].use(this);
             } else {
-                text = "You can't pick up the item anymore!";
+                //Inventory items
+                String text;
+                if (inventory.size() != maxInventorySize) {
+                    inventory.add(gameManager.object[gameManager.currentMap][index]);
+                    gameManager.playSE(2);
+                    text = "Got a " + gameManager.object[gameManager.currentMap][index].name + "!";
+                } else {
+                    text = "You can't pick up the item anymore!";
+                }
+                gameManager.ui.addMessage(text);
             }
-            gameManager.ui.addMessage(text);
-            gameManager.object[index] = null;
+            gameManager.object[gameManager.currentMap][index] = null;
         }
     }
 

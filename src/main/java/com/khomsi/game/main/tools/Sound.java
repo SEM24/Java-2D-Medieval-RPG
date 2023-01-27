@@ -8,7 +8,9 @@ import java.net.URL;
 public class Sound {
     Clip clip;
     private final String resourcePath = "/sounds/";
-
+    FloatControl fc;
+    public int volumeScale = 3;
+    float volume;
     URL[] soundURL = new URL[30];
 
     public Sound() {
@@ -25,6 +27,8 @@ public class Sound {
         soundURL[10] = getClass().getResource(resourcePath + "sword-swipes.wav");
         soundURL[11] = getClass().getResource(resourcePath + "level_up.wav");
         soundURL[12] = getClass().getResource(resourcePath + "cursor.wav");
+        soundURL[13] = getClass().getResource(resourcePath + "cuttree.wav");
+        soundURL[14] = getClass().getResource(resourcePath + "game_over.wav");
     }
 
     public void setFile(int i) {
@@ -32,6 +36,8 @@ public class Sound {
             AudioInputStream stream = AudioSystem.getAudioInputStream(soundURL[i]);
             clip = AudioSystem.getClip();
             clip.open(stream);
+            fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            checkVolume();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             System.err.println("Error in method setFile in class " + getClass().getSimpleName());
             e.printStackTrace();
@@ -49,5 +55,17 @@ public class Sound {
 
     public void stop() {
         clip.stop();
+    }
+
+    public void checkVolume() {
+        switch (volumeScale) {
+            case 0 -> volume = -80F;
+            case 1 -> volume = -20F;
+            case 2 -> volume = -12F;
+            case 3 -> volume = -5F;
+            case 4 -> volume = 1F;
+            case 5 -> volume = 6F;
+        }
+        fc.setValue(volume);
     }
 }

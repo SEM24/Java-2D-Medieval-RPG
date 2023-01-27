@@ -4,6 +4,8 @@ import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.entity.ProjectTile;
 import main.java.com.khomsi.game.main.GameManager;
 
+import java.awt.*;
+
 public class FireBallObject extends ProjectTile {
     public FireBallObject(GameManager gameManager) {
         super(gameManager);
@@ -50,5 +52,29 @@ public class FireBallObject extends ProjectTile {
     @Override
     public void subtractResource(Entity entity) {
         entity.mana -= useCost;
+    }
+
+
+    @Override
+    public Color getParticleColor() {
+        return new Color(76, 104, 133);
+    }
+
+    @Override
+    public int getParticleSize() {
+        int size = 8;
+        return size; //8 pixels
+    }
+
+    @Override
+    public int getParticleSpeed() {
+        int speed = 1;
+        return speed; //speed of particle
+    }
+
+    @Override
+    public int getParticleMaxHp() {
+        int maxHp = 20;
+        return maxHp;
     }
 }

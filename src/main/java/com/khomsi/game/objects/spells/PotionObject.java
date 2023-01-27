@@ -4,14 +4,14 @@ import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
 
 public class PotionObject extends Entity {
-    //healing value
-    int value = 5;
+
 
     public PotionObject(GameManager gameManager) {
         super(gameManager);
         type = typeConsumable;
         name = "Simple potion";
-        down = setup("/objects/potion");
+        down = setup("/objects/potions/potion");
+        value = 6;
 
         itemDescription = "[" + name + "]\n" + "Simple potion\nthat heals " + value + " hp.";
     }
@@ -22,9 +22,6 @@ public class PotionObject extends Entity {
         gameManager.ui.currentDialog = "You used the " + name + "!\n" +
                 "Your HP is recovered by " + value + ".";
         entity.hp += value;
-        if (gameManager.player.hp > gameManager.player.maxHp) {
-            gameManager.player.hp = gameManager.player.maxHp;
-        }
         gameManager.playSE(6);
     }
 }

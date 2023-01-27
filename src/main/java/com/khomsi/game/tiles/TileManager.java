@@ -16,7 +16,7 @@ import java.util.Objects;
 public class TileManager {
     GameManager gameManager;
     public Tiles[] tiles;
-    public int[][] mapTileNum;
+    public int[][][] mapTileNum;
     private final String[] resourcePath = {"/tiles/", "/maps/"};
     List<String> fileNames = new ArrayList<>();
     List<String> collisionStatus = new ArrayList<>();
@@ -57,14 +57,16 @@ public class TileManager {
 
             GameManager.maxWorldCol = maxTile.length;
             GameManager.maxWorldRow = maxTile.length;
-            mapTileNum = new int[GameManager.maxWorldCol][GameManager.maxWorldRow];
+            mapTileNum = new int[gameManager.maxMap][GameManager.maxWorldCol][GameManager.maxWorldRow];
             reader.close();
         } catch (IOException e) {
             System.err.println("Exception in TileManage in " + getClass().getSimpleName());
             e.printStackTrace();
         }
         //load the map
-        loadMap(resourcePath[1] + "world01.txt");
+        //TODO change it to for each loop to prevent hardcode
+        loadMap(resourcePath[1] + "world01.txt", 0);
+        loadMap(resourcePath[1] + "interior01.txt", 1);
     }
 
     public void getTileImage() {
@@ -91,7 +93,7 @@ public class TileManager {
         }
     }
 
-    public void loadMap(String path) {
+    public void loadMap(String path, int map) {
         try (InputStream inputStream = getClass().getResourceAsStream(path);
              BufferedReader reader = new BufferedReader(new InputStreamReader(
                      Objects.requireNonNull(inputStream)))) {
@@ -104,7 +106,7 @@ public class TileManager {
 
                     int number = Integer.parseInt(numbers[col]); //use col as index for array
                     //store extracted nums from file to this array
-                    mapTileNum[col][row] = number;
+                    mapTileNum[map][col][row] = number;
                     col++;
                 }
                 if (col == GameManager.maxWorldCol) {
@@ -124,7 +126,7 @@ public class TileManager {
 
         while (worldCol < GameManager.maxWorldCol && worldRow < GameManager.maxWorldRow) {
 
-            int tileNum = mapTileNum[worldCol][worldRow];
+            int tileNum = mapTileNum[gameManager.currentMap][worldCol][worldRow];
             //coords for world map
             int worldX = worldCol * GameManager.TILE_SIZE;
             int worldY = worldRow * GameManager.TILE_SIZE;

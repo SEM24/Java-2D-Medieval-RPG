@@ -2,12 +2,15 @@ package main.java.com.khomsi.game.entity.mobs;
 
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
+import main.java.com.khomsi.game.objects.gui.HeartObject;
+import main.java.com.khomsi.game.objects.gui.ManaObject;
+import main.java.com.khomsi.game.objects.interact.CoinBObject;
 import main.java.com.khomsi.game.objects.projectTiles.RockObject;
 
 import java.util.Random;
 
-public class MOB_Slime extends Entity {
-    public MOB_Slime(GameManager gameManager) {
+public class MobSlime extends Entity {
+    public MobSlime(GameManager gameManager) {
         super(gameManager);
         setDefaultValues();
         getImage();
@@ -34,7 +37,7 @@ public class MOB_Slime extends Entity {
         solidAreaDefaultY = solidArea.y;
     }
 
-    public void getImage() {
+    private void getImage() {
         up = setup("/mobs/slime_down");
         up1 = setup("/mobs/slime_down_1");
         up2 = setup("/mobs/slime_down");
@@ -92,5 +95,15 @@ public class MOB_Slime extends Entity {
         lockCounter = 0;
         //Monster moves away
         direction = gameManager.player.direction;
+    }
+
+    @Override
+    public void checkDrop() {
+        int drop = new Random().nextInt(100) + 1;
+
+        //Set the mob's drop, 50% chance of coin, 30 of heart and mana
+        if (drop < 50) dropItem(new CoinBObject(gameManager));
+        if (drop >= 50 && drop < 80) dropItem(new HeartObject(gameManager));
+        if (drop >= 80 && drop < 100) dropItem(new ManaObject(gameManager));
     }
 }

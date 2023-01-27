@@ -8,7 +8,7 @@ public class MetalSwordObject extends Entity {
         super(gameManager);
         type = typeSword;
         name = "Metal Sword";
-        down = setup("/objects/sword");
+        down = setup("/objects/equipment/sword");
         attackValue = 1;
         itemDescription = "[" + name + "]\n" + "Usual metal sword with\n" + attackValue + " attack.";
         attackArea.width = 36;
