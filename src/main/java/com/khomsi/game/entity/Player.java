@@ -217,6 +217,7 @@ public class Player extends Entity {
                     case "left" -> worldX -= speed;
                     case "right" -> worldX += speed;
                 }
+                spriteMovement();
             }
             //To prevent sword swing when interact with events by enter press
             if (keyHandler.enterPressed && !attackCanceled) {
@@ -227,7 +228,6 @@ public class Player extends Entity {
             attackCanceled = false;
             gameManager.keyHandler.enterPressed = false;
             //Change the player's walk/attack sprites
-            spriteMovement();
         }
         //Use standing sprites with stand counter
         else {
