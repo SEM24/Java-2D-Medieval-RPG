@@ -5,10 +5,7 @@ import main.java.com.khomsi.game.main.tools.Tools;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,8 +22,7 @@ public class TileManager {
     public TileManager(GameManager gameManager) {
         this.gameManager = gameManager;
 
-        //here change the path to tile data(collision, names)
-
+        //Here change the path to tile data(collision, names)
         InputStream input = getClass().getResourceAsStream(resourcePath[1] + "tiledata01.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 Objects.requireNonNull(input)));
@@ -77,7 +73,7 @@ public class TileManager {
     }
 
     /*
-     We handle all duplicated lines, like initialization import img, scale, set collision in this method
+      We handle all duplicated lines, like initialization import img, scale, set collision in this method
      */
     public void setup(int index, String imageName, boolean collision) {
         try {

@@ -27,6 +27,7 @@ public class UI {
     public int slotCol = 0;
     public int slotRow = 0;
     int subState = 0;
+    int transitCounter = 0;
 
     public UI(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -87,6 +88,25 @@ public class UI {
         //Game Over state
         if (gameManager.gameState == gameManager.gameOverState) {
             drawGameOverScreen();
+        }
+        //Transition Over state
+        if (gameManager.gameState == gameManager.transitionState) {
+            drawTransitionScreen();
+        }
+    }
+
+    private void drawTransitionScreen() {
+        transitCounter++;
+        graphics2D.setColor(new Color(0, 0, 0, transitCounter * 5));
+        graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
+        if (transitCounter == 50) {
+            transitCounter = 0;
+            gameManager.gameState = gameManager.playState;
+            gameManager.currentMap = gameManager.eventHandler.tempMap;
+            gameManager.player.worldX = GameManager.TILE_SIZE * gameManager.eventHandler.tempCol;
+            gameManager.player.worldY = GameManager.TILE_SIZE * gameManager.eventHandler.tempRow;
+            gameManager.eventHandler.previousEventX = gameManager.player.worldX;
+            gameManager.eventHandler.previousEventY = gameManager.player.worldY;
         }
     }
 
@@ -157,7 +177,6 @@ public class UI {
             if (gameManager.keyHandler.enterPressed) {
                 gameManager.fullScreenOn = !gameManager.fullScreenOn;
                 subState = 1;
-                //TODO check if correct
             }
         }
         //Music

@@ -1,7 +1,8 @@
 package main.java.com.khomsi.game.main.tools;
 
 import main.java.com.khomsi.game.entity.mobs.MobSlime;
-import main.java.com.khomsi.game.entity.npc.NpcWoman3;
+import main.java.com.khomsi.game.entity.npc.regular.NpcWomanW;
+import main.java.com.khomsi.game.entity.npc.sellers.NpcGardenerS;
 import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.objects.equipment.AxeObject;
 import main.java.com.khomsi.game.objects.equipment.GoldShieldObject;
@@ -76,9 +77,19 @@ public class PlaceObjects {
     public void setNpc() {
         int index = 0;
         int mapNum = 0;
-        gameManager.npcList[mapNum][index] = new NpcWoman3(gameManager);
+        //Map 0
+        gameManager.npcList[mapNum][index] = new NpcWomanW(gameManager);
         gameManager.npcList[mapNum][index].worldX = GameManager.TILE_SIZE * 26;
         gameManager.npcList[mapNum][index].worldY = GameManager.TILE_SIZE * 21;
+        index++;
+
+        //Map 1
+        index = 0;
+        mapNum = 1;
+        gameManager.npcList[mapNum][index] = new NpcGardenerS(gameManager);
+        gameManager.npcList[mapNum][index].worldX = GameManager.TILE_SIZE * 20;
+        gameManager.npcList[mapNum][index].worldY = GameManager.TILE_SIZE * 16;
+        index++;
     }
 
     public void setMobs() {
@@ -102,8 +113,8 @@ public class PlaceObjects {
         index++;
         //Set mobs on different map
         mapNum = 1;
-        gameManager.mobs[mapNum][index] = new MobSlime(gameManager);
-        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 28;
-        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 14;
+//        gameManager.mobs[mapNum][index] = new MobSlime(gameManager);
+//        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 28;
+//        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 14;
     }
 }

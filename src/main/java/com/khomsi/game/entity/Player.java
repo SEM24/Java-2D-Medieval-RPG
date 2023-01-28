@@ -8,8 +8,6 @@ import main.java.com.khomsi.game.objects.projectTiles.FireBallObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Player extends Entity {
     KeyHandler keyHandler;
@@ -19,8 +17,6 @@ public class Player extends Entity {
     public final int screenX, screenY;
     int playerIndex = 999;
     public boolean attackCanceled = false;
-    public List<Entity> inventory = new ArrayList<>();
-    public int maxInventorySize = 24;
 
     public Player(GameManager gameManager, KeyHandler keyHandler) {
         super(gameManager);
@@ -111,8 +107,8 @@ public class Player extends Entity {
     //Change the skin of character and stats
     public void createNewPlayer(int skinType, int maxHp, int buffSpeed) {
         gameManager.player.playerSkin = skinType;
-        gameManager.player.speed += buffSpeed;
-//                        gameManager.player.maxHp = 8;
+        gameManager.player.speed = buffSpeed;
+//      gameManager.player.maxHp = 8;
 //        gameManager.player.hp = gameManager.player.maxHp;
         gameManager.player.getPlayerImage();
         gameManager.player.getPlayerAttackImage();

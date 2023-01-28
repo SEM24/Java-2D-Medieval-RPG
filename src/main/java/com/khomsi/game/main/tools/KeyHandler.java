@@ -147,7 +147,7 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_CONTROL) shootKeyPressed = true;
         if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = gameManager.optionState;
         //When player pressed shift, he runs
-        if (code == KeyEvent.VK_SHIFT && gameManager.gameState != gameManager.characterState) {
+        if (code == KeyEvent.VK_SHIFT && !gameManager.playerRun) {
             gameManager.playerRun = true;
             gameManager.player.speed += 1;
         }
@@ -194,8 +194,8 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_ENTER) {
                 //Set character's stats and skin, depends on chose
                 switch (gameManager.ui.commandNum) {
-                    case 0 -> gameManager.player.createNewPlayer(0, 0, 0);
-                    case 1 -> gameManager.player.createNewPlayer(1, 0, 1);
+                    case 0 -> gameManager.player.createNewPlayer(0, 0, 3);
+                    case 1 -> gameManager.player.createNewPlayer(1, 0, 4);
                     case 2 -> gameManager.ui.titleScreenState = 0;
                 }
             }
@@ -249,9 +249,9 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_A) leftPressed = false;
         if (code == KeyEvent.VK_D) rightPressed = false;
         //When player unpressed shift, he walks
-        if (code == KeyEvent.VK_SHIFT && gameManager.gameState != gameManager.characterState) {
-            gameManager.playerRun = false;
+        if (code == KeyEvent.VK_SHIFT && gameManager.playerRun) {
             gameManager.player.speed -= 1;
+            gameManager.playerRun = false;
         }
         if (code == KeyEvent.VK_CONTROL) shootKeyPressed = false;
     }

@@ -7,6 +7,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 //parent class for player, monster ect
@@ -85,6 +87,8 @@ public class Entity {
     public String[] dialogues = new String[20];
     public String name;
     //Default values for every entity
+    public List<Entity> inventory = new ArrayList<>();
+    public int maxInventorySize = 24;
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
@@ -172,24 +176,29 @@ public class Entity {
         }
     }
 
-    public void spriteMovement() {
+    public void spriteMovement(int entitySpeed) {
         //Changing sprites, depends on nums
         spriteCounter++;
-        if (spriteCounter <= 13) {
+        if (spriteCounter <= entitySpeed) {
             spriteNum = 1;
         }
-        if (spriteCounter > 13 && spriteCounter <= 23) {
+        if (spriteCounter > entitySpeed && spriteCounter <= entitySpeed + 10) {
             spriteNum = 2;
         }
-        if (spriteCounter > 23 && spriteCounter <= 33) {
+        if (spriteCounter > entitySpeed + 10 && spriteCounter <= entitySpeed + 20) {
             spriteNum = 3;
         }
-        if (spriteCounter > 33 && spriteCounter <= 42) {
+        if (spriteCounter > entitySpeed + 20 && spriteCounter <= entitySpeed + 29) {
             spriteNum = 2;
         }
-        if (spriteCounter > 42) {
+        if (spriteCounter > entitySpeed + 29) {
             spriteCounter = 0;
         }
+    }
+
+    //Method with default values for changing sprites
+    public void spriteMovement() {
+        spriteMovement(13);
     }
 
     public void draw(Graphics2D graphics2D) {
@@ -314,8 +323,7 @@ public class Entity {
     }
 
 
-    //WARNING! We always override these methods by subclasses
-    //so there's no need to have logic inside them
+
     public void generateParticle(Entity generator, Entity target) {
         Color color = generator.getParticleColor();
         int size = generator.getParticleSize();
@@ -335,7 +343,8 @@ public class Entity {
         gameManager.particleList.add(particleDL);
         gameManager.particleList.add(particleDR);
     }
-
+    //WARNING! We always override these methods by subclasses
+    //so there's no need to have logic inside them
     public Color getParticleColor() {
         return null;
     }

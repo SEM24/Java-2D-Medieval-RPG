@@ -76,6 +76,7 @@ public class GameManager extends JPanel implements Runnable {
     public final int characterState = 4;
     public final int optionState = 5;
     public final int gameOverState = 6;
+    public final int transitionState = 7;
     //Until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
@@ -112,8 +113,6 @@ public class GameManager extends JPanel implements Runnable {
 
     public void restart() {
         player.setDefaultValues();
-//        player.setDefaultPosition();
-//        player.restoreHpMana();
         player.setItems();
         setDefaultObjects();
     }

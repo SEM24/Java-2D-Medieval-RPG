@@ -3,8 +3,12 @@ package main.java.com.khomsi.game.main;
 public class EventHandler {
     GameManager gameManager;
     EventRect[][][] eventRect;
-    int previousEventX, previousEventY;
+    public int previousEventX;
+    public int previousEventY;
     boolean canTouchEvent = true;
+    public int tempMap;
+    public int tempCol;
+    public int tempRow;
 
     public EventHandler(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -43,13 +47,12 @@ public class EventHandler {
             canTouchEvent = true;
         }
         if (canTouchEvent) {
-            //TODO add new events to game
             if (interact(0, 29, 19, "any")) damagePit(gameManager.dialogueState);
             else if (interact(0, 30, 21, "right")) healingPool(gameManager.dialogueState);
                 //Col and row of enter location is the place where
                 //the player will be spawned on new map
             else if (interact(0, 12, 17, "any")) {
-                changeLocation(1, 21, 23);
+                changeLocation(1, 21, 21);
                 gameManager.playSE(4);
             } else if (interact(1, 21, 23, "any")) {
                 changeLocation(0, 12, 18);
@@ -59,12 +62,10 @@ public class EventHandler {
     }
 
     private void changeLocation(int map, int col, int row) {
-        gameManager.currentMap = map;
-        gameManager.player.worldX = GameManager.TILE_SIZE * col;
-        gameManager.player.worldY = GameManager.TILE_SIZE * row;
-        //next event won't happen until player moves tile size distance
-        previousEventX = gameManager.player.worldX;
-        previousEventY = gameManager.player.worldY;
+        gameManager.gameState = gameManager.transitionState;
+        tempMap = map;
+        tempCol = col;
+        tempRow = row;
         canTouchEvent = false;
 //        gameManager.playSE(4);
     }
