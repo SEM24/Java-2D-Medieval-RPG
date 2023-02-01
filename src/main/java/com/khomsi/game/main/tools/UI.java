@@ -115,9 +115,14 @@ public class UI {
 
     private void tradeSelect() {
         showDialog();
+        int x = GameManager.TILE_SIZE * 3;
+        int y = GameManager.TILE_SIZE * 7;
+        if (seller != null && seller.name != null) {
+            drawShadowAndText(seller.name, x + GameManager.TILE_SIZE, y, 3, 3);
+        }
         //Draw window
-        int x = GameManager.TILE_SIZE * 14;
-        int y = GameManager.TILE_SIZE * 4;
+        x = GameManager.TILE_SIZE * 14;
+        y = GameManager.TILE_SIZE * 4;
         int width = GameManager.TILE_SIZE * 3;
         int height = (int) (GameManager.TILE_SIZE * 3.5);
         drawSubWindow(x, y, width, height);
@@ -737,10 +742,6 @@ public class UI {
         int height = GameManager.TILE_SIZE * 4;
         drawSubWindow(x, y, width, height);
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30F));
-
-        if (seller != null && seller.name != null) {
-            drawShadowAndText(seller.name, x + GameManager.TILE_SIZE, y, 3, 3);
-        }
         x += GameManager.TILE_SIZE;
         y += GameManager.TILE_SIZE;
         splitTextInDialog(currentDialog, x, y);

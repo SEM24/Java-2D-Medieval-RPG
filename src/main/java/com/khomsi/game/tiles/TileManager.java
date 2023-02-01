@@ -5,7 +5,10 @@ import main.java.com.khomsi.game.main.tools.Tools;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -60,9 +63,7 @@ public class TileManager {
             e.printStackTrace();
         }
         //load the map
-        //TODO change it to for each loop to prevent hardcode
-        loadMap(resourcePath[1] + "world01.txt", 0);
-        loadMap(resourcePath[1] + "interior01.txt", 1);
+        readMapsPath();
     }
 
     public void getTileImage() {
@@ -112,6 +113,23 @@ public class TileManager {
             }
         } catch (Exception e) {
             System.err.println("Error on loading the map!");
+            e.printStackTrace();
+        }
+    }
+
+    public void readMapsPath() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        try (InputStream inputStream = classLoader.getResourceAsStream("maps/mapsPath.txt");
+             BufferedReader br = new BufferedReader(new InputStreamReader(
+                     Objects.requireNonNull(inputStream)))) {
+            String line;
+            int counter = 0;
+            while ((line = br.readLine()) != null) {
+                loadMap(resourcePath[1] + line, counter);
+                counter++;
+            }
+        } catch (Exception e) {
+            System.err.println("Error on reading the path to map!");
             e.printStackTrace();
         }
     }
