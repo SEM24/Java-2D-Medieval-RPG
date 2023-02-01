@@ -63,15 +63,15 @@ public class PlaceObjects {
     public void setInteractiveTiles() {
         int index = 0;
         int mapNum = 0;
-        gameManager.interactiveTile[mapNum][index] = new Bush(gameManager, 21, 16);
+        gameManager.interactTile[mapNum][index] = new Bush(gameManager, 21, 16);
         index++;
-        gameManager.interactiveTile[mapNum][index] = new Bush(gameManager, 25, 16);
+        gameManager.interactTile[mapNum][index] = new Bush(gameManager, 25, 16);
         index++;
-        gameManager.interactiveTile[mapNum][index] = new Bush(gameManager, 12, 18);
+        gameManager.interactTile[mapNum][index] = new Bush(gameManager, 12, 18);
         index++;
-        gameManager.interactiveTile[mapNum][index] = new Bush(gameManager, 13, 18);
+        gameManager.interactTile[mapNum][index] = new Bush(gameManager, 13, 18);
         index++;
-        gameManager.interactiveTile[mapNum][index] = new Bush(gameManager, 11, 18);
+        gameManager.interactTile[mapNum][index] = new Bush(gameManager, 11, 18);
     }
 
     public void setNpc() {

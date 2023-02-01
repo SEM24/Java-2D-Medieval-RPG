@@ -43,6 +43,7 @@ public class Entity {
     public boolean die = false;
     public boolean fallIntoPit = false;
     boolean hpBarOn = false;
+    public boolean onPath = false;
 
     //Entity stats
     //Set default position
@@ -74,18 +75,19 @@ public class Entity {
     public int useCost;
     //0 = player, 1 = npc, 2 = mob
     public int type;
-    public final int typePlayer = 0;
-    public final int typeNpc = 1;
-    public final int typeMob = 2;
-    public final int typeSword = 3;
-    public final int typeAxe = 4;
-    public final int typeShield = 5;
-    public final int typeConsumable = 6;
-    public final int typePickUpOnly = 7;
+    public static final int TYPE_PLAYER = 0;
+    public static final int TYPE_NPC = 1;
+    public static final int TYPE_MOB = 2;
+    public static final int TYPE_SWORD = 3;
+    public static final int TYPE_AXE = 4;
+    public static final int TYPE_SHIELD = 5;
+    public static final int TYPE_CONSUMABLE = 6;
+    public static final int TYPE_PICK_UP_ONLY = 7;
 
     //TOOLS
     int dialogIndex = 0;
     public String[] dialogues = new String[20];
+
     public String name;
     //Default values for every entity
     public List<Entity> inventory = new ArrayList<>();
@@ -129,19 +131,23 @@ public class Entity {
         }
     }
 
-    public void update() {
-        setAction();
+    public void checkCollision() {
         collisionOn = false;
         gameManager.checkCollision.checkTile(this);
         gameManager.checkCollision.checkObject(this, false);
         gameManager.checkCollision.checkEntity(this, gameManager.npcList);
         gameManager.checkCollision.checkEntity(this, gameManager.mobs);
-        gameManager.checkCollision.checkEntity(this, gameManager.interactiveTile);
+        gameManager.checkCollision.checkEntity(this, gameManager.interactTile);
         boolean interactPlayer = gameManager.checkCollision.checkPlayer(this);
         //If it's monster, and it touches the player, receive the dmg
-        if (this.type == typeMob && interactPlayer) {
+        if (this.type == TYPE_MOB && interactPlayer) {
             damagePlayer(attack);
         }
+    }
+
+    public void update() {
+        setAction();
+        checkCollision();
         if (!collisionOn) {
             switch (direction) {
                 case "up" -> worldY -= speed;
@@ -213,7 +219,7 @@ public class Entity {
                 worldY - GameManager.TILE_SIZE < gameManager.player.worldY + gameManager.player.screenY) {
 
             //Monster Hp bar
-            if (type == typeMob && hpBarOn) {
+            if (type == TYPE_MOB && hpBarOn) {
                 //Get the length of hp bar, if hp - 4, then the scale is 12 pixels (4 times)
                 double oneScale = (double) GameManager.TILE_SIZE / maxHp;
                 double hpBarValue = oneScale * hp;
@@ -342,6 +348,59 @@ public class Entity {
         gameManager.particleList.add(particleTR);
         gameManager.particleList.add(particleDL);
         gameManager.particleList.add(particleDR);
+    }
+
+    public void searchPath(int goalCol, int goalRow, boolean reachDestination) {
+        int startCol = (worldX + solidArea.x) / GameManager.TILE_SIZE;
+        int startRow = (worldY + solidArea.y) / GameManager.TILE_SIZE;
+        gameManager.pathFinder.setNodes(startCol, startRow, goalCol, goalRow);
+        if (gameManager.pathFinder.search()) {
+            //Next worldX, worldY
+            int nextX = gameManager.pathFinder.pathList.get(0).col * GameManager.TILE_SIZE;
+            int nextY = gameManager.pathFinder.pathList.get(0).row * GameManager.TILE_SIZE;
+            //Get entity's solidArea pos
+            int enLeftX = worldX + solidArea.x;
+            int enRightX = worldX + solidArea.x + solidArea.width;
+            int enTopY = worldY + solidArea.y;
+            int enBottomY = worldY + solidArea.y + solidArea.height;
+            if (enTopY > nextY && enLeftX >= nextX && enRightX < nextX + GameManager.TILE_SIZE) {
+                direction = "up";
+            } else if (enTopY < nextY && enLeftX >= nextX && enRightX < nextX + GameManager.TILE_SIZE) {
+                direction = "down";
+            } else if (enTopY >= nextY && enBottomY < nextY + GameManager.TILE_SIZE) {
+                //left or right
+                if (enLeftX > nextX) direction = "left";
+                if (enLeftX < nextX) direction = "right";
+            } else if (enTopY > nextY && enLeftX > nextX) {
+                //up or left
+                direction = "up";
+                checkCollision();
+                if (collisionOn) direction = "left";
+            } else if (enTopY > nextY && enLeftX < nextX) {
+                //up or right
+                direction = "up";
+                checkCollision();
+                if (collisionOn) direction = "right";
+            } else if (enTopY < nextY && enLeftX > nextX) {
+                //down or left
+                direction = "down";
+                checkCollision();
+                if (collisionOn) direction = "left";
+            } else if (enTopY < nextY && enLeftX < nextX) {
+                //down or right
+                direction = "down";
+                checkCollision();
+                if (collisionOn) direction = "right";
+            }
+        }
+        if (reachDestination) {
+            //if reaches the goal, stop searching
+            int nextCol = gameManager.pathFinder.pathList.get(0).col;
+            int nextRow = gameManager.pathFinder.pathList.get(0).row;
+            if (nextCol == goalCol && nextRow == goalRow) {
+                onPath = false;
+            }
+        }
     }
 
     //WARNING! We always override these methods by subclasses

@@ -6,7 +6,7 @@ import main.java.com.khomsi.game.main.GameManager;
 public class MetalShieldObject extends Entity {
     public MetalShieldObject(GameManager gameManager) {
         super(gameManager);
-        type = typeShield;
+        type = TYPE_SHIELD;
         name = "Metal Shield";
         down = setup("/objects/equipment/shield_metal");
         defenseValue = 2;

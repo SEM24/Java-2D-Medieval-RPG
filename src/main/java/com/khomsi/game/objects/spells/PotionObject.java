@@ -8,7 +8,7 @@ public class PotionObject extends Entity {
 
     public PotionObject(GameManager gameManager) {
         super(gameManager);
-        type = typeConsumable;
+        type = TYPE_CONSUMABLE;
         name = "Simple potion";
         down = setup("/objects/potions/potion");
         value = 6;

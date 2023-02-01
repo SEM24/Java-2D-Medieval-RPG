@@ -6,7 +6,7 @@ import main.java.com.khomsi.game.main.GameManager;
 public class GoldShieldObject extends Entity {
     public GoldShieldObject(GameManager gameManager) {
         super(gameManager);
-        type = typeShield;
+        type = TYPE_SHIELD;
         name = "Gold Shield";
         down = setup("/objects/equipment/shield_gold");
         defenseValue = 3;

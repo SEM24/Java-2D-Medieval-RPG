@@ -1,5 +1,6 @@
 package main.java.com.khomsi.game.main;
 
+import main.java.com.khomsi.game.ai.PathFinder;
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.entity.Player;
 import main.java.com.khomsi.game.main.tools.*;
@@ -52,14 +53,14 @@ public class GameManager extends JPanel implements Runnable {
     public CheckCollision checkCollision = new CheckCollision(this);
     public PlaceObjects placeObjects = new PlaceObjects(this);
     public EventHandler eventHandler = new EventHandler(this);
-
+    public PathFinder pathFinder = new PathFinder(this);
     //ENTITY AND OBJECTS
     //TODO extend the massive, when you'll have more objects
     public Entity[][] object = new Entity[maxMap][20];
     public Entity[][] npcList = new Entity[maxMap][10];
     public Entity[][] mobs = new Entity[maxMap][10];
     List<Entity> entities = new ArrayList<>();
-    public InteractiveTile interactiveTile[][] = new InteractiveTile[maxMap][50];
+    public InteractiveTile interactTile[][] = new InteractiveTile[maxMap][50];
     public List<Entity> projectilesList = new ArrayList<>();
     public List<Entity> particleList = new ArrayList<>();
 
@@ -202,7 +203,7 @@ public class GameManager extends JPanel implements Runnable {
             //ParticleTiles loop
             updateLoopArrays(particleList);
             //Interactive tiles loop
-            for (InteractiveTile tile : interactiveTile[currentMap]) {
+            for (InteractiveTile tile : interactTile[currentMap]) {
                 if (tile != null) {
                     tile.update();
                 }
@@ -232,7 +233,7 @@ public class GameManager extends JPanel implements Runnable {
             //Add and render npc, obj, mobs, projectiles to draw list
             drawMethodArray(npcList);
             //Interactive tiles
-            drawMethodArray(interactiveTile);
+            drawMethodArray(interactTile);
             drawMethodArray(object);
             drawMethodArray(mobs);
             drawMethodList(projectilesList);

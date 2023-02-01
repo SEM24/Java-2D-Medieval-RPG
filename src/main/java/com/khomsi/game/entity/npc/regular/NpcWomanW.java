@@ -11,7 +11,7 @@ public class NpcWomanW extends Entity {
     public NpcWomanW(GameManager gameManager) {
         super(gameManager);
         direction = "down";
-        speed = 1;
+        speed = 2;
 
         solidArea = new Rectangle();
         solidArea.x = 8;
@@ -56,31 +56,40 @@ public class NpcWomanW extends Entity {
 
     //set npc movement
     public void setAction() {
-        lockCounter++;
-        if (lockCounter == 120) {
-            Random random = new Random();
-            int i = random.nextInt(100) + 1;
-            if (i <= 30) {
-                direction = "up";
+        if (onPath) {
+            int goalCol = 14;
+            int goalRow = 28;
+//            int goalCol = (gameManager.player.worldX + gameManager.player.solidArea.x) / GameManager.TILE_SIZE;
+//            int goalRow = (gameManager.player.worldY + gameManager.player.solidArea.y) / GameManager.TILE_SIZE;
+            searchPath(goalCol, goalRow, true);
+        } else {
+            lockCounter++;
+            if (lockCounter == 120) {
+                Random random = new Random();
+                int i = random.nextInt(100) + 1;
+                if (i <= 30) {
+                    direction = "up";
+                }
+                if (i <= 30) {
+                    direction = "up";
+                }
+                if (i > 30 && i <= 50) {
+                    direction = "down";
+                }
+                if (i > 50 && i <= 75) {
+                    direction = "left";
+                }
+                if (i > 75) {
+                    direction = "right";
+                }
+                lockCounter = 0;
             }
-            if (i <= 30) {
-                direction = "up";
-            }
-            if (i > 30 && i <= 50) {
-                direction = "down";
-            }
-            if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            if (i > 75) {
-                direction = "right";
-            }
-            lockCounter = 0;
         }
     }
 
     //Maybe add special stuff, different custom text for this character
     public void speak() {
         super.speak();
+        onPath = true;
     }
 }

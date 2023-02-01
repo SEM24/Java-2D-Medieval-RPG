@@ -6,7 +6,7 @@ import main.java.com.khomsi.game.main.GameManager;
 public class AxeObject extends Entity {
     public AxeObject(GameManager gameManager) {
         super(gameManager);
-        type = typeAxe;
+        type = TYPE_AXE;
         name = "Axe";
         down = setup("/objects/equipment/axe");
         attackValue = 2;

@@ -147,7 +147,7 @@ public class Player extends Entity {
         int attackLRH = GameManager.TILE_SIZE;
         //TODO Each tool can be having diff colors,add index to the class and write the num here.
         //If the sword is chosen
-        if (currentWeapon.type == typeSword) {
+        if (currentWeapon.type == TYPE_SWORD) {
             attackUp = setup(playerPath[playerSkin] + "/attackSword/player_up_attack", attackUpDownW, attackUpDownH);
             attackUp1 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_1", attackUpDownW, attackUpDownH);
             attackUp2 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_2", attackUpDownW, attackUpDownH);
@@ -165,7 +165,7 @@ public class Player extends Entity {
             attackRight2 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_2", attackLRW, attackLRH);
             attackRight3 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_3", attackLRW, attackLRH);
         }
-        if (currentWeapon.type == typeAxe) {
+        if (currentWeapon.type == TYPE_AXE) {
             attackUp = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe", attackUpDownW, attackUpDownH);
             attackUp1 = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe_1", attackUpDownW, attackUpDownH);
             attackUp2 = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe_2", attackUpDownW, attackUpDownH);
@@ -287,7 +287,7 @@ public class Player extends Entity {
         interactMob(mobIndex);
 
         //Check interactive tiles collision
-        gameManager.checkCollision.checkEntity(this, gameManager.interactiveTile);
+        gameManager.checkCollision.checkEntity(this, gameManager.interactTile);
     }
 
     private void lifeManaConditions() {
@@ -343,7 +343,7 @@ public class Player extends Entity {
             int monsterIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
             damageMob(monsterIndex, attack);
 
-            int interTileIndex = gameManager.checkCollision.checkEntity(this, gameManager.interactiveTile);
+            int interTileIndex = gameManager.checkCollision.checkEntity(this, gameManager.interactTile);
             damageInteractiveTiles(interTileIndex);
             //After checking collision, restore original data
             worldX = currentWorldX;
@@ -360,19 +360,19 @@ public class Player extends Entity {
 
     private void damageInteractiveTiles(int index) {
         if (index != playerIndex
-                && gameManager.interactiveTile[gameManager.currentMap][index].destructible
-                && gameManager.interactiveTile[gameManager.currentMap][index].isCorrectWeapon(this)
-                && !gameManager.interactiveTile[gameManager.currentMap][index].invincible) {
-            gameManager.interactiveTile[gameManager.currentMap][index].playSE();
-            gameManager.interactiveTile[gameManager.currentMap][index].hp--;
-            gameManager.interactiveTile[gameManager.currentMap][index].invincible = true;
+                && gameManager.interactTile[gameManager.currentMap][index].destructible
+                && gameManager.interactTile[gameManager.currentMap][index].isCorrectWeapon(this)
+                && !gameManager.interactTile[gameManager.currentMap][index].invincible) {
+            gameManager.interactTile[gameManager.currentMap][index].playSE();
+            gameManager.interactTile[gameManager.currentMap][index].hp--;
+            gameManager.interactTile[gameManager.currentMap][index].invincible = true;
             //Generate particles
-            generateParticle(gameManager.interactiveTile[gameManager.currentMap][index],
-                    gameManager.interactiveTile[gameManager.currentMap][index]);
+            generateParticle(gameManager.interactTile[gameManager.currentMap][index],
+                    gameManager.interactTile[gameManager.currentMap][index]);
 
-            if (gameManager.interactiveTile[gameManager.currentMap][index].hp == 0) {
-                gameManager.interactiveTile[gameManager.currentMap][index] =
-                        gameManager.interactiveTile[gameManager.currentMap][index].getDestroyedForm();
+            if (gameManager.interactTile[gameManager.currentMap][index].hp == 0) {
+                gameManager.interactTile[gameManager.currentMap][index] =
+                        gameManager.interactTile[gameManager.currentMap][index].getDestroyedForm();
             }
         }
     }
@@ -449,16 +449,16 @@ public class Player extends Entity {
         int itemIndex = gameManager.ui.getItemIndexOnSlot(gameManager.ui.playerSlotCol, gameManager.ui.playerSlotRow);
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
-            if (selectedItem.type == typeSword || selectedItem.type == typeAxe) {
+            if (selectedItem.type == TYPE_SWORD || selectedItem.type == TYPE_AXE) {
                 currentWeapon = selectedItem;
                 attack = getAttack();
                 getPlayerAttackImage();
             }
-            if (selectedItem.type == typeShield) {
+            if (selectedItem.type == TYPE_SHIELD) {
                 currentShield = selectedItem;
                 defense = getDefense();
             }
-            if (selectedItem.type == typeConsumable) {
+            if (selectedItem.type == TYPE_CONSUMABLE) {
                 selectedItem.use(this);
                 inventory.remove(itemIndex);
             }
@@ -469,7 +469,7 @@ public class Player extends Entity {
         //if index is not player, make a reaction on obj
         if (index != playerIndex) {
             //Take only items
-            if (gameManager.object[gameManager.currentMap][index].type == typePickUpOnly) {
+            if (gameManager.object[gameManager.currentMap][index].type == TYPE_PICK_UP_ONLY) {
                 gameManager.object[gameManager.currentMap][index].use(this);
             } else {
                 //Inventory items

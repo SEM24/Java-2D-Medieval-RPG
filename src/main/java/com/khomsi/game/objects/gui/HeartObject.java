@@ -6,7 +6,7 @@ import main.java.com.khomsi.game.main.GameManager;
 public class HeartObject extends Entity {
     public HeartObject(GameManager gameManager) {
         super(gameManager);
-        type = typePickUpOnly;
+        type = TYPE_PICK_UP_ONLY;
         value = 2;
         down = setup("/objects/ui/heart_full",
                 GameManager.TILE_SIZE * 2, GameManager.TILE_SIZE * 2);

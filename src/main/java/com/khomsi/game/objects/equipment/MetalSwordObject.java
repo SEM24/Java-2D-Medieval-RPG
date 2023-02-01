@@ -6,7 +6,7 @@ import main.java.com.khomsi.game.main.GameManager;
 public class MetalSwordObject extends Entity {
     public MetalSwordObject(GameManager gameManager) {
         super(gameManager);
-        type = typeSword;
+        type = TYPE_SWORD;
         name = "Metal Sword";
         down = setup("/objects/equipment/sword");
         attackValue = 1;

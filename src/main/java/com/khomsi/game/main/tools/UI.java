@@ -17,7 +17,7 @@ public class UI {
     GameManager gameManager;
     Graphics2D graphics2D;
     Font playMeGames;
-    BufferedImage heart_full, heart_half, heart_empty, mana_full, mana_empty, coin;
+    BufferedImage heartFull, heartHalf, heartEmpty, manaFull, manaEmpty, coin;
     List<String> message = new ArrayList<>();
     List<Integer> messageCounter = new ArrayList<>();
     public String currentDialog = "";
@@ -43,12 +43,12 @@ public class UI {
         }
         //HUD object
         Entity heart = new HeartObject(gameManager);
-        heart_full = heart.image;
-        heart_half = heart.image2;
-        heart_empty = heart.image3;
+        heartFull = heart.image;
+        heartHalf = heart.image2;
+        heartEmpty = heart.image3;
         Entity mana = new ManaObject(gameManager);
-        mana_full = mana.image;
-        mana_empty = mana.image2;
+        manaFull = mana.image;
+        manaEmpty = mana.image2;
         Entity bronzeCoin = new CoinBObject(gameManager);
         coin = bronzeCoin.down;
     }
@@ -609,7 +609,7 @@ public class UI {
         int i = 0;
         //Draw max Hp
         while (i < gameManager.player.maxHp / 2) {
-            graphics2D.drawImage(heart_empty, x, y, null);
+            graphics2D.drawImage(heartEmpty, x, y, null);
             i++;
             x += GameManager.TILE_SIZE;
         }
@@ -618,10 +618,10 @@ public class UI {
         i = 0;
         //Draw current Hp
         while (i < gameManager.player.hp) {
-            graphics2D.drawImage(heart_half, x, y, null);
+            graphics2D.drawImage(heartHalf, x, y, null);
             i++;
             if (i < gameManager.player.hp) {
-                graphics2D.drawImage(heart_full, x, y, null);
+                graphics2D.drawImage(heartFull, x, y, null);
             }
             i++;
             x += GameManager.TILE_SIZE;
@@ -632,7 +632,7 @@ public class UI {
         y = (int) (GameManager.TILE_SIZE * 1.6);
         i = 0;
         while (i < gameManager.player.maxMana) {
-            graphics2D.drawImage(mana_empty, x, y, null);
+            graphics2D.drawImage(manaEmpty, x, y, null);
             i++;
             x += GameManager.TILE_SIZE;
         }
@@ -641,7 +641,7 @@ public class UI {
         y = (int) (GameManager.TILE_SIZE * 1.6);
         i = 0;
         while (i < gameManager.player.mana) {
-            graphics2D.drawImage(mana_full, x, y, null);
+            graphics2D.drawImage(manaFull, x, y, null);
             i++;
             x += GameManager.TILE_SIZE;
         }

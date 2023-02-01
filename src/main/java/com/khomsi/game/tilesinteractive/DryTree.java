@@ -29,7 +29,7 @@ public class DryTree extends InteractiveTile {
 
     @Override
     public boolean isCorrectWeapon(Entity entity) {
-        return entity.currentWeapon.type == typeAxe;
+        return entity.currentWeapon.type == TYPE_AXE;
     }
 
     @Override

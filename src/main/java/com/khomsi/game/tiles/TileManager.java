@@ -17,6 +17,7 @@ public class TileManager {
     GameManager gameManager;
     public Tiles[] tiles;
     public int[][][] mapTileNum;
+    boolean drawPath = true;
     private final String[] resourcePath = {"/tiles/", "/maps/"};
     List<String> fileNames = new ArrayList<>();
     List<String> collisionStatus = new ArrayList<>();
@@ -153,6 +154,18 @@ public class TileManager {
                 worldCol = 0;
 
                 worldRow++;
+            }
+        }
+        if (drawPath && gameManager.keyHandler.debugMode) {
+            graphics2D.setColor(new Color(0, 255, 255, 70));
+            for (int i = 0; i < gameManager.pathFinder.pathList.size(); i++) {
+                //coords for world map
+                int worldX = gameManager.pathFinder.pathList.get(i).col * GameManager.TILE_SIZE;
+                int worldY = gameManager.pathFinder.pathList.get(i).row * GameManager.TILE_SIZE;
+                //actual coords to draw the stuff on game screen
+                int screenX = worldX - gameManager.player.worldX + gameManager.player.screenX;
+                int screenY = worldY - gameManager.player.worldY + gameManager.player.screenY;
+                graphics2D.fillRect(screenX, screenY, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
             }
         }
     }
