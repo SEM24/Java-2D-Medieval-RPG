@@ -11,5 +11,6 @@ public class MetalShieldObject extends Entity {
         down = setup("/objects/equipment/shield_metal");
         defenseValue = 2;
         itemDescription = "[" + name + "]\n" + "Usual metal shield with\n" + defenseValue + " defense.";
+        price = 21;
     }
 }

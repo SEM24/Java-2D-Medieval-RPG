@@ -66,7 +66,7 @@ public class Player extends Entity {
         agility = 1;
         xp = 0;
         nextLevelXp = 5;
-        coin = 0;
+        coin = 70;
         currentWeapon = new MetalSwordObject(gameManager);
         currentShield = new MetalShieldObject(gameManager);
         //In the beginning of the game, player has this skill.
@@ -446,7 +446,7 @@ public class Player extends Entity {
     }
 
     public void selectItem() {
-        int itemIndex = gameManager.ui.getItemIndexOnSlot();
+        int itemIndex = gameManager.ui.getItemIndexOnSlot(gameManager.ui.playerSlotCol, gameManager.ui.playerSlotRow);
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
             if (selectedItem.type == typeSword || selectedItem.type == typeAxe) {

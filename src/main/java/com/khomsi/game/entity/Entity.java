@@ -68,6 +68,7 @@ public class Entity {
     public int value;
     public int attackValue;
     public int defenseValue;
+    public int price;
     public String itemDescription = "";
     //Cost of shooting the tile
     public int useCost;
@@ -323,7 +324,6 @@ public class Entity {
     }
 
 
-
     public void generateParticle(Entity generator, Entity target) {
         Color color = generator.getParticleColor();
         int size = generator.getParticleSize();
@@ -343,6 +343,7 @@ public class Entity {
         gameManager.particleList.add(particleDL);
         gameManager.particleList.add(particleDR);
     }
+
     //WARNING! We always override these methods by subclasses
     //so there's no need to have logic inside them
     public Color getParticleColor() {

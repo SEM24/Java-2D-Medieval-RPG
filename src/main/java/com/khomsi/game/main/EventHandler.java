@@ -1,5 +1,7 @@
 package main.java.com.khomsi.game.main;
 
+import main.java.com.khomsi.game.entity.Entity;
+
 public class EventHandler {
     GameManager gameManager;
     EventRect[][][] eventRect;
@@ -58,6 +60,16 @@ public class EventHandler {
                 changeLocation(0, 12, 18);
                 gameManager.playSE(5);
             }
+            //gameManager.npcList[1][0], 1 - the map number, 0 - number of npc on this map
+            else if (interact(1, 20, 18, "up")) speak(gameManager.npcList[1][0]);
+        }
+    }
+
+    private void speak(Entity entity) {
+        if (gameManager.keyHandler.enterPressed) {
+            gameManager.gameState = gameManager.dialogueState;
+            gameManager.player.attackCanceled = true;
+            entity.speak();
         }
     }
 

@@ -13,5 +13,6 @@ public class AxeObject extends Entity {
         attackArea.width = 30;
         attackArea.height = 30;
         itemDescription = "[" + name + "]\n" + "Axe with\n" + attackValue + " attack.";
+        price = 13;
     }
 }

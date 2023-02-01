@@ -12,8 +12,8 @@ public class PotionObject extends Entity {
         name = "Simple potion";
         down = setup("/objects/potions/potion");
         value = 6;
-
-        itemDescription = "[" + name + "]\n" + "Simple potion\nthat heals " + value + " hp.";
+        price = 20;
+        itemDescription = "[" + name + "]\n" + "Simple potion\nthat recovers " + value + " hp.";
     }
 
     @Override

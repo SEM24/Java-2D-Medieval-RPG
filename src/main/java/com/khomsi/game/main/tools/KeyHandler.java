@@ -55,6 +55,61 @@ public class KeyHandler implements KeyListener {
         else if (gameManager.gameState == gameManager.gameOverState) {
             gameOverState(code);
         }
+        //Trade state
+        else if (gameManager.gameState == gameManager.tradeState) {
+            tradeState(code);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int code = e.getKeyCode();
+
+        if (code == KeyEvent.VK_W) upPressed = false;
+        if (code == KeyEvent.VK_S) downPressed = false;
+        if (code == KeyEvent.VK_A) leftPressed = false;
+        if (code == KeyEvent.VK_D) rightPressed = false;
+        //When player unpressed shift, he walks
+        if (code == KeyEvent.VK_SHIFT && gameManager.playerRun) {
+            gameManager.player.speed -= 1;
+            gameManager.playerRun = false;
+        }
+        if (code == KeyEvent.VK_CONTROL) shootKeyPressed = false;
+    }
+
+    private void tradeState(int code) {
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressed = true;
+        }
+        //First selection state
+        if (gameManager.ui.subState == 0) {
+            if (code == KeyEvent.VK_W) {
+                gameManager.ui.commandNum--;
+                if (gameManager.ui.commandNum < 0) {
+                    gameManager.ui.commandNum = 2;
+                }
+                gameManager.playSE(12);
+            }
+            if (code == KeyEvent.VK_S) {
+                gameManager.ui.commandNum++;
+                if (gameManager.ui.commandNum > 2) {
+                    gameManager.ui.commandNum = 0;
+                }
+                gameManager.playSE(12);
+            }
+        }
+        if (gameManager.ui.subState == 1) {
+            npcInventory(code);
+            if (code == KeyEvent.VK_ESCAPE) {
+                gameManager.ui.subState = 0;
+            }
+        }
+        if (gameManager.ui.subState == 2) {
+            playerInventory(code);
+            if (code == KeyEvent.VK_ESCAPE) {
+                gameManager.ui.subState = 0;
+            }
+        }
     }
 
     private void gameOverState(int code) {
@@ -205,30 +260,57 @@ public class KeyHandler implements KeyListener {
 
     private void characterState(int code) {
         if (code == KeyEvent.VK_C) gameManager.gameState = gameManager.playState;
+        if (code == KeyEvent.VK_ENTER) {
+            gameManager.player.selectItem();
+        }
+        playerInventory(code);
+    }
 
+    private void playerInventory(int code) {
         if (code == KeyEvent.VK_W) {
-            if (gameManager.ui.slotRow != 0)
-                gameManager.ui.slotRow--;
+            if (gameManager.ui.playerSlotRow != 0)
+                gameManager.ui.playerSlotRow--;
 
             gameManager.playSE(12);
         }
         if (code == KeyEvent.VK_A) {
-            if (gameManager.ui.slotCol != 0)
-                gameManager.ui.slotCol--;
+            if (gameManager.ui.playerSlotCol != 0)
+                gameManager.ui.playerSlotCol--;
             gameManager.playSE(12);
         }
         if (code == KeyEvent.VK_S) {
-            if (gameManager.ui.slotRow != 3)
-                gameManager.ui.slotRow++;
+            if (gameManager.ui.playerSlotRow != 3)
+                gameManager.ui.playerSlotRow++;
             gameManager.playSE(12);
         }
         if (code == KeyEvent.VK_D) {
-            if (gameManager.ui.slotCol != 4)
-                gameManager.ui.slotCol++;
+            if (gameManager.ui.playerSlotCol != 4)
+                gameManager.ui.playerSlotCol++;
             gameManager.playSE(12);
         }
-        if (code == KeyEvent.VK_ENTER) {
-            gameManager.player.selectItem();
+    }
+
+    private void npcInventory(int code) {
+        if (code == KeyEvent.VK_W) {
+            if (gameManager.ui.npcSlotRow != 0)
+                gameManager.ui.npcSlotRow--;
+
+            gameManager.playSE(12);
+        }
+        if (code == KeyEvent.VK_A) {
+            if (gameManager.ui.npcSlotCol != 0)
+                gameManager.ui.npcSlotCol--;
+            gameManager.playSE(12);
+        }
+        if (code == KeyEvent.VK_S) {
+            if (gameManager.ui.npcSlotRow != 3)
+                gameManager.ui.npcSlotRow++;
+            gameManager.playSE(12);
+        }
+        if (code == KeyEvent.VK_D) {
+            if (gameManager.ui.npcSlotCol != 4)
+                gameManager.ui.npcSlotCol++;
+            gameManager.playSE(12);
         }
     }
 
@@ -240,19 +322,4 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_P) gameManager.gameState = gameManager.playState;
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        int code = e.getKeyCode();
-
-        if (code == KeyEvent.VK_W) upPressed = false;
-        if (code == KeyEvent.VK_S) downPressed = false;
-        if (code == KeyEvent.VK_A) leftPressed = false;
-        if (code == KeyEvent.VK_D) rightPressed = false;
-        //When player unpressed shift, he walks
-        if (code == KeyEvent.VK_SHIFT && gameManager.playerRun) {
-            gameManager.player.speed -= 1;
-            gameManager.playerRun = false;
-        }
-        if (code == KeyEvent.VK_CONTROL) shootKeyPressed = false;
-    }
 }

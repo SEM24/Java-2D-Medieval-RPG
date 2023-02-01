@@ -13,5 +13,6 @@ public class MetalSwordObject extends Entity {
         itemDescription = "[" + name + "]\n" + "Usual metal sword with\n" + attackValue + " attack.";
         attackArea.width = 36;
         attackArea.height = 36;
+        price = 22;
     }
 }

@@ -11,5 +11,6 @@ public class GoldShieldObject extends Entity {
         down = setup("/objects/equipment/shield_gold");
         defenseValue = 3;
         itemDescription = "[" + name + "]\n" + "Gold shield with\n" + defenseValue + " defense.";
+        price = 35;
     }
 }

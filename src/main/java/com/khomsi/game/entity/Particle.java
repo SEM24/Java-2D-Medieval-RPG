@@ -51,6 +51,6 @@ public class Particle extends Entity {
         int screenY = worldY - gameManager.player.worldY + gameManager.player.screenY;
 
         graphics2D.setColor(color);
-        graphics2D.fillRect(screenX, screenY, size, size);
+        graphics2D.fillRoundRect(screenX, screenY, size, size, 10,10);
     }
 }

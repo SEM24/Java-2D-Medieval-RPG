@@ -3,6 +3,7 @@ package main.java.com.khomsi.game.entity.npc.regular;
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
 
+import java.awt.*;
 import java.util.Random;
 
 public class NpcWomanW extends Entity {
@@ -11,6 +12,17 @@ public class NpcWomanW extends Entity {
         super(gameManager);
         direction = "down";
         speed = 1;
+
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        //boundaries of npc
+        solidArea.width = 31;
+        solidArea.height = 32;
+
         getImage();
         setDialog();
     }

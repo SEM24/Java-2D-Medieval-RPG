@@ -6,11 +6,24 @@ import main.java.com.khomsi.game.objects.equipment.GoldShieldObject;
 import main.java.com.khomsi.game.objects.equipment.MetalSwordObject;
 import main.java.com.khomsi.game.objects.spells.PotionObject;
 
+import java.awt.*;
+
 public class NpcGardenerS extends Entity {
     public NpcGardenerS(GameManager gameManager) {
         super(gameManager);
+        name = "Vlad";
         direction = "down";
         speed = 0;
+
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        //boundaries of npc
+        solidArea.width = 31;
+        solidArea.height = 32;
         getImage();
         setDialog();
         setItems();
@@ -43,5 +56,12 @@ public class NpcGardenerS extends Entity {
         inventory.add(new PotionObject(gameManager));
         inventory.add(new MetalSwordObject(gameManager));
         inventory.add(new GoldShieldObject(gameManager));
+    }
+
+    @Override
+    public void speak() {
+        super.speak();
+        gameManager.gameState = gameManager.tradeState;
+        gameManager.ui.seller = this;
     }
 }
