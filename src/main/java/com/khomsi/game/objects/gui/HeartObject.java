@@ -21,9 +21,10 @@ public class HeartObject extends Entity {
     }
 
     @Override
-    public void use(Entity entity) {
+    public boolean use(Entity entity) {
         gameManager.playSE(6);
         gameManager.ui.addMessage("Life +" + value);
         entity.hp += value;
+        return true;
     }
 }

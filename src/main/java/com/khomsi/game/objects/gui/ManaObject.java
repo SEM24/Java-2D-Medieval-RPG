@@ -19,9 +19,10 @@ public class ManaObject extends Entity {
     }
 
     @Override
-    public void use(Entity entity) {
+    public boolean use(Entity entity) {
         gameManager.playSE(6);
         gameManager.ui.addMessage("Mana +" + value);
         entity.mana += value;
+        return true;
     }
 }

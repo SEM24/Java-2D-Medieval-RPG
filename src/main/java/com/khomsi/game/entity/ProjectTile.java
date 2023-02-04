@@ -41,7 +41,7 @@ public class ProjectTile extends Entity {
         if (entity == gameManager.player) {
             int mobIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
             if (mobIndex != gameManager.player.playerIndex) {
-                gameManager.player.damageMob(mobIndex, attack);
+                gameManager.player.damageMob(mobIndex, attack, knockBackPower, direction);
                 generateParticle(entity.projectTile, gameManager.mobs[gameManager.currentMap][mobIndex]);
                 //After hitting the mob, projectile disappear
                 alive = false;

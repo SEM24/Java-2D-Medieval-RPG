@@ -14,5 +14,6 @@ public class MetalSwordObject extends Entity {
         attackArea.width = 36;
         attackArea.height = 36;
         price = 22;
+        knockBackPower = 2;
     }
 }

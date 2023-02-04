@@ -14,14 +14,16 @@ public class PotionObject extends Entity {
         value = 6;
         price = 20;
         itemDescription = "[" + name + "]\n" + "Simple potion\nthat recovers " + value + " hp.";
+        stackable = true;
     }
 
     @Override
-    public void use(Entity entity) {
+    public boolean use(Entity entity) {
         gameManager.gameState = gameManager.dialogueState;
         gameManager.ui.currentDialog = "You used the " + name + "!\n" +
                 "Your HP is recovered by " + value + ".";
         entity.hp += value;
         gameManager.playSE(6);
+        return true;
     }
 }

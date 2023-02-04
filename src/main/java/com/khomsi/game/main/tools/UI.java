@@ -183,14 +183,14 @@ public class UI {
                     gameManager.gameState = gameManager.dialogueState;
                     currentDialog = "You need more coins to buy it!";
                     showDialog();
-                } else if (gameManager.player.inventory.size() > gameManager.player.maxInventorySize) {
-                    subState = 0;
-                    gameManager.gameState = gameManager.dialogueState;
-                    currentDialog = "Your inventory is full!";
-                    showDialog();
                 } else {
-                    gameManager.player.coin -= seller.inventory.get(itemIndex).price;
-                    gameManager.player.inventory.add(seller.inventory.get(itemIndex));
+                    if (gameManager.player.canObtainItem(seller.inventory.get(itemIndex))) {
+                        gameManager.player.coin -= seller.inventory.get(itemIndex).price;
+                    } else {
+                        subState = 0;
+                        gameManager.gameState = gameManager.dialogueState;
+                        currentDialog = "Your inventory is full!";
+                    }
                 }
             }
         }
@@ -225,7 +225,11 @@ public class UI {
                     gameManager.gameState = gameManager.dialogueState;
                     currentDialog = "You can't sell the equipped item!";
                 } else {
-                    gameManager.player.inventory.remove(itemIndex);
+                    if (gameManager.player.inventory.get(itemIndex).amount > 1) {
+                        gameManager.player.inventory.get(itemIndex).amount--;
+                    } else {
+                        gameManager.player.inventory.remove(itemIndex);
+                    }
                     gameManager.player.coin += price;
                 }
             }
@@ -434,6 +438,16 @@ public class UI {
                 graphics2D.fillRect(slotX, slotY, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
             }
             graphics2D.drawImage(entity.inventory.get(i).down, slotX, slotY, null);
+            //Display amount of stackable items
+            if (entity.inventory.get(i).amount > 1 && entity == gameManager.player) {
+                graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 22F));
+                int amountX;
+                int amountY;
+                String text = "" + entity.inventory.get(i).amount;
+                amountX = getXAlignToRightText(text, slotX + 44);
+                amountY = slotY + GameManager.TILE_SIZE;
+                drawShadowAndText(text, amountX, amountY, 3, 3);
+            }
             slotX += slotSize;
             if (i == 4 || i == 9 || i == 14) {
                 slotX = slotXStart;

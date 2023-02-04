@@ -12,9 +12,10 @@ public class CoinBObject extends Entity {
     }
 
     @Override
-    public void use(Entity entity) {
+    public boolean use(Entity entity) {
         gameManager.playSE(6);
         gameManager.ui.addMessage("Coin +" + value);
         gameManager.player.coin += value;
+        return true;
     }
 }

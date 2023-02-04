@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-//parent class for player, monster ect
+//parent class for player, monster etc
 public class Entity {
     //IMAGES
     public BufferedImage image, image2, image3;
@@ -33,6 +33,7 @@ public class Entity {
     int hpBarCounter = 0;
     public int shootAvailableCounter = 0;
 
+    int knockBackCounter = 0;
     //State
     public String direction = "down";
     public boolean collisionOn = false;
@@ -45,14 +46,18 @@ public class Entity {
     boolean hpBarOn = false;
     public boolean onPath = false;
 
+    public boolean knockBack = false;
+
     //Entity stats
     //Set default position
+    public String name;
     public int worldX, worldY;
     public int speed;
     public int maxHp;
     public int hp;
     public int level;
     public int maxMana;
+    public int defaultSpeed;
     public int mana;
     public int strength;
     public int ammo;
@@ -70,6 +75,9 @@ public class Entity {
     public int attackValue;
     public int defenseValue;
     public int price;
+    public int knockBackPower = 0;
+    public boolean stackable = false;
+    public int amount = 1;
     public String itemDescription = "";
     //Cost of shooting the tile
     public int useCost;
@@ -83,12 +91,12 @@ public class Entity {
     public static final int TYPE_SHIELD = 5;
     public static final int TYPE_CONSUMABLE = 6;
     public static final int TYPE_PICK_UP_ONLY = 7;
+    public static final int TYPE_OBSTACLE = 8;
 
     //TOOLS
     int dialogIndex = 0;
     public String[] dialogues = new String[20];
 
-    public String name;
     //Default values for every entity
     public List<Entity> inventory = new ArrayList<>();
     public int maxInventorySize = 24;
@@ -146,14 +154,36 @@ public class Entity {
     }
 
     public void update() {
-        setAction();
-        checkCollision();
-        if (!collisionOn) {
-            switch (direction) {
-                case "up" -> worldY -= speed;
-                case "down" -> worldY += speed;
-                case "left" -> worldX -= speed;
-                case "right" -> worldX += speed;
+        if (knockBack) {
+            checkCollision();
+            if (collisionOn) {
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+            } else {
+                switch (direction) {
+                    case "up" -> worldY -= speed;
+                    case "down" -> worldY += speed;
+                    case "left" -> worldX -= speed;
+                    case "right" -> worldX += speed;
+                }
+            }
+            knockBackCounter++;
+            if (knockBackCounter == 10) {
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+            }
+        } else {
+            setAction();
+            checkCollision();
+            if (!collisionOn) {
+                switch (direction) {
+                    case "up" -> worldY -= speed;
+                    case "down" -> worldY += speed;
+                    case "left" -> worldX -= speed;
+                    case "right" -> worldX += speed;
+                }
             }
         }
         spriteMovement();
@@ -403,6 +433,39 @@ public class Entity {
         }
     }
 
+    public void checkVacancy() {
+        for (int i = 0; i < gameManager.projectile[1].length; i++) {
+            if (gameManager.projectile[gameManager.currentMap][i] == null) {
+                gameManager.projectile[gameManager.currentMap][i] = projectTile;
+                break;
+            }
+        }
+    }
+
+    public int getLeftX() {
+        return worldX + solidArea.x;
+    }
+
+    public int getRightX() {
+        return worldX + solidArea.x + solidArea.width;
+    }
+
+    public int getTopY() {
+        return worldY + solidArea.y;
+    }
+
+    public int getBottomY() {
+        return worldY + solidArea.y + solidArea.height;
+    }
+
+    public int getCol() {
+        return (worldX + solidArea.x) / GameManager.TILE_SIZE;
+    }
+
+    public int getRow() {
+        return (worldY + solidArea.y) / GameManager.TILE_SIZE;
+    }
+
     //WARNING! We always override these methods by subclasses
     //so there's no need to have logic inside them
     public Color getParticleColor() {
@@ -431,11 +494,16 @@ public class Entity {
     public void damageReaction() {
     }
 
-    public void use(Entity entity) {
-
+    public boolean use(Entity entity) {
+        return false;
     }
 
     public void checkDrop() {
 
     }
+
+    public void interact() {
+
+    }
+
 }

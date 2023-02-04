@@ -7,7 +7,8 @@ public class DoorObject extends Entity {
 
     public DoorObject(GameManager gameManager) {
         super(gameManager);
-        name = "Door";
+        name = "door";
+        type = TYPE_OBSTACLE;
         down = setup("/objects/door");
         collision = true;
         solidArea.x = 0;
@@ -16,5 +17,11 @@ public class DoorObject extends Entity {
         solidArea.height = 32;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+    }
+
+    @Override
+    public void interact() {
+        gameManager.gameState = gameManager.dialogueState;
+        gameManager.ui.currentDialog = "You need a key to open the door!";
     }
 }

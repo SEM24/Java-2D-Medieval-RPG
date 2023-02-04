@@ -4,6 +4,7 @@ import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.main.tools.KeyHandler;
 import main.java.com.khomsi.game.objects.equipment.MetalShieldObject;
 import main.java.com.khomsi.game.objects.equipment.MetalSwordObject;
+import main.java.com.khomsi.game.objects.interact.KeyObject;
 import main.java.com.khomsi.game.objects.projectTiles.FireBallObject;
 
 import java.awt.*;
@@ -15,7 +16,7 @@ public class Player extends Entity {
     //Male/Female type of skin
     public int playerSkin;
     public final int screenX, screenY;
-    int playerIndex = 999;
+    public int playerIndex = 999;
     public boolean attackCanceled = false;
 
     public Player(GameManager gameManager, KeyHandler keyHandler) {
@@ -48,11 +49,12 @@ public class Player extends Entity {
         //player position of player
         worldX = GameManager.TILE_SIZE * 23;
         worldY = GameManager.TILE_SIZE * 21;
-        speed = 3;
+        defaultSpeed = 3;
+        speed = defaultSpeed;
         direction = "down";
         invincible = false;
 
-        //player hp, 6 = 3 hearts, 6 = 2.5 hearts
+        //player hp, 6 = 3 hearts, 5 = 2.5 hearts
         level = 1;
         maxHp = 6;
         hp = maxHp;
@@ -97,6 +99,7 @@ public class Player extends Entity {
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
+        inventory.add(new KeyObject(gameManager));
     }
 
     private int getAttack() {
@@ -106,12 +109,13 @@ public class Player extends Entity {
 
     //Change the skin of character and stats
     public void createNewPlayer(int skinType, int maxHp, int buffSpeed) {
-        gameManager.player.playerSkin = skinType;
-        gameManager.player.speed = buffSpeed;
+        playerSkin = skinType;
+        defaultSpeed = buffSpeed;
+        speed = defaultSpeed;
 //      gameManager.player.maxHp = 8;
 //        gameManager.player.hp = gameManager.player.maxHp;
-        gameManager.player.getPlayerImage();
-        gameManager.player.getPlayerAttackImage();
+        getPlayerImage();
+        getPlayerAttackImage();
         gameManager.gameState = gameManager.playState;
         gameManager.playMusic(0);
     }
@@ -189,7 +193,7 @@ public class Player extends Entity {
     @Override
     public void update() {
         if (attacking) {
-            playerAttack();
+            playerAttack(3);
         }
         //to avoid moving the character without pressing buttons
         else if (keyHandler.upPressed || keyHandler.downPressed ||
@@ -249,7 +253,7 @@ public class Player extends Entity {
             projectTile.subtractResource(this);
 
             //Add this projTile to list
-            gameManager.projectilesList.add(projectTile);
+            checkVacancy();
             shootAvailableCounter = 0;
             //TODO change soundEffect
             gameManager.playSE(1);
@@ -310,19 +314,19 @@ public class Player extends Entity {
         }
     }
 
-    public void playerAttack() {
+    public void playerAttack(int spriteSpeed) {
         spriteCounter++;
 
-        if (spriteCounter <= 5) {
+        if (spriteCounter <= spriteSpeed) {
             spriteNum = 0;
         }
-        if (spriteCounter > 5 && spriteCounter <= 11) {
+        if (spriteCounter > spriteSpeed && spriteCounter <= spriteSpeed + 6) {
             spriteNum = 1;
         }
-        if (spriteCounter > 11 && spriteCounter <= 18) {
+        if (spriteCounter > spriteSpeed + 6 && spriteCounter <= spriteSpeed + 13) {
             spriteNum = 2;
         }
-        if (spriteCounter > 18 && spriteCounter <= 24) {
+        if (spriteCounter > spriteSpeed + 13 && spriteCounter <= spriteSpeed + 19) {
             spriteNum = 3;
             //Save current x,y, solid area
             int currentWorldX = worldX;
@@ -341,20 +345,31 @@ public class Player extends Entity {
             solidArea.height = attackArea.height;
             //Check monster collision
             int monsterIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
-            damageMob(monsterIndex, attack);
+            damageMob(monsterIndex, attack, currentWeapon.knockBackPower, direction);
 
             int interTileIndex = gameManager.checkCollision.checkEntity(this, gameManager.interactTile);
             damageInteractiveTiles(interTileIndex);
+            int projectTileIndex = gameManager.checkCollision.checkEntity(this, gameManager.projectile);
+            damageProjectTile(projectTileIndex);
             //After checking collision, restore original data
             worldX = currentWorldX;
             worldY = currentWorldY;
             solidArea.width = solidAreaWidth;
             solidArea.height = solidAreaHeight;
         }
-        if (spriteCounter > 24) {
+        if (spriteCounter > spriteSpeed + 19) {
             spriteCounter = 0;
             spriteNum = 0;
             attacking = false;
+        }
+    }
+
+    private void damageProjectTile(int index) {
+        if (index != playerIndex) {
+            //player's weapon hits the weapon = project tile disappears
+            Entity projectTile = gameManager.projectile[gameManager.currentMap][index];
+            projectTile.alive = false;
+            generateParticle(projectTile, projectTile);
         }
     }
 
@@ -377,10 +392,13 @@ public class Player extends Entity {
         }
     }
 
-    public void damageMob(int monsterIndex, int attack) {
+    public void damageMob(int monsterIndex, int attack, int knockBackPower, String direction) {
         if (monsterIndex != playerIndex) {
             if (!gameManager.mobs[gameManager.currentMap][monsterIndex].invincible) {
                 gameManager.playSE(8);
+                if (knockBackPower > 0) {
+                    knockBack(gameManager.mobs[gameManager.currentMap][monsterIndex], knockBackPower, direction);
+                }
 
                 int damage = attack - gameManager.mobs[gameManager.currentMap][monsterIndex].defense;
                 if (damage < 0) {
@@ -459,8 +477,12 @@ public class Player extends Entity {
                 defense = getDefense();
             }
             if (selectedItem.type == TYPE_CONSUMABLE) {
-                selectedItem.use(this);
-                inventory.remove(itemIndex);
+                if (selectedItem.use(this)) {
+                    if (selectedItem.amount > 1) {
+                        selectedItem.amount--;
+                    } else
+                        inventory.remove(itemIndex);
+                }
             }
         }
     }
@@ -471,20 +493,69 @@ public class Player extends Entity {
             //Take only items
             if (gameManager.object[gameManager.currentMap][index].type == TYPE_PICK_UP_ONLY) {
                 gameManager.object[gameManager.currentMap][index].use(this);
+                gameManager.object[gameManager.currentMap][index] = null;
+            }
+            //Obstacle
+            else if (gameManager.object[gameManager.currentMap][index].type == TYPE_OBSTACLE) {
+                if (keyHandler.enterPressed) {
+                    attackCanceled = true;
+                    gameManager.object[gameManager.currentMap][index].interact();
+                }
             } else {
                 //Inventory items
                 String text;
-                if (inventory.size() != maxInventorySize) {
-                    inventory.add(gameManager.object[gameManager.currentMap][index]);
+                if (canObtainItem(gameManager.object[gameManager.currentMap][index])) {
                     gameManager.playSE(2);
                     text = "Got a " + gameManager.object[gameManager.currentMap][index].name + "!";
                 } else {
                     text = "You can't pick up the item anymore!";
                 }
                 gameManager.ui.addMessage(text);
+                gameManager.object[gameManager.currentMap][index] = null;
             }
-            gameManager.object[gameManager.currentMap][index] = null;
         }
+    }
+
+    public void knockBack(Entity entity, int knockBackPower, String direction) {
+        entity.direction = direction;
+        entity.speed += knockBackPower;
+        entity.knockBack = true;
+    }
+
+    public int searchItemInventory(String itemName) {
+        int itemIndex = 999;
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).name.equals(itemName)) {
+                itemIndex = i;
+                break;
+            }
+        }
+        return itemIndex;
+    }
+
+    public boolean canObtainItem(Entity item) {
+        boolean canObtain = false;
+        //Check if item is stackable
+        if (item.stackable) {
+            int index = searchItemInventory(item.name);
+            if (index != 999) {
+                inventory.get(index).amount++;
+                canObtain = true;
+            } else {
+                //New item, so need to check vacancy
+                if (inventory.size() != maxInventorySize) {
+                    inventory.add(item);
+                    canObtain = true;
+                }
+            }
+        } else {
+            //Not stackable, so check vacancy
+            if (inventory.size() != maxInventorySize) {
+                inventory.add(item);
+                canObtain = true;
+            }
+        }
+        return canObtain;
     }
 
     @Override

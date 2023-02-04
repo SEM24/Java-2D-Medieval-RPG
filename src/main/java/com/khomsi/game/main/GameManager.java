@@ -60,8 +60,8 @@ public class GameManager extends JPanel implements Runnable {
     public Entity[][] npcList = new Entity[maxMap][10];
     public Entity[][] mobs = new Entity[maxMap][10];
     List<Entity> entities = new ArrayList<>();
-    public InteractiveTile interactTile[][] = new InteractiveTile[maxMap][50];
-    public List<Entity> projectilesList = new ArrayList<>();
+    public InteractiveTile[][] interactTile = new InteractiveTile[maxMap][50];
+    public Entity[][] projectile = new Entity[maxMap][20];
     public List<Entity> particleList = new ArrayList<>();
 
     public Player player = new Player(this, keyHandler);
@@ -198,8 +198,16 @@ public class GameManager extends JPanel implements Runnable {
                 }
             }
             //ProjectTiles loop
-            updateLoopArrays(projectilesList);
-
+            for (int i = 0; i < projectile.length; i++) {
+                if (projectile[currentMap][i] != null) {
+                    if (projectile[currentMap][i].alive) {
+                        projectile[currentMap][i].update();
+                    }
+                    if (!projectile[currentMap][i].alive) {
+                        projectile[currentMap][i] = null;
+                    }
+                }
+            }
             //ParticleTiles loop
             updateLoopArrays(particleList);
             //Interactive tiles loop
@@ -236,7 +244,7 @@ public class GameManager extends JPanel implements Runnable {
             drawMethodArray(interactTile);
             drawMethodArray(object);
             drawMethodArray(mobs);
-            drawMethodList(projectilesList);
+            drawMethodArray(projectile);
             drawMethodList(particleList);
 
             //Sort entities

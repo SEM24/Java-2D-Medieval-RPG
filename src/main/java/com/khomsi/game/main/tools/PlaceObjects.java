@@ -8,7 +8,10 @@ import main.java.com.khomsi.game.objects.equipment.AxeObject;
 import main.java.com.khomsi.game.objects.equipment.GoldShieldObject;
 import main.java.com.khomsi.game.objects.gui.HeartObject;
 import main.java.com.khomsi.game.objects.gui.ManaObject;
+import main.java.com.khomsi.game.objects.interact.ChestObject;
 import main.java.com.khomsi.game.objects.interact.CoinBObject;
+import main.java.com.khomsi.game.objects.interact.KeyObject;
+import main.java.com.khomsi.game.objects.outside.DoorObject;
 import main.java.com.khomsi.game.objects.spells.PotionObject;
 import main.java.com.khomsi.game.tilesinteractive.Bush;
 
@@ -58,6 +61,28 @@ public class PlaceObjects {
         gameManager.object[mapNum][index] = new ManaObject(gameManager);
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 34;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 14;
+
+        index++;
+        gameManager.object[mapNum][index] = new DoorObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 12;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 17;
+        index++;
+        gameManager.object[mapNum][index] = new DoorObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 14;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 27;
+        index++;
+        gameManager.object[mapNum][index] = new ChestObject(gameManager, new KeyObject(gameManager));
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 25;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 22;
+        index++;
+        gameManager.object[mapNum][index] = new PotionObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 22;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 22;
+        index++;
+        gameManager.object[mapNum][index] = new PotionObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 23;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 22;
+
     }
 
     public void setInteractiveTiles() {
@@ -67,9 +92,9 @@ public class PlaceObjects {
         index++;
         gameManager.interactTile[mapNum][index] = new Bush(gameManager, 25, 16);
         index++;
-        gameManager.interactTile[mapNum][index] = new Bush(gameManager, 12, 18);
-        index++;
         gameManager.interactTile[mapNum][index] = new Bush(gameManager, 13, 18);
+        index++;
+        gameManager.interactTile[mapNum][index] = new Bush(gameManager, 12, 19);
         index++;
         gameManager.interactTile[mapNum][index] = new Bush(gameManager, 11, 18);
     }

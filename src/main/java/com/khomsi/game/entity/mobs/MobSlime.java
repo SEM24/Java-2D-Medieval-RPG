@@ -19,7 +19,8 @@ public class MobSlime extends Entity {
     private void setDefaultValues() {
         name = "Slime";
         type = TYPE_MOB;
-        speed = 1;
+        defaultSpeed = 1;
+        speed = defaultSpeed;
         direction = "down";
         //4 = 2 hearts
         maxHp = 4;
@@ -85,7 +86,7 @@ public class MobSlime extends Entity {
             int rand = new Random().nextInt(200) + 1;
             if (rand > 197 && !projectTile.alive && shootAvailableCounter == 30) {
                 projectTile.set(worldX, worldY, direction, true, this);
-                gameManager.projectilesList.add(projectTile);
+                checkVacancy();
                 shootAvailableCounter = 0;
             }
         } else {

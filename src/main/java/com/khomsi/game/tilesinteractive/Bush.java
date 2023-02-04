@@ -22,7 +22,7 @@ public class Bush extends InteractiveTile {
 
         down = setup("/tilesinteractive/bush");
         destructible = true;
-        hp = 3;
+        hp = 1;
     }
 
     @Override
