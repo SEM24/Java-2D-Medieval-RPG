@@ -29,6 +29,7 @@ public class Sound {
         soundURL[12] = getClass().getResource(resourcePath + "cursor.wav");
         soundURL[13] = getClass().getResource(resourcePath + "cuttree.wav");
         soundURL[14] = getClass().getResource(resourcePath + "game_over.wav");
+        soundURL[15] = getClass().getResource(resourcePath + "sleep.wav");
     }
 
     public void setFile(int i) {

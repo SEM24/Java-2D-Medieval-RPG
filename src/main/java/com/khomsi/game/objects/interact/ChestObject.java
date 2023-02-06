@@ -3,10 +3,6 @@ package main.java.com.khomsi.game.objects.interact;
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.Objects;
-
 public class ChestObject extends Entity {
     Entity loot;
     boolean opened = false;
@@ -30,7 +26,7 @@ public class ChestObject extends Entity {
 
     @Override
     public void interact() {
-        gameManager.gameState = gameManager.dialogueState;
+        gameManager.gameState = GameManager.DIALOGUE_STATE;
         if (!opened) {
             gameManager.playSE(4);
             StringBuilder sb = new StringBuilder();

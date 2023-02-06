@@ -1,6 +1,7 @@
 package main.java.com.khomsi.game.main.tools;
 
 import main.java.com.khomsi.game.entity.Entity;
+import main.java.com.khomsi.game.enviroment.Lightning;
 import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.objects.gui.HeartObject;
 import main.java.com.khomsi.game.objects.gui.ManaObject;
@@ -30,7 +31,7 @@ public class UI {
     public int npcSlotCol = 0;
     public int npcSlotRow = 0;
     int subState = 0;
-    int transitCounter = 0;
+    int counter = 0;
     public Entity seller;
 
     public UI(GameManager gameManager) {
@@ -64,43 +65,68 @@ public class UI {
         graphics2D.setFont(playMeGames);
         graphics2D.setColor(Color.WHITE);
         //Title state
-        if (gameManager.gameState == gameManager.titleState) {
+        if (gameManager.gameState == GameManager.TITLE_STATE) {
             drawTitleScreen();
         }
         //Play state
-        if (gameManager.gameState == gameManager.playState) {
+        if (gameManager.gameState == GameManager.PLAY_STATE) {
             drawPlayerHp();
             drawMessage();
         }
         //Pause state
-        if (gameManager.gameState == gameManager.pauseState) {
+        if (gameManager.gameState == GameManager.PAUSE_STATE) {
             drawPlayerHp();
             drawPauseScreen();
         }
         //Dialog state
-        if (gameManager.gameState == gameManager.dialogueState) {
+        if (gameManager.gameState == GameManager.DIALOGUE_STATE) {
             showDialog();
         }
         //Character state
-        if (gameManager.gameState == gameManager.characterState) {
+        if (gameManager.gameState == GameManager.CHARACTER_STATE) {
             drawCharacterScreen();
             drawInventory(gameManager.player, true);
         }
         //Option state
-        if (gameManager.gameState == gameManager.optionState) {
+        if (gameManager.gameState == GameManager.OPTION_STATE) {
             drawOptionScreen();
         }
         //Game Over state
-        if (gameManager.gameState == gameManager.gameOverState) {
+        if (gameManager.gameState == GameManager.GAME_OVER_STATE) {
             drawGameOverScreen();
         }
         //Transition Over state
-        if (gameManager.gameState == gameManager.transitionState) {
+        if (gameManager.gameState == GameManager.TRANSITION_STATE) {
             drawTransitionScreen();
         }
         //Trade state
-        if (gameManager.gameState == gameManager.tradeState) {
+        if (gameManager.gameState == GameManager.TRADE_STATE) {
             drawTradeScreen();
+        }
+        //Sleep state
+        if (gameManager.gameState == GameManager.SLEEP_STATE) {
+            drawSleepScreen();
+        }
+    }
+
+    private void drawSleepScreen() {
+        counter++;
+
+        if (counter < 120) {
+            gameManager.enManagment.lightning.filterAlfa += 0.01F;
+            if (gameManager.enManagment.lightning.filterAlfa > 1F)
+                gameManager.enManagment.lightning.filterAlfa = 1F;
+        }
+        if (counter >= 120) {
+            gameManager.enManagment.lightning.filterAlfa -= 0.01F;
+            if (gameManager.enManagment.lightning.filterAlfa <= 0F) {
+                gameManager.enManagment.lightning.filterAlfa = 0F;
+                counter = 0;
+                gameManager.enManagment.lightning.dayState = Lightning.DAY;
+                gameManager.enManagment.lightning.dayCounter = 0;
+                gameManager.gameState = GameManager.PLAY_STATE;
+                gameManager.player.getPlayerImage();
+            }
         }
     }
 
@@ -146,7 +172,7 @@ public class UI {
             showChooseCursor(x, y, 25);
             if (gameManager.keyHandler.enterPressed) {
                 commandNum = 0;
-                gameManager.gameState = gameManager.dialogueState;
+                gameManager.gameState = GameManager.DIALOGUE_STATE;
                 currentDialog = "See you later!";
             }
         }
@@ -180,7 +206,7 @@ public class UI {
             if (gameManager.keyHandler.enterPressed) {
                 if (seller.inventory.get(itemIndex).price > gameManager.player.coin) {
                     subState = 0;
-                    gameManager.gameState = gameManager.dialogueState;
+                    gameManager.gameState = GameManager.DIALOGUE_STATE;
                     currentDialog = "You need more coins to buy it!";
                     showDialog();
                 } else {
@@ -188,7 +214,7 @@ public class UI {
                         gameManager.player.coin -= seller.inventory.get(itemIndex).price;
                     } else {
                         subState = 0;
-                        gameManager.gameState = gameManager.dialogueState;
+                        gameManager.gameState = GameManager.DIALOGUE_STATE;
                         currentDialog = "Your inventory is full!";
                     }
                 }
@@ -222,7 +248,7 @@ public class UI {
                         gameManager.player.inventory.get(itemIndex) == gameManager.player.currentShield) {
                     commandNum = 0;
                     subState = 0;
-                    gameManager.gameState = gameManager.dialogueState;
+                    gameManager.gameState = GameManager.DIALOGUE_STATE;
                     currentDialog = "You can't sell the equipped item!";
                 } else {
                     if (gameManager.player.inventory.get(itemIndex).amount > 1) {
@@ -251,12 +277,12 @@ public class UI {
     }
 
     private void drawTransitionScreen() {
-        transitCounter++;
-        graphics2D.setColor(new Color(0, 0, 0, transitCounter * 5));
+        counter++;
+        graphics2D.setColor(new Color(0, 0, 0, counter * 5));
         graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
-        if (transitCounter == 50) {
-            transitCounter = 0;
-            gameManager.gameState = gameManager.playState;
+        if (counter == 50) {
+            counter = 0;
+            gameManager.gameState = GameManager.PLAY_STATE;
             gameManager.currentMap = gameManager.eventHandler.tempMap;
             gameManager.player.worldX = GameManager.TILE_SIZE * gameManager.eventHandler.tempCol;
             gameManager.player.worldY = GameManager.TILE_SIZE * gameManager.eventHandler.tempRow;
@@ -369,7 +395,7 @@ public class UI {
         if (commandNum == 5) {
             showChooseCursor(textX, textY, 25);
             if (gameManager.keyHandler.enterPressed) {
-                gameManager.gameState = gameManager.playState;
+                gameManager.gameState = GameManager.PLAY_STATE;
                 commandNum = 0;
             }
         }
@@ -431,7 +457,8 @@ public class UI {
         for (int i = 0; i < entity.inventory.size(); i++) {
             //Equip cursor
             if (entity.inventory.get(i).equals(entity.currentWeapon) ||
-                    entity.inventory.get(i).equals(entity.currentShield)) {
+                    entity.inventory.get(i).equals(entity.currentShield) ||
+                    entity.inventory.get(i).equals(entity.currentLight)) {
                 int alpha = 200; // % transparent
                 graphics2D.setColor(new Color(255, 255, 255, alpha));
 
@@ -866,7 +893,7 @@ public class UI {
                 //Quit the game
                 subState = 0;
                 gameManager.ui.titleScreenState = 0;
-                gameManager.gameState = gameManager.titleState;
+                gameManager.gameState = GameManager.TITLE_STATE;
                 gameManager.stopMusic();
             }
         }

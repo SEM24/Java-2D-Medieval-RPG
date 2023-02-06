@@ -21,7 +21,7 @@ public class DoorObject extends Entity {
 
     @Override
     public void interact() {
-        gameManager.gameState = gameManager.dialogueState;
+        gameManager.gameState = GameManager.DIALOGUE_STATE;
         gameManager.ui.currentDialog = "You need a key to open the door!";
     }
 }

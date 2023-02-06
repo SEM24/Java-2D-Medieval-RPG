@@ -17,7 +17,7 @@ public class KeyObject extends Entity {
 
     @Override
     public boolean use(Entity entity) {
-        gameManager.gameState = gameManager.dialogueState;
+        gameManager.gameState = GameManager.DIALOGUE_STATE;
 
         int objIndex = getDetected(entity, gameManager.object, "door");
         if (objIndex != 999) {

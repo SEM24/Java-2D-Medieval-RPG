@@ -49,8 +49,8 @@ public class EventHandler {
             canTouchEvent = true;
         }
         if (canTouchEvent) {
-            if (interact(0, 29, 19, "any")) damagePit(gameManager.dialogueState);
-            else if (interact(0, 30, 21, "right")) healingPool(gameManager.dialogueState);
+            if (interact(0, 29, 19, "any")) damagePit(GameManager.DIALOGUE_STATE);
+            else if (interact(0, 30, 21, "right")) healingPool(GameManager.DIALOGUE_STATE);
                 //Col and row of enter location is the place where
                 //the player will be spawned on new map
             else if (interact(0, 12, 17, "any")) {
@@ -67,14 +67,14 @@ public class EventHandler {
 
     private void speak(Entity entity) {
         if (gameManager.keyHandler.enterPressed) {
-            gameManager.gameState = gameManager.dialogueState;
+            gameManager.gameState = GameManager.DIALOGUE_STATE;
             gameManager.player.attackCanceled = true;
             entity.speak();
         }
     }
 
     private void changeLocation(int map, int col, int row) {
-        gameManager.gameState = gameManager.transitionState;
+        gameManager.gameState = GameManager.TRANSITION_STATE;
         tempMap = map;
         tempCol = col;
         tempRow = row;

@@ -27,6 +27,11 @@ public class NpcWomanW extends Entity {
         setDialog();
     }
 
+    @Override
+    public void update() {
+        super.update();
+    }
+
     public void getImage() {
         up = setup("/npc/woman3_up");
         up1 = setup("/npc/woman3_up_1");

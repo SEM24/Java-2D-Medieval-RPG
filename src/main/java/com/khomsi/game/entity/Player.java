@@ -18,6 +18,8 @@ public class Player extends Entity {
     public final int screenX, screenY;
     public int playerIndex = 999;
     public boolean attackCanceled = false;
+    //call this only when the light condition is updated
+    public boolean lightUpdated = false;
 
     public Player(GameManager gameManager, KeyHandler keyHandler) {
         super(gameManager);
@@ -116,7 +118,7 @@ public class Player extends Entity {
 //        gameManager.player.hp = gameManager.player.maxHp;
         getPlayerImage();
         getPlayerAttackImage();
-        gameManager.gameState = gameManager.playState;
+        gameManager.gameState = GameManager.PLAY_STATE;
         gameManager.playMusic(0);
     }
 
@@ -187,6 +189,25 @@ public class Player extends Entity {
             attackRight2 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_2", attackLRW, attackLRH);
             attackRight3 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_3", attackLRW, attackLRH);
         }
+    }
+
+    public void getSleepingImage(BufferedImage image) {
+        up = image;
+        up1 = image;
+        up2 = image;
+        up3 = image;
+        down = image;
+        down1 = image;
+        down2 = image;
+        down3 = image;
+        left = image;
+        left1 = image;
+        left2 = image;
+        left3 = image;
+        right = image;
+        right1 = image;
+        right2 = image;
+        right3 = image;
     }
 
     //This method updates player's coordinates
@@ -304,7 +325,7 @@ public class Player extends Entity {
             mana = maxMana;
         }
         if (hp <= 0) {
-            gameManager.gameState = gameManager.gameOverState;
+            gameManager.gameState = GameManager.GAME_OVER_STATE;
             //To prevent pressing immediate retry, while you was pressing enter(attack)
             gameManager.ui.commandNum = -1;
             gameManager.stopMusic();
@@ -437,7 +458,7 @@ public class Player extends Entity {
             //if index not 999 - player touches the npc
             if (npcIndex != playerIndex) {
                 attackCanceled = true;
-                gameManager.gameState = gameManager.dialogueState;
+                gameManager.gameState = GameManager.DIALOGUE_STATE;
                 gameManager.npcList[gameManager.currentMap][npcIndex].speak();
             }
         }
@@ -456,7 +477,7 @@ public class Player extends Entity {
             attack = getAttack();
             defense = getDefense();
             gameManager.playSE(11);
-            gameManager.gameState = gameManager.dialogueState;
+            gameManager.gameState = GameManager.DIALOGUE_STATE;
             gameManager.ui.currentDialog = "Your new level is " + level + " !\n" +
                     "You became stronger!";
             gameManager.pauseMusic(5);
@@ -475,6 +496,14 @@ public class Player extends Entity {
             if (selectedItem.type == TYPE_SHIELD) {
                 currentShield = selectedItem;
                 defense = getDefense();
+            }
+            if (selectedItem.type == TYPE_LIGHT) {
+                if (currentLight == selectedItem) {
+                    currentLight = null;
+                } else {
+                    currentLight = selectedItem;
+                }
+                lightUpdated = true;
             }
             if (selectedItem.type == TYPE_CONSUMABLE) {
                 if (selectedItem.use(this)) {

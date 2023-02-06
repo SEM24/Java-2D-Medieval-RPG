@@ -1,6 +1,7 @@
 package main.java.com.khomsi.game.main.tools;
 
 import main.java.com.khomsi.game.entity.mobs.MobSlime;
+import main.java.com.khomsi.game.entity.mobs.MobSlimeBlue;
 import main.java.com.khomsi.game.entity.npc.regular.NpcWomanW;
 import main.java.com.khomsi.game.entity.npc.sellers.NpcGardenerS;
 import main.java.com.khomsi.game.main.GameManager;
@@ -11,7 +12,10 @@ import main.java.com.khomsi.game.objects.gui.ManaObject;
 import main.java.com.khomsi.game.objects.interact.ChestObject;
 import main.java.com.khomsi.game.objects.interact.CoinBObject;
 import main.java.com.khomsi.game.objects.interact.KeyObject;
+import main.java.com.khomsi.game.objects.light.LanternObject;
+import main.java.com.khomsi.game.objects.outside.BedObject;
 import main.java.com.khomsi.game.objects.outside.DoorObject;
+import main.java.com.khomsi.game.objects.outside.TentObject;
 import main.java.com.khomsi.game.objects.spells.PotionObject;
 import main.java.com.khomsi.game.tilesinteractive.Bush;
 
@@ -33,6 +37,15 @@ public class PlaceObjects {
         gameManager.object[mapNum][index] = new CoinBObject(gameManager);
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 28;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 19;
+        index++;
+
+        gameManager.object[mapNum][index] = new LanternObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 26;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 22;
+        index++;
+        gameManager.object[mapNum][index] = new TentObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 27;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 21;
         index++;
 
         gameManager.object[mapNum][index] = new AxeObject(gameManager);
@@ -82,6 +95,13 @@ public class PlaceObjects {
         gameManager.object[mapNum][index] = new PotionObject(gameManager);
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 23;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 22;
+
+        //Map 1
+        index = 0;
+        mapNum = 1;
+        gameManager.object[mapNum][index] = new BedObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 28;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 13;
 
     }
 
@@ -135,6 +155,10 @@ public class PlaceObjects {
         gameManager.mobs[mapNum][index] = new MobSlime(gameManager);
         gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 35;
         gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 33;
+        index++;
+        gameManager.mobs[mapNum][index] = new MobSlimeBlue(gameManager);
+        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 19;
+        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 21;
         index++;
         //Set mobs on different map
         mapNum = 1;

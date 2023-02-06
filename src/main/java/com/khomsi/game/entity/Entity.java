@@ -69,6 +69,7 @@ public class Entity {
     public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
+    public Entity currentLight;
 
     //Item attributes
     public int value;
@@ -78,6 +79,7 @@ public class Entity {
     public int knockBackPower = 0;
     public boolean stackable = false;
     public int amount = 1;
+    public int lightRadius;
     public String itemDescription = "";
     //Cost of shooting the tile
     public int useCost;
@@ -92,6 +94,7 @@ public class Entity {
     public static final int TYPE_CONSUMABLE = 6;
     public static final int TYPE_PICK_UP_ONLY = 7;
     public static final int TYPE_OBSTACLE = 8;
+    public static final int TYPE_LIGHT = 9;
 
     //TOOLS
     int dialogIndex = 0;
@@ -186,6 +189,7 @@ public class Entity {
                 }
             }
         }
+        //TODO idk how to make special movement for each mob yet
         spriteMovement();
         if (invincible) {
             invincibleCounter++;
@@ -199,6 +203,7 @@ public class Entity {
             shootAvailableCounter++;
         }
     }
+
 
     public void damagePlayer(int attack) {
         //Check if player can receive the dmg

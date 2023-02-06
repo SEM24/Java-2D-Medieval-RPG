@@ -28,35 +28,35 @@ public class KeyHandler implements KeyListener {
         int code = e.getKeyCode();
 
         //Title state
-        if (gameManager.gameState == gameManager.titleState) {
+        if (gameManager.gameState == GameManager.TITLE_STATE) {
             titleState(code);
         }
         //play state
-        else if (gameManager.gameState == gameManager.playState) {
+        else if (gameManager.gameState == GameManager.PLAY_STATE) {
             playerState(code);
         }
         //pause state
-        else if (gameManager.gameState == gameManager.pauseState) {
+        else if (gameManager.gameState == GameManager.PAUSE_STATE) {
             pauseState(code);
         }
         //Dialog state
-        else if (gameManager.gameState == gameManager.dialogueState) {
+        else if (gameManager.gameState == GameManager.DIALOGUE_STATE) {
             dialogState(code);
         }
         //Character state
-        else if (gameManager.gameState == gameManager.characterState) {
+        else if (gameManager.gameState == GameManager.CHARACTER_STATE) {
             characterState(code);
         }
         //Option state
-        else if (gameManager.gameState == gameManager.optionState) {
+        else if (gameManager.gameState == GameManager.OPTION_STATE) {
             optionState(code);
         }
         //Game Over state
-        else if (gameManager.gameState == gameManager.gameOverState) {
+        else if (gameManager.gameState == GameManager.GAME_OVER_STATE) {
             gameOverState(code);
         }
         //Trade state
-        else if (gameManager.gameState == gameManager.tradeState) {
+        else if (gameManager.gameState == GameManager.TRADE_STATE) {
             tradeState(code);
         }
     }
@@ -129,19 +129,19 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_ENTER) {
             if (gameManager.ui.commandNum == 0) {
-                gameManager.gameState = gameManager.playState;
+                gameManager.gameState = GameManager.PLAY_STATE;
                 gameManager.retry();
                 gameManager.playMusic(0);
             } else if (gameManager.ui.commandNum == 1) {
                 gameManager.ui.titleScreenState = 0;
-                gameManager.gameState = gameManager.titleState;
+                gameManager.gameState = GameManager.TITLE_STATE;
                 gameManager.restart();
             }
         }
     }
 
     private void optionState(int code) {
-        if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = gameManager.playState;
+        if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = GameManager.PLAY_STATE;
         if (code == KeyEvent.VK_ENTER) enterPressed = true;
 
         int maxCommandNum = 0;
@@ -194,13 +194,13 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_A) leftPressed = true;
         if (code == KeyEvent.VK_D) rightPressed = true;
         //Show character stats
-        if (code == KeyEvent.VK_C) gameManager.gameState = gameManager.characterState;
+        if (code == KeyEvent.VK_C) gameManager.gameState = GameManager.CHARACTER_STATE;
         //Pause the game
-        if (code == KeyEvent.VK_P) gameManager.gameState = gameManager.pauseState;
+        if (code == KeyEvent.VK_P) gameManager.gameState = GameManager.PAUSE_STATE;
         if (code == KeyEvent.VK_ENTER) enterPressed = true;
 
         if (code == KeyEvent.VK_CONTROL) shootKeyPressed = true;
-        if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = gameManager.optionState;
+        if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = GameManager.OPTION_STATE;
         //When player pressed shift, he runs
         if (code == KeyEvent.VK_SHIFT && !gameManager.playerRun) {
             gameManager.playerRun = true;
@@ -244,7 +244,7 @@ public class KeyHandler implements KeyListener {
                 gameManager.ui.commandNum++;
                 if (gameManager.ui.commandNum > 2) gameManager.ui.commandNum = 0;
             }
-            if (code == KeyEvent.VK_C) gameManager.gameState = gameManager.characterState;
+            if (code == KeyEvent.VK_C) gameManager.gameState = GameManager.CHARACTER_STATE;
 
             if (code == KeyEvent.VK_ENTER) {
                 //Set character's stats and skin, depends on chose
@@ -259,7 +259,7 @@ public class KeyHandler implements KeyListener {
 
 
     private void characterState(int code) {
-        if (code == KeyEvent.VK_C) gameManager.gameState = gameManager.playState;
+        if (code == KeyEvent.VK_C) gameManager.gameState = GameManager.PLAY_STATE;
         if (code == KeyEvent.VK_ENTER) {
             gameManager.player.selectItem();
         }
@@ -315,11 +315,11 @@ public class KeyHandler implements KeyListener {
     }
 
     private void dialogState(int code) {
-        if (code == KeyEvent.VK_ENTER) gameManager.gameState = gameManager.playState;
+        if (code == KeyEvent.VK_ENTER) gameManager.gameState = GameManager.PLAY_STATE;
     }
 
     private void pauseState(int code) {
-        if (code == KeyEvent.VK_P) gameManager.gameState = gameManager.playState;
+        if (code == KeyEvent.VK_P) gameManager.gameState = GameManager.PLAY_STATE;
     }
 
 }

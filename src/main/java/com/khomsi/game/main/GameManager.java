@@ -3,6 +3,7 @@ package main.java.com.khomsi.game.main;
 import main.java.com.khomsi.game.ai.PathFinder;
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.entity.Player;
+import main.java.com.khomsi.game.enviroment.EnvironmentManagment;
 import main.java.com.khomsi.game.main.tools.*;
 import main.java.com.khomsi.game.tiles.TileManager;
 import main.java.com.khomsi.game.tilesinteractive.InteractiveTile;
@@ -54,6 +55,7 @@ public class GameManager extends JPanel implements Runnable {
     public PlaceObjects placeObjects = new PlaceObjects(this);
     public EventHandler eventHandler = new EventHandler(this);
     public PathFinder pathFinder = new PathFinder(this);
+    public EnvironmentManagment enManagment = new EnvironmentManagment(this);
     //ENTITY AND OBJECTS
     //TODO extend the massive, when you'll have more objects
     public Entity[][] object = new Entity[maxMap][20];
@@ -69,16 +71,18 @@ public class GameManager extends JPanel implements Runnable {
     public static final int FPS = 60;
     //GameState
     public int gameState;
-    public final int titleState = 0;
-    public final int dialogueState = 3;
-    public final int playState = 1;
+    public static final int TITLE_STATE = 0;
+
+    public static final int PLAY_STATE = 1;
     //depends on situation, draw dif keyInput
-    public final int pauseState = 2;
-    public final int characterState = 4;
-    public final int optionState = 5;
-    public final int gameOverState = 6;
-    public final int transitionState = 7;
-    public final int tradeState = 8;
+    public static final int PAUSE_STATE = 2;
+    public static final int DIALOGUE_STATE = 3;
+    public static final int CHARACTER_STATE = 4;
+    public static final int OPTION_STATE = 5;
+    public static final int GAME_OVER_STATE = 6;
+    public static final int TRANSITION_STATE = 7;
+    public static final int TRADE_STATE = 8;
+    public static final int SLEEP_STATE = 9;
     //Until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
@@ -97,7 +101,8 @@ public class GameManager extends JPanel implements Runnable {
 
     public void setupGame() {
         setDefaultObjects();
-        gameState = titleState;
+        enManagment.setup();
+        gameState = TITLE_STATE;
 
         tempScreen = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         //Everything will be recorded in buff tempScreen
@@ -178,7 +183,7 @@ public class GameManager extends JPanel implements Runnable {
 
     public void update() {
         //Player loop
-        if (gameState == playState) {
+        if (gameState == PLAY_STATE) {
             player.update();
             //Npc loop
             for (Entity npc : npcList[currentMap])
@@ -216,8 +221,9 @@ public class GameManager extends JPanel implements Runnable {
                     tile.update();
                 }
             }
+            enManagment.update();
         }
-        if (gameState == pauseState) {
+        if (gameState == PAUSE_STATE) {
             //Stop game
         }
     }
@@ -230,7 +236,7 @@ public class GameManager extends JPanel implements Runnable {
             drawStart = System.nanoTime();
 
         //title screen
-        if (gameState == titleState) {
+        if (gameState == TITLE_STATE) {
             ui.draw(g2d);
         }
         //others
@@ -240,10 +246,10 @@ public class GameManager extends JPanel implements Runnable {
             entities.add(player);
             //Add and render npc, obj, mobs, projectiles to draw list
             drawMethodArray(npcList);
-            //Interactive tiles
-            drawMethodArray(interactTile);
             drawMethodArray(object);
             drawMethodArray(mobs);
+            //Interactive tiles
+            drawMethodArray(interactTile);
             drawMethodArray(projectile);
             drawMethodList(particleList);
 
@@ -256,6 +262,8 @@ public class GameManager extends JPanel implements Runnable {
             }
             //Make list empty to not overload it
             entities.clear();
+            //Environment
+            enManagment.draw(g2d);
             //UI(text)
             ui.draw(g2d);
         }

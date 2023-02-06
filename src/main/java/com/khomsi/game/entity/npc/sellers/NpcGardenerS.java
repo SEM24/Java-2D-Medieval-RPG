@@ -48,8 +48,13 @@ public class NpcGardenerS extends Entity {
         right3 = setup("/npc/gardener_down_3");
     }
 
+    @Override
+    public void update() {
+        super.update();
+    }
+
     private void setDialog() {
-        dialogues[0] = "Hi, I'm the seller. \nMy name is Vlad!\nDo you want to buy something?";
+        dialogues[0] = "Hi, I'm the seller.\nDo you want to buy something?";
     }
 
     public void setItems() {
@@ -61,7 +66,7 @@ public class NpcGardenerS extends Entity {
     @Override
     public void speak() {
         super.speak();
-        gameManager.gameState = gameManager.tradeState;
+        gameManager.gameState = GameManager.TRADE_STATE;
         gameManager.ui.seller = this;
     }
 }
