@@ -5,6 +5,7 @@ import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.entity.Player;
 import main.java.com.khomsi.game.enviroment.EnvironmentManagment;
 import main.java.com.khomsi.game.main.tools.*;
+import main.java.com.khomsi.game.tiles.Map;
 import main.java.com.khomsi.game.tiles.TileManager;
 import main.java.com.khomsi.game.tilesinteractive.InteractiveTile;
 
@@ -34,7 +35,6 @@ public class GameManager extends JPanel implements Runnable {
     //TODO change if need to create more maps
     public final int maxMap = 10;
     public int currentMap = 0;
-
     //For full screen
     int screenWidthFull = SCREEN_WIDTH;
     int screenHeightFull = SCREEN_HEIGHT;
@@ -56,6 +56,7 @@ public class GameManager extends JPanel implements Runnable {
     public EventHandler eventHandler = new EventHandler(this);
     public PathFinder pathFinder = new PathFinder(this);
     public EnvironmentManagment enManagment = new EnvironmentManagment(this);
+    public Map map = new Map(this);
     //ENTITY AND OBJECTS
     //TODO extend the massive, when you'll have more objects
     public Entity[][] object = new Entity[maxMap][20];
@@ -74,7 +75,6 @@ public class GameManager extends JPanel implements Runnable {
     public static final int TITLE_STATE = 0;
 
     public static final int PLAY_STATE = 1;
-    //depends on situation, draw dif keyInput
     public static final int PAUSE_STATE = 2;
     public static final int DIALOGUE_STATE = 3;
     public static final int CHARACTER_STATE = 4;
@@ -83,6 +83,7 @@ public class GameManager extends JPanel implements Runnable {
     public static final int TRANSITION_STATE = 7;
     public static final int TRADE_STATE = 8;
     public static final int SLEEP_STATE = 9;
+    public static final int MAP_STATE = 10;
     //Until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
@@ -230,14 +231,17 @@ public class GameManager extends JPanel implements Runnable {
 
     //method to draw the components on screen
     public void drawToTempScreen() {
-        //object
         long drawStart = 0;
         if (keyHandler.debugMode)
             drawStart = System.nanoTime();
 
-        //title screen
+        //Title screen
         if (gameState == TITLE_STATE) {
             ui.draw(g2d);
+        }
+        //Map screen
+        else if (gameState == MAP_STATE) {
+            map.drawFullScreenMap(g2d);
         }
         //others
         else {
@@ -264,6 +268,8 @@ public class GameManager extends JPanel implements Runnable {
             entities.clear();
             //Environment
             enManagment.draw(g2d);
+            //Mini map
+            map.drawMiniMap(g2d);
             //UI(text)
             ui.draw(g2d);
         }

@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
     KeyHandler keyHandler;
-    private final String[] playerPath = {"/player/male/", "/player/female/"};
+    public final String[] playerPath = {"/player/male/", "/player/female/"};
     //Male/Female type of skin
     public int playerSkin;
     public final int screenX, screenY;

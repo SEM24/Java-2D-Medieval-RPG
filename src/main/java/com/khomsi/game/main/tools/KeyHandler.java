@@ -59,6 +59,14 @@ public class KeyHandler implements KeyListener {
         else if (gameManager.gameState == GameManager.TRADE_STATE) {
             tradeState(code);
         }
+        //Map state
+        else if (gameManager.gameState == GameManager.MAP_STATE) {
+            mapState(code);
+        }
+    }
+
+    private void mapState(int code) {
+        if (code == KeyEvent.VK_M) gameManager.gameState = GameManager.PLAY_STATE;
     }
 
     @Override
@@ -193,14 +201,16 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_S) downPressed = true;
         if (code == KeyEvent.VK_A) leftPressed = true;
         if (code == KeyEvent.VK_D) rightPressed = true;
+        if (code == KeyEvent.VK_CONTROL) shootKeyPressed = true;
+        if (code == KeyEvent.VK_ENTER) enterPressed = true;
         //Show character stats
         if (code == KeyEvent.VK_C) gameManager.gameState = GameManager.CHARACTER_STATE;
         //Pause the game
         if (code == KeyEvent.VK_P) gameManager.gameState = GameManager.PAUSE_STATE;
-        if (code == KeyEvent.VK_ENTER) enterPressed = true;
-
-        if (code == KeyEvent.VK_CONTROL) shootKeyPressed = true;
         if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = GameManager.OPTION_STATE;
+        //Opens the map
+        if (code == KeyEvent.VK_M) gameManager.gameState = GameManager.MAP_STATE;
+        if (code == KeyEvent.VK_X) gameManager.map.miniMapOn = !gameManager.map.miniMapOn;
         //When player pressed shift, he runs
         if (code == KeyEvent.VK_SHIFT && !gameManager.playerRun) {
             gameManager.playerRun = true;

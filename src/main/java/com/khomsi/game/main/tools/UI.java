@@ -17,7 +17,7 @@ import java.util.List;
 public class UI {
     GameManager gameManager;
     Graphics2D graphics2D;
-    Font playMeGames;
+    public Font playMeGames;
     BufferedImage heartFull, heartHalf, heartEmpty, manaFull, manaEmpty, coin;
     List<String> message = new ArrayList<>();
     List<Integer> messageCounter = new ArrayList<>();
