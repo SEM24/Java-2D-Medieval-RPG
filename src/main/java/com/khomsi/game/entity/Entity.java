@@ -2,6 +2,9 @@ package main.java.com.khomsi.game.entity;
 
 import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.main.tools.Tools;
+import main.java.com.khomsi.game.objects.gui.HeartObject;
+import main.java.com.khomsi.game.objects.gui.ManaObject;
+import main.java.com.khomsi.game.objects.interact.CoinBObject;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -10,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 //parent class for player, monster etc
 public class Entity {
@@ -39,7 +43,7 @@ public class Entity {
     public boolean collisionOn = false;
     public boolean collision = false;
     public boolean invincible = false;
-    boolean attacking = false;
+    public boolean attacking = false;
     public boolean alive = true;
     public boolean die = false;
     public boolean fallIntoPit = false;
@@ -67,6 +71,8 @@ public class Entity {
     public int xp;
     public int nextLevelXp;
     public int coin;
+    public int motion1Duration;
+    public int motion2Duration;
     public Entity currentWeapon;
     public Entity currentShield;
     public Entity currentLight;
@@ -109,6 +115,8 @@ public class Entity {
     public GameManager gameManager;
     public Tools tools = new Tools();
     public ProjectTile projectTile;
+    public Entity attacker;
+    public String knockBackDirection;
 
     public Entity(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -164,7 +172,7 @@ public class Entity {
                 knockBack = false;
                 speed = defaultSpeed;
             } else {
-                switch (direction) {
+                switch (knockBackDirection) {
                     case "up" -> worldY -= speed;
                     case "down" -> worldY += speed;
                     case "left" -> worldX -= speed;
@@ -177,6 +185,8 @@ public class Entity {
                 knockBack = false;
                 speed = defaultSpeed;
             }
+        } else if (attacking) {
+            entityAttack();
         } else {
             setAction();
             checkCollision();
@@ -188,9 +198,9 @@ public class Entity {
                     case "right" -> worldX += speed;
                 }
             }
+            //TODO idk how to make special movement for each mob yet
+            spriteMovement();
         }
-        //TODO idk how to make special movement for each mob yet
-        spriteMovement();
         if (invincible) {
             invincibleCounter++;
             //1 sec
@@ -247,12 +257,76 @@ public class Entity {
         //actual coords to draw the stuff on game screen
         int screenX = worldX - gameManager.player.worldX + gameManager.player.screenX;
         int screenY = worldY - gameManager.player.worldY + gameManager.player.screenY;
+        BufferedImage image = null;
 
         if (worldX + GameManager.TILE_SIZE > gameManager.player.worldX - gameManager.player.screenX &&
                 worldX - GameManager.TILE_SIZE < gameManager.player.worldX + gameManager.player.screenX &&
                 worldY + GameManager.TILE_SIZE > gameManager.player.worldY - gameManager.player.screenY &&
                 worldY - GameManager.TILE_SIZE < gameManager.player.worldY + gameManager.player.screenY) {
+            int tempScreenX = screenX;
+            int tempScreenY = screenY;
 
+            //Use this method to change the sprite direction of character
+            switch (direction) {
+                case "up" -> {
+                    if (!attacking) {
+                        if (spriteNum == 0) image = up;
+                        if (spriteNum == 1) image = up1;
+                        if (spriteNum == 2) image = up2;
+                        if (spriteNum == 3) image = up3;
+                    }
+                    if (attacking) {
+                        tempScreenY = screenY - GameManager.TILE_SIZE;
+                        if (spriteNum == 0) image = attackUp;
+                        if (spriteNum == 1) image = attackUp1;
+                        if (spriteNum == 2) image = attackUp2;
+                        if (spriteNum == 3) image = attackUp3;
+                    }
+                }
+                case "down" -> {
+                    if (!attacking) {
+                        if (spriteNum == 0) image = down;
+                        if (spriteNum == 1) image = down1;
+                        if (spriteNum == 2) image = down2;
+                        if (spriteNum == 3) image = down3;
+                    }
+                    if (attacking) {
+                        if (spriteNum == 0) image = attackDown;
+                        if (spriteNum == 1) image = attackDown1;
+                        if (spriteNum == 2) image = attackDown2;
+                        if (spriteNum == 3) image = attackDown3;
+                    }
+                }
+                case "left" -> {
+                    if (!attacking) {
+                        if (spriteNum == 0) image = left;
+                        if (spriteNum == 1) image = left1;
+                        if (spriteNum == 2) image = left2;
+                        if (spriteNum == 3) image = left3;
+                    }
+                    if (attacking) {
+                        tempScreenX = screenX - GameManager.TILE_SIZE;
+                        if (spriteNum == 0) image = attackLeft;
+                        if (spriteNum == 1) image = attackLeft1;
+                        if (spriteNum == 2) image = attackLeft2;
+                        if (spriteNum == 3) image = attackLeft3;
+                    }
+                }
+                case "right" -> {
+                    if (!attacking) {
+                        if (spriteNum == 0) image = right;
+                        if (spriteNum == 1) image = right1;
+                        if (spriteNum == 2) image = right2;
+                        if (spriteNum == 3) image = right3;
+                    }
+                    if (attacking) {
+                        if (spriteNum == 0) image = attackRight;
+                        if (spriteNum == 1) image = attackRight1;
+                        if (spriteNum == 2) image = attackRight2;
+                        if (spriteNum == 3) image = attackRight3;
+                    }
+                }
+            }
             //Monster Hp bar
             if (type == TYPE_MOB && hpBarOn) {
                 //Get the length of hp bar, if hp - 4, then the scale is 12 pixels (4 times)
@@ -281,8 +355,8 @@ public class Entity {
             if (die) {
                 dieAnimation(graphics2D);
             }
-            graphics2D.drawImage(characterSpriteDirectionImage(),
-                    screenX, screenY, null);
+            graphics2D.drawImage(image,
+                    tempScreenX, tempScreenY, null);
             changeAlfa(graphics2D, 1F);
         }
     }
@@ -314,37 +388,73 @@ public class Entity {
 
 
     //Use this method to change the sprite direction of character
-    public BufferedImage characterSpriteDirectionImage() {
-        BufferedImage image = null;
-
-        switch (direction) {
-            case "up" -> {
-                if (spriteNum == 1) image = up1;
-                if (spriteNum == 2) image = up2;
-                if (spriteNum == 3) image = up3;
-                if (spriteNum == 0) image = up;
-            }
-            case "down" -> {
-                if (spriteNum == 1) image = down1;
-                if (spriteNum == 2) image = down2;
-                if (spriteNum == 3) image = down3;
-                if (spriteNum == 0) image = down;
-            }
-            case "left" -> {
-                if (spriteNum == 1) image = left1;
-                if (spriteNum == 2) image = left2;
-                if (spriteNum == 3) image = left3;
-                if (spriteNum == 0) image = left;
-            }
-            case "right" -> {
-                if (spriteNum == 1) image = right1;
-                if (spriteNum == 2) image = right2;
-                if (spriteNum == 3) image = right3;
-                if (spriteNum == 0) image = right;
-            }
-        }
-        return image;
-    }
+//    public BufferedImage characterSpriteDirectionImage() {
+//        BufferedImage image = null;
+//        int tempScreenX = screenX;
+//        int tempScreenY = screenY;
+//        //Use this method to change the sprite direction of character
+//        switch (direction) {
+//            case "up" -> {
+//                if (!attacking) {
+//                    if (spriteNum == 0) image = up;
+//                    if (spriteNum == 1) image = up1;
+//                    if (spriteNum == 2) image = up2;
+//                    if (spriteNum == 3) image = up3;
+//                }
+//                if (attacking) {
+//                    tempScreenY = screenY - GameManager.TILE_SIZE;
+//                    if (spriteNum == 0) image = attackUp;
+//                    if (spriteNum == 1) image = attackUp1;
+//                    if (spriteNum == 2) image = attackUp2;
+//                    if (spriteNum == 3) image = attackUp3;
+//                }
+//            }
+//            case "down" -> {
+//                if (!attacking) {
+//                    if (spriteNum == 0) image = down;
+//                    if (spriteNum == 1) image = down1;
+//                    if (spriteNum == 2) image = down2;
+//                    if (spriteNum == 3) image = down3;
+//                }
+//                if (attacking) {
+//                    if (spriteNum == 0) image = attackDown;
+//                    if (spriteNum == 1) image = attackDown1;
+//                    if (spriteNum == 2) image = attackDown2;
+//                    if (spriteNum == 3) image = attackDown3;
+//                }
+//            }
+//            case "left" -> {
+//                if (!attacking) {
+//                    if (spriteNum == 0) image = left;
+//                    if (spriteNum == 1) image = left1;
+//                    if (spriteNum == 2) image = left2;
+//                    if (spriteNum == 3) image = left3;
+//                }
+//                if (attacking) {
+//                    tempScreenX = screenX - GameManager.TILE_SIZE;
+//                    if (spriteNum == 0) image = attackLeft;
+//                    if (spriteNum == 1) image = attackLeft1;
+//                    if (spriteNum == 2) image = attackLeft2;
+//                    if (spriteNum == 3) image = attackLeft3;
+//                }
+//            }
+//            case "right" -> {
+//                if (!attacking) {
+//                    if (spriteNum == 0) image = right;
+//                    if (spriteNum == 1) image = right1;
+//                    if (spriteNum == 2) image = right2;
+//                    if (spriteNum == 3) image = right3;
+//                }
+//                if (attacking) {
+//                    if (spriteNum == 0) image = attackRight;
+//                    if (spriteNum == 1) image = attackRight1;
+//                    if (spriteNum == 2) image = attackRight2;
+//                    if (spriteNum == 3) image = attackRight3;
+//                }
+//            }
+//        }
+//        return image;
+//    }
 
     public BufferedImage setup(String imagePath, int width, int height) {
         BufferedImage image = null;
@@ -438,12 +548,151 @@ public class Entity {
         }
     }
 
+    public void entityAttack() {
+        spriteCounter++;
+
+        if (spriteCounter <= motion1Duration) {
+            spriteNum = 0;
+        }
+        if (spriteCounter > motion1Duration && spriteCounter <= motion2Duration + 6) {
+            spriteNum = 1;
+        }
+        if (spriteCounter > motion1Duration + 6 && spriteCounter <= motion2Duration + 13) {
+            spriteNum = 2;
+        }
+        if (spriteCounter > motion1Duration + 13 && spriteCounter <= motion2Duration + 19) {
+            spriteNum = 3;
+            //Save current x,y, solid area
+            int currentWorldX = worldX;
+            int currentWorldY = worldY;
+            int solidAreaWidth = solidArea.width;
+            int solidAreaHeight = solidArea.height;
+            //Adjust player's worldX/Y for attackArea
+            switch (direction) {
+                case "up" -> worldY -= attackArea.height;
+                case "down" -> worldY += attackArea.height;
+                case "left" -> worldX -= attackArea.width;
+                case "right" -> worldX += attackArea.width;
+            }
+            //Change size of solid area to attack area
+            solidArea.width = attackArea.width;
+            solidArea.height = attackArea.height;
+            if (type == TYPE_MOB) {
+                if (gameManager.checkCollision.checkPlayer(this)) {
+                    damagePlayer(attack);
+                }
+            } else { //Player
+                //Check monster collision
+                int monsterIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
+                gameManager.player.damageMob(monsterIndex, this, attack, currentWeapon.knockBackPower);
+
+                int interTileIndex = gameManager.checkCollision.checkEntity(this, gameManager.interactTile);
+                gameManager.player.damageInteractiveTiles(interTileIndex);
+                int projectTileIndex = gameManager.checkCollision.checkEntity(this, gameManager.projectile);
+                gameManager.player.damageProjectTile(projectTileIndex);
+            }
+
+            //After checking collision, restore original data
+            worldX = currentWorldX;
+            worldY = currentWorldY;
+            solidArea.width = solidAreaWidth;
+            solidArea.height = solidAreaHeight;
+        }
+        if (spriteCounter > motion2Duration + 19) {
+            spriteCounter = 0;
+            spriteNum = 0;
+            attacking = false;
+        }
+    }
+    //If you need very aggressive monster, make rate lower
+    public void checkAttacking(int rate, int straight, int horizontal) {
+        boolean targetInRange = false;
+        int xDis = getXDistance(gameManager.player);
+        int yDis = getYDistance(gameManager.player);
+        switch (direction) {
+            case "up" -> {
+                if (gameManager.player.worldY < worldY && yDis < straight && xDis < horizontal)
+                    targetInRange = true;
+            }
+            case "down" -> {
+                if (gameManager.player.worldY > worldY && yDis < straight && xDis < horizontal)
+                    targetInRange = true;
+            }
+            case "left" -> {
+                if (gameManager.player.worldX < worldX && xDis < straight && yDis < horizontal)
+                    targetInRange = true;
+            }
+            case "right" -> {
+                if (gameManager.player.worldX > worldX && xDis < straight && yDis < horizontal)
+                    targetInRange = true;
+            }
+        }
+        if (targetInRange) {
+            int rand = new Random().nextInt(rate);
+            if (rand == 0) {
+                attacking = true;
+                spriteNum = 1;
+                spriteCounter = 0;
+                shootAvailableCounter = 0;
+            }
+        }
+    }
+
+    public void setKnockBack(Entity target, Entity attacker, int knockBackPower) {
+        this.attacker = attacker;
+        target.knockBackDirection = attacker.direction;
+        target.speed += knockBackPower;
+        target.knockBack = true;
+    }
+
     public void checkVacancy() {
         for (int i = 0; i < gameManager.projectile[1].length; i++) {
             if (gameManager.projectile[gameManager.currentMap][i] == null) {
                 gameManager.projectile[gameManager.currentMap][i] = projectTile;
                 break;
             }
+        }
+    }
+
+    public void checkShoot(int rate, int shootInterval) {
+        int rand = new Random().nextInt(rate);
+        if (rand == 0 && !projectTile.alive && shootAvailableCounter == shootInterval) {
+            projectTile.set(worldX, worldY, direction, true, this);
+            checkVacancy();
+            shootAvailableCounter = 0;
+        }
+    }
+
+    /**
+     * @param distance if entity is n-tile distance, it will have a chance to chase
+     * @param rate number of chance when the entity can chase
+     */
+    public void checkStartChasing(Entity target, int distance, int rate) {
+        if (getTileDistance(target) < distance) {
+            int rand = new Random().nextInt(rate);
+            if (rand == 0) onPath = true;
+        }
+    }
+
+    public void checkStopChasing(Entity target, int distance, int rate) {
+        if (getTileDistance(target) > distance) {
+            int rand = new Random().nextInt(rate);
+            if (rand == 0) onPath = false;
+        }
+    }
+
+    public void getRandomDirection() {
+        lockCounter++;
+        if (lockCounter == 120) {
+            Random random = new Random();
+            int rand = random.nextInt(100) + 1;
+            if (rand <= 30) direction = "up";
+            if (rand <= 30) direction = "up";
+            if (rand > 30 && rand <= 50) direction = "down";
+            if (rand > 50 && rand <= 75) direction = "left";
+            if (rand > 75) direction = "right";
+
+            lockCounter = 0;
         }
     }
 
@@ -469,6 +718,26 @@ public class Entity {
 
     public int getRow() {
         return (worldY + solidArea.y) / GameManager.TILE_SIZE;
+    }
+
+    public int getXDistance(Entity target) {
+        return Math.abs(worldX - target.worldX);
+    }
+
+    public int getYDistance(Entity target) {
+        return Math.abs(worldY - target.worldY);
+    }
+
+    public int getTileDistance(Entity target) {
+        return (getXDistance(target) + getYDistance(target)) / GameManager.TILE_SIZE;
+    }
+
+    public int getGoalRow(Entity target) {
+        return (target.worldY + target.solidArea.y) / GameManager.TILE_SIZE;
+    }
+
+    public int getGoalCol(Entity target) {
+        return (target.worldX + target.solidArea.x) / GameManager.TILE_SIZE;
     }
 
     //WARNING! We always override these methods by subclasses
@@ -504,7 +773,12 @@ public class Entity {
     }
 
     public void checkDrop() {
+        int drop = new Random().nextInt(100) + 1;
 
+        //Set the mob's drop, 50% chance of coin, 30 of heart and mana
+        if (drop < 50) dropItem(new CoinBObject(gameManager));
+        if (drop >= 50 && drop < 80) dropItem(new HeartObject(gameManager));
+        if (drop >= 80 && drop < 100) dropItem(new ManaObject(gameManager));
     }
 
     public void interact() {

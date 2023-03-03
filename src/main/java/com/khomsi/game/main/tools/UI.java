@@ -850,8 +850,11 @@ public class UI {
         graphics2D.drawString("Pause", textX, textY);
         textY += GameManager.TILE_SIZE;
         graphics2D.drawString("Settings", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("Map/MiniMap", textX, textY);
         textX = frameX + GameManager.TILE_SIZE * 6;
         textY = frameY + GameManager.TILE_SIZE * 2;
+
         graphics2D.drawString("WASD", textX, textY);
         textY += GameManager.TILE_SIZE;
         graphics2D.drawString("ENTER", textX, textY);
@@ -863,6 +866,8 @@ public class UI {
         graphics2D.drawString("P", textX, textY);
         textY += GameManager.TILE_SIZE;
         graphics2D.drawString("ESC", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("M/X", textX, textY);
 
         //Back button
         textX = frameX + GameManager.TILE_SIZE;

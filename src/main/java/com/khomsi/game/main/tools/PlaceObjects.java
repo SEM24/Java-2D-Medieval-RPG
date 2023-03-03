@@ -1,5 +1,7 @@
 package main.java.com.khomsi.game.main.tools;
 
+import main.java.com.khomsi.game.entity.mobs.MobChestMimic;
+import main.java.com.khomsi.game.entity.mobs.MobOrc;
 import main.java.com.khomsi.game.entity.mobs.MobSlime;
 import main.java.com.khomsi.game.entity.mobs.MobSlimeBlue;
 import main.java.com.khomsi.game.entity.npc.regular.NpcWomanW;
@@ -157,8 +159,17 @@ public class PlaceObjects {
         gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 33;
         index++;
         gameManager.mobs[mapNum][index] = new MobSlimeBlue(gameManager);
-        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 19;
+        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 13;
         gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 21;
+        index++;
+        gameManager.mobs[mapNum][index] = new MobOrc(gameManager);
+        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 34;
+        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 33;
+        index++;
+
+        gameManager.mobs[mapNum][index] = new MobChestMimic(gameManager);
+        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 30;
+        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 15;
         index++;
         //Set mobs on different map
         mapNum = 1;

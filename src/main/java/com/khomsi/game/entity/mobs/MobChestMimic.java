@@ -1,109 +1,107 @@
-//package main.java.com.khomsi.game.entity.mobs;
-//
-//import main.java.com.khomsi.game.entity.Entity;
-//import main.java.com.khomsi.game.main.GameManager;
-//import main.java.com.khomsi.game.objects.gui.HeartObject;
-//import main.java.com.khomsi.game.objects.gui.ManaObject;
-//import main.java.com.khomsi.game.objects.interact.CoinBObject;
-//
-//import java.util.Random;
-//
-//public class MobChestMimic extends Entity {
-//    public MobChestMimic(GameManager gameManager) {
-//        super(gameManager);
-//        setDefaultValues();
-//        getImage();
-//    }
-//
-//TODO #48, add attack option, another case is movement(but use the same sprite)
-//    private void setDefaultValues() {
-//        name = "chest";
-//        type = TYPE_MOB;
-//        defaultSpeed = 0;
-//        speed = defaultSpeed;
-//        direction = "down";
-//        //4 = 2 hearts
-//        maxHp = 2;
-//        hp = maxHp;
-//        attack = 16;
-//        defense = 0;
-//        xp = 4;
-//        //Boundaries
-//        solidArea.x = 3;
-//        solidArea.y = 18;
-//        solidArea.width = 42;
-//        solidArea.height = 30;
-//        solidAreaDefaultX = solidArea.x;
-//        solidAreaDefaultY = solidArea.y;
-//    }
-//
-//    private void getImage() {
-//        up = setup("/mobs/slimes/blue/slime_blue_up");
-//        up1 = setup("/mobs/slimes/blue/slime_blue_up_1");
-//        up2 = setup("/mobs/slimes/blue/slime_blue_up_2");
-//        up3 = setup("/mobs/slimes/blue/slime_blue_up_3");
-//
-//        down = setup("/mobs/slimes/blue/slime_blue_down");
-//        down1 = setup("/mobs/slimes/blue/slime_blue_down_1");
-//        down2 = setup("/mobs/slimes/blue/slime_blue_down_2");
-//        down3 = setup("/mobs/slimes/blue/slime_blue_down_3");
-//
-//        left = setup("/mobs/slimes/blue/slime_blue_down");
-//        left1 = setup("/mobs/slimes/blue/slime_blue_down_1");
-//        left2 = setup("/mobs/slimes/blue/slime_blue_down_2");
-//        left3 = setup("/mobs/slimes/blue/slime_blue_down_3");
-//
-//        right = setup("/mobs/slimes/blue/slime_blue_down");
-//        right1 = setup("/mobs/slimes/blue/slime_blue_down_1");
-//        right2 = setup("/mobs/slimes/blue/slime_blue_down_2");
-//        right3 = setup("/mobs/slimes/blue/slime_blue_down_3");
-//    }
-//
-//    @Override
-//    public void update() {
-//        super.update();
-//        //Use standing sprites with stand counter
-//        standCounter++;
-//        //timer before the idle anim starts
-//        if (standCounter == 42) {
-//            spriteNum = 0;  // Idle sprite
-//            standCounter = 0;
-//        }
-//        int xDistance = Math.abs(worldX - gameManager.player.worldX);
-//        int yDistance = Math.abs(worldY - gameManager.player.worldY);
-//        int tileDistance = (xDistance + yDistance) / GameManager.TILE_SIZE;
-//        if (!onPath && tileDistance < 2) {
-//            onPath = true;
-//        }
-//        if (onPath && tileDistance > 2) {
-//            onPath = false;
-//        }
-//    }
-//
-//    @Override
-//    public void setAction() {
-//        if (onPath) {
-//            int goalCol = (gameManager.player.worldX + gameManager.player.solidArea.x) / GameManager.TILE_SIZE;
-//            int goalRow = (gameManager.player.worldY + gameManager.player.solidArea.y) / GameManager.TILE_SIZE;
-//            searchPath(goalCol, goalRow, false);
-//        }
-//    }
-//
-//    @Override
-//    public void damageReaction() {
-//        lockCounter = 0;
-//        //Monster moves away
-////        direction = gameManager.player.direction;
-//        onPath = true;
-//    }
-//
-//    @Override
-//    public void checkDrop() {
-//        int drop = new Random().nextInt(100) + 1;
-//
-//        //Set the mob's drop, 50% chance of coin, 30 of heart and mana
-//        if (drop < 50) dropItem(new CoinBObject(gameManager));
-//        if (drop >= 50 && drop < 80) dropItem(new HeartObject(gameManager));
-//        if (drop >= 80 && drop < 100) dropItem(new ManaObject(gameManager));
-//    }
-//}
+package main.java.com.khomsi.game.entity.mobs;
+
+import main.java.com.khomsi.game.entity.Entity;
+import main.java.com.khomsi.game.main.GameManager;
+
+public class MobChestMimic extends Entity {
+    public MobChestMimic(GameManager gameManager) {
+        super(gameManager);
+        setDefaultValues();
+        getImage();
+        getAttackImage();
+    }
+
+    private void setDefaultValues() {
+        name = "ChestMimic";
+        type = TYPE_MOB;
+        defaultSpeed = 0;
+        speed = defaultSpeed;
+        direction = "down";
+        //4 = 2 hearts
+        maxHp = 2;
+        hp = maxHp;
+        attack = 10;
+        defense = 0;
+        xp = 10;
+        //Boundaries
+        solidArea.x = 4;
+        solidArea.y = 4;
+        solidArea.width = 20;
+        solidArea.height = 20;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        attackArea.width = 40;
+        attackArea.height = 40;
+        motion1Duration = 15;
+        motion2Duration = 20;
+    }
+
+    private void getImage() {
+        up = setup("/mobs/mimics/mimic_chest_down");
+        up1 = setup("/mobs/mimics/mimic_chest_down");
+        up2 = setup("/mobs/mimics/mimic_chest_down");
+        up3 = setup("/mobs/mimics/mimic_chest_down");
+
+        down = setup("/mobs/mimics/mimic_chest_down");
+        down1 = setup("/mobs/mimics/mimic_chest_down");
+        down2 = setup("/mobs/mimics/mimic_chest_down");
+        down3 = setup("/mobs/mimics/mimic_chest_down");
+
+        left = setup("/mobs/mimics/mimic_chest_down");
+        left1 = setup("/mobs/mimics/mimic_chest_down");
+        left2 = setup("/mobs/mimics/mimic_chest_down");
+        left3 = setup("/mobs/mimics/mimic_chest_down");
+
+        right = setup("/mobs/mimics/mimic_chest_down");
+        right1 = setup("/mobs/mimics/mimic_chest_down");
+        right2 = setup("/mobs/mimics/mimic_chest_down");
+        right3 = setup("/mobs/mimics/mimic_chest_down");
+    }
+
+    public void getAttackImage() {
+        attackUp = setup("/mobs/mimics/attack/mimic_chest_attack_down");
+        attackUp1 = setup("/mobs/mimics/attack/mimic_chest_attack_down_1");
+        attackUp2 = setup("/mobs/mimics/attack/mimic_chest_attack_down_2");
+        attackUp3 = setup("/mobs/mimics/attack/mimic_chest_attack_down_3");
+
+        attackDown = setup("/mobs/mimics/attack/mimic_chest_attack_down");
+        attackDown1 = setup("/mobs/mimics/attack/mimic_chest_attack_down_1");
+        attackDown2 = setup("/mobs/mimics/attack/mimic_chest_attack_down_2");
+        attackDown3 = setup("/mobs/mimics/attack/mimic_chest_attack_down_3");
+
+        attackLeft = setup("/mobs/mimics/attack/mimic_chest_attack_down");
+        attackLeft1 = setup("/mobs/mimics/attack/mimic_chest_attack_down_1");
+        attackLeft2 = setup("/mobs/mimics/attack/mimic_chest_attack_down_2");
+        attackLeft3 = setup("/mobs/mimics/attack/mimic_chest_attack_down_3");
+
+        attackRight = setup("/mobs/mimics/attack/mimic_chest_attack_down");
+        attackRight1 = setup("/mobs/mimics/attack/mimic_chest_attack_down_1");
+        attackRight2 = setup("/mobs/mimics/attack/mimic_chest_attack_down_2");
+        attackRight3 = setup("/mobs/mimics/attack/mimic_chest_attack_down_3");
+    }
+
+    @Override
+    public void setAction() {
+        if (onPath) {
+            //Check if it stops chasing
+            checkStopChasing(gameManager.player, 1, 100);
+            //Search the direction to go
+            searchPath(getGoalCol(gameManager.player), getGoalRow(gameManager.player), false);
+        } else {
+            //Check if it starts chasing
+            checkStartChasing(gameManager.player, 1, 100);
+        }
+        //Check if attacking
+        if (!attacking) {
+            checkAttacking(20, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
+        }
+    }
+
+    @Override
+    public void damageReaction() {
+        lockCounter = 0;
+        //Monster moves away
+//        direction = gameManager.player.direction;
+        onPath = true;
+    }
+}

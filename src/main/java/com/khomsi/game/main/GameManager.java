@@ -337,7 +337,7 @@ public class GameManager extends JPanel implements Runnable {
             }
         }
     }
-
+    //FIXME full screen problem on current laptop, test on another one
     public void drawToScreen() {
         Graphics graphics = getGraphics();
         graphics.drawImage(tempScreen, 0, 0, screenWidthFull, screenHeightFull, null);

@@ -22,8 +22,12 @@ public class CheckCollision {
         int entityBottomRow = entityBottomWorldY / GameManager.TILE_SIZE;
 
         int tileNum1, tileNum2;
-
-        switch (entity.direction) {
+        //Use a temporal direction when it's being knockBacked
+        String direction = entity.direction;
+        if (entity.knockBack) {
+            direction = entity.knockBackDirection;
+        }
+        switch (direction) {
             case "up" -> {
                 entityTopRow = (entityTopWorldY - entity.speed) / GameManager.TILE_SIZE;
                 tileNum1 = panel.tileManager.mapTileNum[panel.currentMap][entityLeftCol][entityTopRow];
@@ -61,7 +65,10 @@ public class CheckCollision {
 
     public int checkObject(Entity entity, boolean player) {
         int index = 999;
-
+        String direction = entity.direction;
+        if (entity.knockBack) {
+            direction = entity.knockBackDirection;
+        }
         for (int i = 0; i < panel.object[1].length; i++) {
 
             if (panel.object[panel.currentMap][i] != null) {
@@ -76,7 +83,12 @@ public class CheckCollision {
                         + panel.object[panel.currentMap][i].solidArea.y;
 
                 //Change the movement collision and detect it
-                entityDirectionSpeed(entity);
+                switch (direction) {
+                    case "up" -> entity.solidArea.y -= entity.speed;
+                    case "down" -> entity.solidArea.y += entity.speed;
+                    case "left" -> entity.solidArea.x -= entity.speed;
+                    case "right" -> entity.solidArea.x += entity.speed;
+                }
                 index = checkCollisionForPlayer(entity, player, index, i, panel.object);
 
                 entity.solidArea.x = entity.solidAreaDefaultX;
@@ -114,7 +126,10 @@ public class CheckCollision {
     //NPC/Enemies collision
     public int checkEntity(Entity entity, Entity[][] entities) {
         int index = 999;
-
+        String direction = entity.direction;
+        if (entity.knockBack) {
+            direction = entity.knockBackDirection;
+        }
         for (int i = 0; i < entities[1].length; i++) {
 
             if (entities[panel.currentMap][i] != null) {
@@ -130,7 +145,12 @@ public class CheckCollision {
                         entities[panel.currentMap][i].worldY + entities[panel.currentMap][i].solidArea.y;
 
                 //Change the movement collision and detect it
-                entityDirectionSpeed(entity);
+                switch (direction) {
+                    case "up" -> entity.solidArea.y -= entity.speed;
+                    case "down" -> entity.solidArea.y += entity.speed;
+                    case "left" -> entity.solidArea.x -= entity.speed;
+                    case "right" -> entity.solidArea.x += entity.speed;
+                }
                 index = checkCollisionForEntity(entity, entities, index, i);
 
                 entity.solidArea.x = entity.solidAreaDefaultX;

@@ -59,8 +59,7 @@ public class MobSlimeBlue extends Entity {
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void setAction() {
         int xDistance = Math.abs(worldX - gameManager.player.worldX);
         int yDistance = Math.abs(worldY - gameManager.player.worldY);
         int tileDistance = (xDistance + yDistance) / GameManager.TILE_SIZE;
@@ -72,10 +71,6 @@ public class MobSlimeBlue extends Entity {
         if (onPath && tileDistance > 10) {
             onPath = false;
         }
-    }
-
-    @Override
-    public void setAction() {
         if (onPath) {
             int goalCol = (gameManager.player.worldX + gameManager.player.solidArea.x) / GameManager.TILE_SIZE;
             int goalRow = (gameManager.player.worldY + gameManager.player.solidArea.y) / GameManager.TILE_SIZE;

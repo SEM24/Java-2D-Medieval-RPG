@@ -61,56 +61,19 @@ public class MobSlime extends Entity {
     }
 
     @Override
-    public void update() {
-        super.update();
-        int xDistance = Math.abs(worldX - gameManager.player.worldX);
-        int yDistance = Math.abs(worldY - gameManager.player.worldY);
-        int tileDistance = (xDistance + yDistance) / GameManager.TILE_SIZE;
-        if (!onPath && tileDistance < 5) {
-            //50% chance mob will be agro after you come to 5 tiles close
-            int rand = new Random().nextInt(100) + 1;
-            if (rand > 50) onPath = true;
-        }
-        if (onPath && tileDistance > 10) {
-            onPath = false;
-        }
-    }
-
-    @Override
     public void setAction() {
         if (onPath) {
-            int goalCol = (gameManager.player.worldX + gameManager.player.solidArea.x) / GameManager.TILE_SIZE;
-            int goalRow = (gameManager.player.worldY + gameManager.player.solidArea.y) / GameManager.TILE_SIZE;
-            searchPath(goalCol, goalRow, false);
-
-            int rand = new Random().nextInt(200) + 1;
-            if (rand > 197 && !projectTile.alive && shootAvailableCounter == 30) {
-                projectTile.set(worldX, worldY, direction, true, this);
-                checkVacancy();
-                shootAvailableCounter = 0;
-            }
+            //Check if it stops chasing
+            checkStopChasing(gameManager.player, 10, 100);
+            //Search the direction to go
+            searchPath(getGoalCol(gameManager.player), getGoalRow(gameManager.player), false);
+            //Check if it shoots the projTiles
+            checkShoot(200, 30);
         } else {
-            lockCounter++;
-            if (lockCounter == 120) {
-                Random random = new Random();
-                int i = random.nextInt(100) + 1;
-                if (i <= 30) {
-                    direction = "up";
-                }
-                if (i <= 30) {
-                    direction = "up";
-                }
-                if (i > 30 && i <= 50) {
-                    direction = "down";
-                }
-                if (i > 50 && i <= 75) {
-                    direction = "left";
-                }
-                if (i > 75) {
-                    direction = "right";
-                }
-                lockCounter = 0;
-            }
+            //Check if it starts chasing
+            checkStartChasing(gameManager.player, 5, 100);
+            //Get random direction
+            getRandomDirection();
         }
     }
 

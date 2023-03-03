@@ -106,6 +106,8 @@ public class Player extends Entity {
 
     private int getAttack() {
         attackArea = currentWeapon.attackArea;
+        motion1Duration = currentWeapon.motion1Duration;
+        motion2Duration = currentWeapon.motion2Duration;
         return strength * currentWeapon.attackValue;
     }
 
@@ -214,7 +216,7 @@ public class Player extends Entity {
     @Override
     public void update() {
         if (attacking) {
-            playerAttack(3);
+            entityAttack();
         }
         //to avoid moving the character without pressing buttons
         else if (keyHandler.upPressed || keyHandler.downPressed ||
@@ -335,57 +337,7 @@ public class Player extends Entity {
         }
     }
 
-    public void playerAttack(int spriteSpeed) {
-        spriteCounter++;
-
-        if (spriteCounter <= spriteSpeed) {
-            spriteNum = 0;
-        }
-        if (spriteCounter > spriteSpeed && spriteCounter <= spriteSpeed + 6) {
-            spriteNum = 1;
-        }
-        if (spriteCounter > spriteSpeed + 6 && spriteCounter <= spriteSpeed + 13) {
-            spriteNum = 2;
-        }
-        if (spriteCounter > spriteSpeed + 13 && spriteCounter <= spriteSpeed + 19) {
-            spriteNum = 3;
-            //Save current x,y, solid area
-            int currentWorldX = worldX;
-            int currentWorldY = worldY;
-            int solidAreaWidth = solidArea.width;
-            int solidAreaHeight = solidArea.height;
-            //Adjust player's worldX/Y for attackArea
-            switch (direction) {
-                case "up" -> worldY -= attackArea.height;
-                case "down" -> worldY += attackArea.height;
-                case "left" -> worldX -= attackArea.width;
-                case "right" -> worldX += attackArea.width;
-            }
-            //Change size of solid area to attack area
-            solidArea.width = attackArea.width;
-            solidArea.height = attackArea.height;
-            //Check monster collision
-            int monsterIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
-            damageMob(monsterIndex, attack, currentWeapon.knockBackPower, direction);
-
-            int interTileIndex = gameManager.checkCollision.checkEntity(this, gameManager.interactTile);
-            damageInteractiveTiles(interTileIndex);
-            int projectTileIndex = gameManager.checkCollision.checkEntity(this, gameManager.projectile);
-            damageProjectTile(projectTileIndex);
-            //After checking collision, restore original data
-            worldX = currentWorldX;
-            worldY = currentWorldY;
-            solidArea.width = solidAreaWidth;
-            solidArea.height = solidAreaHeight;
-        }
-        if (spriteCounter > spriteSpeed + 19) {
-            spriteCounter = 0;
-            spriteNum = 0;
-            attacking = false;
-        }
-    }
-
-    private void damageProjectTile(int index) {
+    void damageProjectTile(int index) {
         if (index != playerIndex) {
             //player's weapon hits the weapon = project tile disappears
             Entity projectTile = gameManager.projectile[gameManager.currentMap][index];
@@ -394,7 +346,7 @@ public class Player extends Entity {
         }
     }
 
-    private void damageInteractiveTiles(int index) {
+    void damageInteractiveTiles(int index) {
         if (index != playerIndex
                 && gameManager.interactTile[gameManager.currentMap][index].destructible
                 && gameManager.interactTile[gameManager.currentMap][index].isCorrectWeapon(this)
@@ -413,12 +365,12 @@ public class Player extends Entity {
         }
     }
 
-    public void damageMob(int monsterIndex, int attack, int knockBackPower, String direction) {
+    public void damageMob(int monsterIndex, Entity attacker, int attack, int knockBackPower) {
         if (monsterIndex != playerIndex) {
             if (!gameManager.mobs[gameManager.currentMap][monsterIndex].invincible) {
                 gameManager.playSE(8);
                 if (knockBackPower > 0) {
-                    knockBack(gameManager.mobs[gameManager.currentMap][monsterIndex], knockBackPower, direction);
+                    setKnockBack(gameManager.mobs[gameManager.currentMap][monsterIndex], attacker, knockBackPower);
                 }
 
                 int damage = attack - gameManager.mobs[gameManager.currentMap][monsterIndex].defense;
@@ -543,12 +495,6 @@ public class Player extends Entity {
                 gameManager.object[gameManager.currentMap][index] = null;
             }
         }
-    }
-
-    public void knockBack(Entity entity, int knockBackPower, String direction) {
-        entity.direction = direction;
-        entity.speed += knockBackPower;
-        entity.knockBack = true;
     }
 
     public int searchItemInventory(String itemName) {
