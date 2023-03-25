@@ -4,11 +4,11 @@ import main.java.com.khomsi.game.main.GameManager;
 
 import java.awt.*;
 
-public class EnvironmentManagment {
+public class EnvironmentManagement {
     GameManager gameManager;
     public Lightning lightning;
 
-    public EnvironmentManagment(GameManager gameManager) {
+    public EnvironmentManagement(GameManager gameManager) {
         this.gameManager = gameManager;
     }
 

@@ -14,6 +14,7 @@ public class Sound {
     URL[] soundURL = new URL[30];
 
     public Sound() {
+        //TODO make it automatic in future
         soundURL[0] = getClass().getResource(resourcePath + "Main-Theme.wav");
         soundURL[1] = getClass().getResource(resourcePath + "snd_pombark.wav");
         soundURL[2] = getClass().getResource(resourcePath + "mus_sfx_a_grab.wav");
@@ -30,6 +31,8 @@ public class Sound {
         soundURL[13] = getClass().getResource(resourcePath + "cuttree.wav");
         soundURL[14] = getClass().getResource(resourcePath + "game_over.wav");
         soundURL[15] = getClass().getResource(resourcePath + "sleep.wav");
+        soundURL[16] = getClass().getResource(resourcePath + "parry.wav");
+        soundURL[17] = getClass().getResource(resourcePath + "blocked.wav");
     }
 
     public void setFile(int i) {

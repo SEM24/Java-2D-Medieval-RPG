@@ -6,6 +6,7 @@ import main.java.com.khomsi.game.main.GameManager;
 public class CoinBObject extends Entity {
     public CoinBObject(GameManager gameManager) {
         super(gameManager);
+        name = "Coin Bronze";
         type = TYPE_PICK_UP_ONLY;
         down = setup("/objects/coins/coins_bronze");
         value = 1;

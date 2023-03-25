@@ -51,7 +51,7 @@ public class ProjectTile extends Entity {
             boolean contactPlayer = gameManager.checkCollision.checkPlayer(this);
             if (!gameManager.player.invincible && contactPlayer) {
                 damagePlayer(attack);
-                generateParticle(entity.projectTile, gameManager.player);
+                generateParticle(entity.projectTile, entity.projectTile);
                 alive = false;
             }
         }

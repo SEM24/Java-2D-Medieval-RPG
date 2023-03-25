@@ -76,6 +76,11 @@ public class Lightning {
         g2d.dispose();
     }
 
+    public void resetDay() {
+        dayState = DAY;
+        filterAlfa = 0F;
+    }
+
     public void update() {
         if (gameManager.player.lightUpdated) {
             setLightSource();
@@ -85,13 +90,13 @@ public class Lightning {
         //Check the state of the day
         if (dayState == DAY) {
             dayCounter++;
-            if (dayCounter > 600) {
+            if (dayCounter > 2200) {
                 dayState = NIGHTFALL;
                 dayCounter = 0;
             }
         }
         if (dayState == NIGHTFALL) {
-            filterAlfa += 0.001F;
+            filterAlfa += 0.0003F;
             if (filterAlfa > 1F) {
                 filterAlfa = 1F;
                 dayState = NIGHT;
@@ -99,19 +104,18 @@ public class Lightning {
         }
         if (dayState == NIGHT) {
             dayCounter++;
-            if (dayCounter > 600) {
+            if (dayCounter > 2200) {
                 dayState = DAWN;
                 dayCounter = 0;
             }
         }
         if (dayState == DAWN) {
-            filterAlfa -= 0.001F;
+            filterAlfa -= 0.0003F;
             if (filterAlfa < 0F) {
                 filterAlfa = 0;
                 dayState = DAY;
             }
         }
-
     }
 
     public void draw(Graphics2D g2d) {

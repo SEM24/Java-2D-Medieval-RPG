@@ -26,6 +26,7 @@ public class Entity {
     public BufferedImage attackUp, attackUp1, attackUp2, attackUp3, attackDown, attackDown1,
             attackDown2, attackDown3, attackLeft, attackLeft1, attackLeft2, attackLeft3,
             attackRight, attackRight1, attackRight2, attackRight3;
+    public BufferedImage guardUp, guardDown, guardLeft, guardRight;
 
     //COUNTERS
     public int lockCounter = 0;
@@ -38,6 +39,8 @@ public class Entity {
     public int shootAvailableCounter = 0;
 
     int knockBackCounter = 0;
+    public int guardCounter = 0;
+    int offBalanceCounter = 0;
     //State
     public String direction = "down";
     public boolean collisionOn = false;
@@ -51,6 +54,12 @@ public class Entity {
     public boolean onPath = false;
 
     public boolean knockBack = false;
+    public boolean guarding = false;
+    public boolean transparent = false;
+    public boolean offBalance = false;
+    public Entity loot;
+    public boolean opened = false;
+
 
     //Entity stats
     //Set default position
@@ -212,20 +221,62 @@ public class Entity {
         if (shootAvailableCounter < 30) {
             shootAvailableCounter++;
         }
+        if (offBalance) {
+            offBalanceCounter++;
+            if (offBalanceCounter > 60) {
+                offBalance = false;
+                offBalanceCounter = 0;
+            }
+        }
     }
 
 
     public void damagePlayer(int attack) {
         //Check if player can receive the dmg
         if (!gameManager.player.invincible) {
-            gameManager.playSE(9);
             int damage = attack - gameManager.player.defense;
-            if (damage < 0) {
-                damage = 0;
+            //Get opposite direction of this entity
+            String canGuardDirection = getOppositeDirection(direction);
+            if (gameManager.player.guarding && gameManager.player.direction.equals(canGuardDirection)) {
+                //Parry (11 frames window) //TODO find great num
+                if (gameManager.player.guardCounter < 11) {
+                    damage = 0;
+                    gameManager.playSE(16);
+                    setKnockBack(this, gameManager.player, knockBackPower);
+                    offBalance = true;
+                    //Return sprite to previous one, stan effect
+                    spriteCounter -= 60;
+                } else {
+                    //Normal guard
+                    damage /= 3;
+                    gameManager.playSE(17);
+                }
+            }
+            //Not guarding
+            else {
+                gameManager.playSE(9);
+                if (damage < 1) {
+                    damage = 1;
+                }
+            }
+            if (damage != 0) {
+                gameManager.player.transparent = true;
+                setKnockBack(gameManager.player, this, knockBackPower);
             }
             gameManager.player.hp -= damage;
             gameManager.player.invincible = true;
         }
+    }
+
+    public String getOppositeDirection(String direction) {
+        String oppositeDirection = "";
+        switch (direction) {
+            case "up" -> oppositeDirection = "down";
+            case "down" -> oppositeDirection = "up";
+            case "left" -> oppositeDirection = "right";
+            case "right" -> oppositeDirection = "left";
+        }
+        return oppositeDirection;
     }
 
     public void spriteMovement(int entitySpeed) {
@@ -382,79 +433,10 @@ public class Entity {
         }
     }
 
-    private void changeAlfa(Graphics2D graphics2D, float alfaValue) {
-        graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alfaValue));
+    //Method with default values for images
+    public BufferedImage setup(String imageName) {
+        return setup(imageName, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
     }
-
-
-    //Use this method to change the sprite direction of character
-//    public BufferedImage characterSpriteDirectionImage() {
-//        BufferedImage image = null;
-//        int tempScreenX = screenX;
-//        int tempScreenY = screenY;
-//        //Use this method to change the sprite direction of character
-//        switch (direction) {
-//            case "up" -> {
-//                if (!attacking) {
-//                    if (spriteNum == 0) image = up;
-//                    if (spriteNum == 1) image = up1;
-//                    if (spriteNum == 2) image = up2;
-//                    if (spriteNum == 3) image = up3;
-//                }
-//                if (attacking) {
-//                    tempScreenY = screenY - GameManager.TILE_SIZE;
-//                    if (spriteNum == 0) image = attackUp;
-//                    if (spriteNum == 1) image = attackUp1;
-//                    if (spriteNum == 2) image = attackUp2;
-//                    if (spriteNum == 3) image = attackUp3;
-//                }
-//            }
-//            case "down" -> {
-//                if (!attacking) {
-//                    if (spriteNum == 0) image = down;
-//                    if (spriteNum == 1) image = down1;
-//                    if (spriteNum == 2) image = down2;
-//                    if (spriteNum == 3) image = down3;
-//                }
-//                if (attacking) {
-//                    if (spriteNum == 0) image = attackDown;
-//                    if (spriteNum == 1) image = attackDown1;
-//                    if (spriteNum == 2) image = attackDown2;
-//                    if (spriteNum == 3) image = attackDown3;
-//                }
-//            }
-//            case "left" -> {
-//                if (!attacking) {
-//                    if (spriteNum == 0) image = left;
-//                    if (spriteNum == 1) image = left1;
-//                    if (spriteNum == 2) image = left2;
-//                    if (spriteNum == 3) image = left3;
-//                }
-//                if (attacking) {
-//                    tempScreenX = screenX - GameManager.TILE_SIZE;
-//                    if (spriteNum == 0) image = attackLeft;
-//                    if (spriteNum == 1) image = attackLeft1;
-//                    if (spriteNum == 2) image = attackLeft2;
-//                    if (spriteNum == 3) image = attackLeft3;
-//                }
-//            }
-//            case "right" -> {
-//                if (!attacking) {
-//                    if (spriteNum == 0) image = right;
-//                    if (spriteNum == 1) image = right1;
-//                    if (spriteNum == 2) image = right2;
-//                    if (spriteNum == 3) image = right3;
-//                }
-//                if (attacking) {
-//                    if (spriteNum == 0) image = attackRight;
-//                    if (spriteNum == 1) image = attackRight1;
-//                    if (spriteNum == 2) image = attackRight2;
-//                    if (spriteNum == 3) image = attackRight3;
-//                }
-//            }
-//        }
-//        return image;
-//    }
 
     public BufferedImage setup(String imagePath, int width, int height) {
         BufferedImage image = null;
@@ -469,11 +451,9 @@ public class Entity {
         return image;
     }
 
-    //Method with default values for images
-    public BufferedImage setup(String imageName) {
-        return setup(imageName, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
+    private void changeAlfa(Graphics2D graphics2D, float alfaValue) {
+        graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alfaValue));
     }
-
 
     public void generateParticle(Entity generator, Entity target) {
         Color color = generator.getParticleColor();
@@ -494,6 +474,7 @@ public class Entity {
         gameManager.particleList.add(particleDL);
         gameManager.particleList.add(particleDR);
     }
+
 
     public void searchPath(int goalCol, int goalRow, boolean reachDestination) {
         int startCol = (worldX + solidArea.x) / GameManager.TILE_SIZE;
@@ -604,6 +585,7 @@ public class Entity {
             attacking = false;
         }
     }
+
     //If you need very aggressive monster, make rate lower
     public void checkAttacking(int rate, int straight, int horizontal) {
         boolean targetInRange = false;
@@ -665,7 +647,7 @@ public class Entity {
 
     /**
      * @param distance if entity is n-tile distance, it will have a chance to chase
-     * @param rate number of chance when the entity can chase
+     * @param rate     number of chance when the entity can chase
      */
     public void checkStartChasing(Entity target, int distance, int rate) {
         if (getTileDistance(target) < distance) {
@@ -694,6 +676,32 @@ public class Entity {
 
             lockCounter = 0;
         }
+    }
+
+    public int getDetected(Entity entity, Entity[][] target, String targetName) {
+        int index = 999;
+        int nextWorldX = entity.getLeftX();
+        int nextWorldY = entity.getTopY();
+
+        switch (entity.direction) {
+            case "up" -> nextWorldY = entity.getTopY() - gameManager.player.speed;
+            case "down" -> nextWorldY = entity.getBottomY() + gameManager.player.speed;
+            case "left" -> nextWorldX = entity.getLeftX() - gameManager.player.speed;
+            case "right" -> nextWorldX = entity.getRightX() + gameManager.player.speed;
+        }
+        int col = nextWorldX / GameManager.TILE_SIZE;
+        int row = nextWorldY / GameManager.TILE_SIZE;
+        for (int i = 0; i < target[1].length; i++) {
+            if (target[gameManager.currentMap][i] != null) {
+                if (target[gameManager.currentMap][i].getCol() == col &&
+                        target[gameManager.currentMap][i].getRow() == row &&
+                        target[gameManager.currentMap][i].name.equals(targetName)) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        return index;
     }
 
     public int getLeftX() {
@@ -742,10 +750,10 @@ public class Entity {
 
     //WARNING! We always override these methods by subclasses
     //so there's no need to have logic inside them
+
     public Color getParticleColor() {
         return null;
     }
-
     public int getParticleSize() {
         int size = 0;
         return size;
@@ -762,6 +770,10 @@ public class Entity {
     }
 
     public void setAction() {
+
+    }
+
+    public void setLoot(Entity loot) {
 
     }
 

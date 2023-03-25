@@ -9,8 +9,6 @@ import main.java.com.khomsi.game.entity.npc.sellers.NpcGardenerS;
 import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.objects.equipment.AxeObject;
 import main.java.com.khomsi.game.objects.equipment.GoldShieldObject;
-import main.java.com.khomsi.game.objects.gui.HeartObject;
-import main.java.com.khomsi.game.objects.gui.ManaObject;
 import main.java.com.khomsi.game.objects.interact.ChestObject;
 import main.java.com.khomsi.game.objects.interact.CoinBObject;
 import main.java.com.khomsi.game.objects.interact.KeyObject;
@@ -65,19 +63,6 @@ public class PlaceObjects {
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 34;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 29;
         index++;
-        gameManager.object[mapNum][index] = new HeartObject(gameManager);
-        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 32;
-        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 19;
-        index++;
-        gameManager.object[mapNum][index] = new HeartObject(gameManager);
-        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 32;
-        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 14;
-        index++;
-        gameManager.object[mapNum][index] = new ManaObject(gameManager);
-        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 34;
-        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 14;
-
-        index++;
         gameManager.object[mapNum][index] = new DoorObject(gameManager);
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 12;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 17;
@@ -86,7 +71,8 @@ public class PlaceObjects {
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 14;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 27;
         index++;
-        gameManager.object[mapNum][index] = new ChestObject(gameManager, new KeyObject(gameManager));
+        gameManager.object[mapNum][index] = new ChestObject(gameManager);
+        gameManager.object[mapNum][index].setLoot(new KeyObject(gameManager));
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 25;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 22;
         index++;

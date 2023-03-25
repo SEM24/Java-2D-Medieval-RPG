@@ -2,12 +2,14 @@ package main.java.com.khomsi.game.objects.outside;
 
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
+import main.java.com.khomsi.game.objects.light.LanternObject;
 
 public class TentObject extends Entity {
+    public static final String OBJ_NAME = "Tent";
     public TentObject(GameManager gameManager) {
         super(gameManager);
         type = TYPE_CONSUMABLE;
-        name = "Tent";
+        name = OBJ_NAME;
         down = setup("/objects/tent");
         itemDescription = "[" + name + "]" + "\nYou can sleep until\nnext morning.";
         price = 300;

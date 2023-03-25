@@ -40,7 +40,6 @@ public class Player extends Entity {
         solidArea.height = 32;
 
         setDefaultValues();
-        setItems();
         //FIXME remove this line and use the logo of game instead in ui method!!!
         //To draw the preview image on the screen, can be removed
 //        getPlayerImage();
@@ -73,15 +72,18 @@ public class Player extends Entity {
         coin = 70;
         currentWeapon = new MetalSwordObject(gameManager);
         currentShield = new MetalShieldObject(gameManager);
+        currentLight = null;
         //In the beginning of the game, player has this skill.
         //TODO make it optional when you choose the screen sections
         //Think how to make an magic animation
         projectTile = new FireBallObject(gameManager);
         //TODO for arrows
 //        projectTile = new MagicArrowObject(gameManager);
-
+        //The total attack is decided by strength and weapon
         attack = getAttack();
+        //The total defence value is decided by agility and shield
         defense = getDefense();
+        setItems();
     }
 
     public void setDefaultPosition() {
@@ -91,20 +93,46 @@ public class Player extends Entity {
         direction = "down";
     }
 
-    public void restoreHpMana() {
+    public void restoreStatus() {
         hp = maxHp;
         mana = maxMana;
+        speed = defaultSpeed;
         invincible = false;
+        transparent = false;
+        attacking = false;
+        guarding = false;
+        knockBack = false;
+        lightUpdated = true;
     }
 
-    public void setItems() {
+    private void setItems() {
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new KeyObject(gameManager));
     }
 
-    private int getAttack() {
+    public int getCurrentWeaponSlot() {
+        int currentWeaponSlot = 0;
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i) == currentWeapon) {
+                currentWeaponSlot = i;
+            }
+        }
+        return currentWeaponSlot;
+    }
+
+    public int getCurrentShieldSlot() {
+        int currentShieldSlot = 0;
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i) == currentShield) {
+                currentShieldSlot = i;
+            }
+        }
+        return currentShieldSlot;
+    }
+
+    public int getAttack() {
         attackArea = currentWeapon.attackArea;
         motion1Duration = currentWeapon.motion1Duration;
         motion2Duration = currentWeapon.motion2Duration;
@@ -118,17 +146,22 @@ public class Player extends Entity {
         speed = defaultSpeed;
 //      gameManager.player.maxHp = 8;
 //        gameManager.player.hp = gameManager.player.maxHp;
-        getPlayerImage();
-        getPlayerAttackImage();
+        loadImages();
         gameManager.gameState = GameManager.PLAY_STATE;
         gameManager.playMusic(0);
     }
 
-    private int getDefense() {
+    public void loadImages() {
+        getImage();
+        getAttackImage();
+        getGuardImages();
+    }
+
+    public int getDefense() {
         return agility * currentShield.defenseValue;
     }
 
-    public void getPlayerImage() {
+    public void getImage() {
         up = setup(playerPath[playerSkin] + "player_up");
         up1 = setup(playerPath[playerSkin] + "player_up_1");
         up2 = setup(playerPath[playerSkin] + "player_up_2");
@@ -147,7 +180,7 @@ public class Player extends Entity {
         right3 = setup(playerPath[playerSkin] + "player_right_3");
     }
 
-    public void getPlayerAttackImage() {
+    public void getAttackImage() {
         //Adjust image size due to not standard size
         int attackUpDownW = GameManager.TILE_SIZE;
         int attackUpDownH = GameManager.TILE_SIZE * 2;
@@ -193,6 +226,13 @@ public class Player extends Entity {
         }
     }
 
+    public void getGuardImages() {
+        guardUp = setup(playerPath[playerSkin] + "shield/player_up_shield");
+        guardDown = setup(playerPath[playerSkin] + "shield/player_down_shield");
+        guardLeft = setup(playerPath[playerSkin] + "shield/player_left_shield");
+        guardRight = setup(playerPath[playerSkin] + "shield/player_right_shield");
+    }
+
     public void getSleepingImage(BufferedImage image) {
         up = image;
         up1 = image;
@@ -215,8 +255,39 @@ public class Player extends Entity {
     //This method updates player's coordinates
     @Override
     public void update() {
-        if (attacking) {
+        if (knockBack) {
+            collisionOn = false;
+            gameManager.checkCollision.checkTile(this);
+            gameManager.checkCollision.checkObject(this, true);
+            gameManager.checkCollision.checkEntity(this, gameManager.npcList);
+            gameManager.checkCollision.checkEntity(this, gameManager.mobs);
+            gameManager.checkCollision.checkEntity(this, gameManager.interactTile);
+            if (collisionOn) {
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+            } else {
+                switch (knockBackDirection) {
+                    case "up" -> worldY -= speed;
+                    case "down" -> worldY += speed;
+                    case "left" -> worldX -= speed;
+                    case "right" -> worldX += speed;
+                }
+            }
+            knockBackCounter++;
+            if (knockBackCounter == 10) {
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+            }
+        } else if (attacking) {
             entityAttack();
+        }
+        //You can't guard while attacking
+        else if (keyHandler.spacePressed) {
+            guarding = true;
+            guardCounter++;
+
         }
         //to avoid moving the character without pressing buttons
         else if (keyHandler.upPressed || keyHandler.downPressed ||
@@ -254,6 +325,8 @@ public class Player extends Entity {
             }
             attackCanceled = false;
             gameManager.keyHandler.enterPressed = false;
+            guarding = false;
+            guardCounter = 0;
             //Change the player's walk/attack sprites
         }
         //Use standing sprites with stand counter
@@ -264,6 +337,9 @@ public class Player extends Entity {
                 spriteNum = 0;  // Idle sprite
                 standCounter = 0;
             }
+            //If you aren't pressing any key, disable guard state
+            guarding = false;
+            guardCounter = 0;
         }
 
         //Shoot projectTiles, if the previous tile is still on the screen,
@@ -287,6 +363,7 @@ public class Player extends Entity {
             //1 sec
             if (invincibleCounter > 60) {
                 invincible = false;
+                transparent = false;
                 invincibleCounter = 0;
             }
         }
@@ -372,7 +449,9 @@ public class Player extends Entity {
                 if (knockBackPower > 0) {
                     setKnockBack(gameManager.mobs[gameManager.currentMap][monsterIndex], attacker, knockBackPower);
                 }
-
+                if (gameManager.mobs[gameManager.currentMap][monsterIndex].offBalance) {
+                    attack *= 3;
+                }
                 int damage = attack - gameManager.mobs[gameManager.currentMap][monsterIndex].defense;
                 if (damage < 0) {
                     damage = 0;
@@ -396,11 +475,12 @@ public class Player extends Entity {
         if (mobIndex != playerIndex && !invincible && !gameManager.mobs[gameManager.currentMap][mobIndex].die) {
             gameManager.playSE(8);
             int damage = gameManager.mobs[gameManager.currentMap][mobIndex].attack - defense;
-            if (damage < 0) {
-                damage = 0;
+            if (damage < 1) {
+                damage = 1;
             }
             hp -= damage;
             invincible = true;
+            transparent = true;
         }
     }
 
@@ -443,7 +523,7 @@ public class Player extends Entity {
             if (selectedItem.type == TYPE_SWORD || selectedItem.type == TYPE_AXE) {
                 currentWeapon = selectedItem;
                 attack = getAttack();
-                getPlayerAttackImage();
+                getAttackImage();
             }
             if (selectedItem.type == TYPE_SHIELD) {
                 currentShield = selectedItem;
@@ -554,6 +634,9 @@ public class Player extends Entity {
                     if (spriteNum == 2) image = attackUp2;
                     if (spriteNum == 3) image = attackUp3;
                 }
+                if (guarding) {
+                    image = guardUp;
+                }
             }
             case "down" -> {
                 if (!attacking) {
@@ -567,6 +650,9 @@ public class Player extends Entity {
                     if (spriteNum == 1) image = attackDown1;
                     if (spriteNum == 2) image = attackDown2;
                     if (spriteNum == 3) image = attackDown3;
+                }
+                if (guarding) {
+                    image = guardDown;
                 }
             }
             case "left" -> {
@@ -583,6 +669,9 @@ public class Player extends Entity {
                     if (spriteNum == 2) image = attackLeft2;
                     if (spriteNum == 3) image = attackLeft3;
                 }
+                if (guarding) {
+                    image = guardLeft;
+                }
             }
             case "right" -> {
                 if (!attacking) {
@@ -597,11 +686,14 @@ public class Player extends Entity {
                     if (spriteNum == 2) image = attackRight2;
                     if (spriteNum == 3) image = attackRight3;
                 }
+                if (guarding) {
+                    image = guardRight;
+                }
             }
         }
 
         //Make the player partly transparent
-        if (invincible)
+        if (transparent)
             graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8F));
 
         graphics2D.drawImage(image, tempScreenX, tempScreenY, null);

@@ -98,11 +98,13 @@ public class EventHandler {
             gameManager.player.attackCanceled = true;
             if (gameManager.player.coin > 0) {
                 //TODO gameManager.playerSE();
-                gameManager.ui.currentDialog = "You thrown the coin!\nYour Hp and Mana were recovered!";
+                gameManager.ui.currentDialog = "You thrown the coin!\nYour Hp and Mana were recovered!\nFile saved.";
                 gameManager.player.hp = gameManager.player.maxHp;
                 gameManager.player.mana = gameManager.player.maxMana;
                 gameManager.player.coin--;
                 gameManager.placeObjects.setMobs();
+                //TODO make a new place to save the player (unique)
+                gameManager.saveLoad.save();
             } else {
                 //TODO gameManager.playerSE();
                 gameManager.ui.currentDialog = "You need coins to interact!\nCome again later!";

@@ -4,10 +4,12 @@ import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
 
 public class AxeObject extends Entity {
+    public static final String OBJ_NAME = "Axe";
+
     public AxeObject(GameManager gameManager) {
         super(gameManager);
         type = TYPE_AXE;
-        name = "Axe";
+        name = OBJ_NAME;
         down = setup("/objects/equipment/axe");
         attackValue = 2;
         attackArea.width = 30;

@@ -28,6 +28,7 @@ public class MobOrc extends Entity {
         attack = 8;
         defense = 2;
         xp = 9;
+        knockBackPower = 5;
         //Boundaries
         solidArea.x = 4;
         solidArea.y = 4;

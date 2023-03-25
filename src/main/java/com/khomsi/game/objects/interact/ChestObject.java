@@ -4,14 +4,12 @@ import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
 
 public class ChestObject extends Entity {
-    Entity loot;
-    boolean opened = false;
+    public static final String OBJ_NAME = "Chest";
 
-    public ChestObject(GameManager gameManager, Entity loot) {
+    public ChestObject(GameManager gameManager) {
         super(gameManager);
-        this.loot = loot;
         type = TYPE_OBSTACLE;
-        name = "Chest";
+        name = OBJ_NAME;
         image = setup("/objects/chest");
         image2 = setup("/objects/chest_opened");
         down = image;
@@ -22,6 +20,11 @@ public class ChestObject extends Entity {
         solidArea.height = 32;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+    }
+
+
+    public void setLoot(Entity loot) {
+        this.loot = loot;
     }
 
     @Override

@@ -125,7 +125,7 @@ public class UI {
                 gameManager.enManagment.lightning.dayState = Lightning.DAY;
                 gameManager.enManagment.lightning.dayCounter = 0;
                 gameManager.gameState = GameManager.PLAY_STATE;
-                gameManager.player.getPlayerImage();
+                gameManager.player.getImage();
             }
         }
     }
@@ -899,6 +899,7 @@ public class UI {
                 subState = 0;
                 gameManager.ui.titleScreenState = 0;
                 gameManager.gameState = GameManager.TITLE_STATE;
+                gameManager.resetGame(true);
                 gameManager.stopMusic();
             }
         }

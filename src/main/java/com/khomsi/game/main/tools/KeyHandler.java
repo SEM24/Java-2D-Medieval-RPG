@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
     GameManager gameManager;
     public boolean upPressed, downPressed, leftPressed,
-            rightPressed, enterPressed, shootKeyPressed;
+            rightPressed, enterPressed, shootKeyPressed, spacePressed;
     //Debug
     public boolean debugMode = false;
 
@@ -77,6 +77,8 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_S) downPressed = false;
         if (code == KeyEvent.VK_A) leftPressed = false;
         if (code == KeyEvent.VK_D) rightPressed = false;
+        if (code == KeyEvent.VK_ENTER) enterPressed = false;
+        if (code == KeyEvent.VK_SPACE) spacePressed = false;
         //When player unpressed shift, he walks
         if (code == KeyEvent.VK_SHIFT && gameManager.playerRun) {
             gameManager.player.speed -= 1;
@@ -138,12 +140,12 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_ENTER) {
             if (gameManager.ui.commandNum == 0) {
                 gameManager.gameState = GameManager.PLAY_STATE;
-                gameManager.retry();
+                gameManager.resetGame(false);
                 gameManager.playMusic(0);
             } else if (gameManager.ui.commandNum == 1) {
                 gameManager.ui.titleScreenState = 0;
                 gameManager.gameState = GameManager.TITLE_STATE;
-                gameManager.restart();
+                gameManager.resetGame(true);
             }
         }
     }
@@ -203,6 +205,7 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D) rightPressed = true;
         if (code == KeyEvent.VK_CONTROL) shootKeyPressed = true;
         if (code == KeyEvent.VK_ENTER) enterPressed = true;
+        if (code == KeyEvent.VK_SPACE) spacePressed = true;
         //Show character stats
         if (code == KeyEvent.VK_C) gameManager.gameState = GameManager.CHARACTER_STATE;
         //Pause the game
@@ -240,7 +243,9 @@ public class KeyHandler implements KeyListener {
                 switch (gameManager.ui.commandNum) {
                     case 0 -> gameManager.ui.titleScreenState = 1;
                     case 1 -> {
-                        //TODO add load menu in future
+                        gameManager.saveLoad.load();
+                        gameManager.gameState = GameManager.PLAY_STATE;
+                        gameManager.playMusic(0);
                     }
                     case 2 -> System.exit(0);
                 }

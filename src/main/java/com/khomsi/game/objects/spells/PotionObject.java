@@ -5,11 +5,12 @@ import main.java.com.khomsi.game.main.GameManager;
 
 public class PotionObject extends Entity {
 
+    public static final String OBJ_NAME = "Potion";
 
     public PotionObject(GameManager gameManager) {
         super(gameManager);
         type = TYPE_CONSUMABLE;
-        name = "Simple potion";
+        name = OBJ_NAME;
         down = setup("/objects/potions/potion");
         value = 6;
         price = 20;

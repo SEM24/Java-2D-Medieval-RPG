@@ -7,7 +7,7 @@ public class DoorObject extends Entity {
 
     public DoorObject(GameManager gameManager) {
         super(gameManager);
-        name = "door";
+        name = "Door";
         type = TYPE_OBSTACLE;
         down = setup("/objects/door");
         collision = true;
