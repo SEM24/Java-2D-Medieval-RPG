@@ -4,6 +4,7 @@ import main.java.com.khomsi.game.entity.Entity;
 
 public class EventHandler {
     GameManager gameManager;
+    Entity eventMaster;
     EventRect[][][] eventRect;
     public int previousEventX;
     public int previousEventY;
@@ -15,6 +16,7 @@ public class EventHandler {
     public EventHandler(GameManager gameManager) {
         this.gameManager = gameManager;
         eventRect = new EventRect[gameManager.maxMap][GameManager.maxWorldCol][GameManager.maxWorldRow];
+        eventMaster = new Entity(gameManager);
         int col = 0;
         int row = 0;
         int map = 0;
@@ -38,6 +40,13 @@ public class EventHandler {
                 }
             }
         }
+        setDialogue();
+    }
+
+    public void setDialogue() {
+        eventMaster.dialogues[0][0] = "You felt into a pit!";
+        eventMaster.dialogues[1][0] = "You thrown the coin!\nYour Hp and Mana were recovered!\nFile saved.";
+        eventMaster.dialogues[2][0] = "You need coins to interact!\nCome again later!";
     }
 
     public void checkEvent() {
@@ -85,7 +94,7 @@ public class EventHandler {
     private void damagePit(int gameState) {
         //TODO gameManager.playerSE();
         gameManager.gameState = gameState;
-        gameManager.ui.currentDialog = "You felt into a pit!";
+        eventMaster.startDialogue(eventMaster, 0);
         //TODO draw different sprites from character char_one char_pit_fall
         gameManager.player.hp -= 1;
         teleport(gameState);
@@ -98,7 +107,7 @@ public class EventHandler {
             gameManager.player.attackCanceled = true;
             if (gameManager.player.coin > 0) {
                 //TODO gameManager.playerSE();
-                gameManager.ui.currentDialog = "You thrown the coin!\nYour Hp and Mana were recovered!\nFile saved.";
+                eventMaster.startDialogue(eventMaster, 1);
                 gameManager.player.hp = gameManager.player.maxHp;
                 gameManager.player.mana = gameManager.player.maxMana;
                 gameManager.player.coin--;
@@ -107,14 +116,14 @@ public class EventHandler {
                 gameManager.saveLoad.save();
             } else {
                 //TODO gameManager.playerSE();
-                gameManager.ui.currentDialog = "You need coins to interact!\nCome again later!";
+                eventMaster.startDialogue(eventMaster, 2);
             }
         }
     }
 
     private void teleport(int gameState) {
         gameManager.gameState = gameState;
-        gameManager.ui.currentDialog = "You felt into a pit!";
+        eventMaster.startDialogue(eventMaster, 0);
         gameManager.player.worldX = GameManager.TILE_SIZE * 37;
         gameManager.player.worldY = GameManager.TILE_SIZE * 10;
         gameManager.player.fallIntoPit = false;

@@ -330,7 +330,7 @@ public class KeyHandler implements KeyListener {
     }
 
     private void dialogState(int code) {
-        if (code == KeyEvent.VK_ENTER) gameManager.gameState = GameManager.PLAY_STATE;
+        if (code == KeyEvent.VK_ENTER) enterPressed = true;
     }
 
     private void pauseState(int code) {

@@ -117,6 +117,7 @@ public class GameManager extends JPanel implements Runnable {
     public void resetGame(boolean restart) {
         player.setDefaultPosition();
         player.restoreStatus();
+        player.resetCounters();
         placeObjects.setNpc();
         placeObjects.setMobs();
 

@@ -33,7 +33,7 @@ public class Entity {
     public int spriteCounter = 0;
     public int standCounter = 0;
     public int spriteNum = 0;
-    public int invincibleCounter;
+    public int invincibleCounter = 0;
     int dieCounter = 0;
     int hpBarCounter = 0;
     public int shootAvailableCounter = 0;
@@ -112,8 +112,9 @@ public class Entity {
     public static final int TYPE_LIGHT = 9;
 
     //TOOLS
-    int dialogIndex = 0;
-    public String[] dialogues = new String[20];
+    public int dialogueIndex = 0;
+    public int dialogueSet = 0;
+    public String[][] dialogues = new String[20][20];
 
     //Default values for every entity
     public List<Entity> inventory = new ArrayList<>();
@@ -145,18 +146,19 @@ public class Entity {
         }
     }
 
-    public void speak() {
-        if (dialogues[dialogIndex] == null) {
-            dialogIndex = 0;
-        }
-        gameManager.ui.currentDialog = dialogues[dialogIndex];
-        dialogIndex++;
+    public void facePlayer() {
         switch (gameManager.player.direction) {
             case "up" -> direction = "down";
             case "down" -> direction = "up";
             case "left" -> direction = "right";
             case "right" -> direction = "left";
         }
+    }
+
+    public void startDialogue(Entity entity, int setNum) {
+        gameManager.gameState = GameManager.DIALOGUE_STATE;
+        gameManager.ui.npc = entity;
+        dialogueSet = setNum;
     }
 
     public void checkCollision() {
@@ -704,6 +706,20 @@ public class Entity {
         return index;
     }
 
+    public void resetCounters() {
+        lockCounter = 0;
+        spriteCounter = 0;
+        standCounter = 0;
+        spriteNum = 0;
+        invincibleCounter = 0;
+        dieCounter = 0;
+        hpBarCounter = 0;
+        shootAvailableCounter = 0;
+        knockBackCounter = 0;
+        guardCounter = 0;
+        offBalanceCounter = 0;
+    }
+
     public int getLeftX() {
         return worldX + solidArea.x;
     }
@@ -750,10 +766,13 @@ public class Entity {
 
     //WARNING! We always override these methods by subclasses
     //so there's no need to have logic inside them
+    public void speak() {
+    }
 
     public Color getParticleColor() {
         return null;
     }
+
     public int getParticleSize() {
         int size = 0;
         return size;

@@ -22,6 +22,7 @@ public class NpcWomanW extends Entity {
         //boundaries of npc
         solidArea.width = 31;
         solidArea.height = 32;
+        dialogueSet = -1;
 
         getImage();
         setDialog();
@@ -52,11 +53,17 @@ public class NpcWomanW extends Entity {
     }
 
     private void setDialog() {
-        dialogues[0] = "Hello young man!";
-        dialogues[1] = "How are you today?\nIt's a nice weather, isn't it?";
-        dialogues[2] = "Are you a adventure traveler?";
-        dialogues[3] = "Well, I wish you good luck to\nfind something interesting!";
-        dialogues[4] = "If you need something,\nI'll be happy to help you!";
+        dialogues[0][0] = "Hello young man!";
+        dialogues[0][1] = "How are you today?\nIt's a nice weather, isn't it?";
+        dialogues[0][2] = "Are you a adventure traveler?";
+        dialogues[0][3] = "Well, I wish you good luck to\nfind something interesting!";
+        dialogues[0][4] = "If you need something,\nI'll be happy to help you!";
+
+        dialogues[1][0] = "You can save the game,\nif you through the coin into water.";
+        dialogues[1][1] = "The tent or bed is good way to skip the night.";
+        dialogues[1][2] = "Hey, be careful with chests!";
+
+        dialogues[2][0] = "I'm wondering how to open the doors...";
     }
 
     //set npc movement
@@ -94,7 +101,13 @@ public class NpcWomanW extends Entity {
 
     //Maybe add special stuff, different custom text for this character
     public void speak() {
-        super.speak();
+        facePlayer();
+        startDialogue(this, dialogueSet);
+        dialogueSet++;
+        if (dialogues[dialogueSet][0] == null) {
+            dialogueSet = 0;
+//            dialogueSet--;
+        }
         onPath = true;
     }
 }

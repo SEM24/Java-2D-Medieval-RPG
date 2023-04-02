@@ -22,28 +22,33 @@ public class ChestObject extends Entity {
         solidAreaDefaultY = solidArea.y;
     }
 
-
+    @Override
     public void setLoot(Entity loot) {
         this.loot = loot;
+        setDialogue();
+    }
+
+    public void setDialogue() {
+        dialogues[0][0] = "You opened the chest and found a " + loot.name + "!" +
+                "\n...But you can't carry any more!";
+        dialogues[1][0] = "You opened the chest and found a " + loot.name + "!" +
+                "\nYou obtain the " + loot.name + "!";
+        dialogues[2][0] = "This chest is empty!";
     }
 
     @Override
     public void interact() {
-        gameManager.gameState = GameManager.DIALOGUE_STATE;
         if (!opened) {
             gameManager.playSE(4);
-            StringBuilder sb = new StringBuilder();
-            sb.append("You opened the chest and found a ").append(loot.name).append("!");
             if (!gameManager.player.canObtainItem(loot)) {
-                sb.append("\n...But you can't carry any more!");
+                startDialogue(this, 0);
             } else {
-                sb.append("\nYou obtain the ").append(loot.name).append("!");
+                startDialogue(this, 1);
                 down = image2;
                 opened = true;
             }
-            gameManager.ui.currentDialog = sb.toString();
         } else {
-            gameManager.ui.currentDialog = "This chest is empty!";
+            startDialogue(this, 2);
         }
     }
 }

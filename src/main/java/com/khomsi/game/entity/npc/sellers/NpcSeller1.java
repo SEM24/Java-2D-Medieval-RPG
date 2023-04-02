@@ -8,8 +8,8 @@ import main.java.com.khomsi.game.objects.spells.PotionObject;
 
 import java.awt.*;
 
-public class NpcGardenerS extends Entity {
-    public NpcGardenerS(GameManager gameManager) {
+public class NpcSeller1 extends Entity {
+    public NpcSeller1(GameManager gameManager) {
         super(gameManager);
         name = "Vlad";
         direction = "down";
@@ -54,7 +54,11 @@ public class NpcGardenerS extends Entity {
     }
 
     private void setDialog() {
-        dialogues[0] = "Hi, I'm the seller.\nDo you want to buy something?";
+        dialogues[0][0] = "Hi, I'm the seller.\nDo you want to buy something?";
+        dialogues[1][0] = "See you later!";
+        dialogues[2][0] = "You need more coins to buy it!";
+        dialogues[3][0] = "Your inventory is full!";
+        dialogues[4][0] = "You can't sell the equipped item!";
     }
 
     public void setItems() {
@@ -65,8 +69,8 @@ public class NpcGardenerS extends Entity {
 
     @Override
     public void speak() {
-        super.speak();
+        facePlayer();
         gameManager.gameState = GameManager.TRADE_STATE;
-        gameManager.ui.seller = this;
+        gameManager.ui.npc = this;
     }
 }

@@ -16,13 +16,17 @@ public class PotionObject extends Entity {
         price = 20;
         itemDescription = "[" + name + "]\n" + "Simple potion\nthat recovers " + value + " hp.";
         stackable = true;
+        setDialogue();
+    }
+
+    public void setDialogue() {
+        dialogues[0][0] = "You used the " + name + "!\n" +
+                "Your HP is recovered by " + value + ".";
     }
 
     @Override
     public boolean use(Entity entity) {
-        gameManager.gameState = GameManager.DIALOGUE_STATE;
-        gameManager.ui.currentDialog = "You used the " + name + "!\n" +
-                "Your HP is recovered by " + value + ".";
+        startDialogue(this, 0);
         entity.hp += value;
         gameManager.playSE(6);
         return true;

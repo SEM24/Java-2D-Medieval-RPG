@@ -5,7 +5,7 @@ import main.java.com.khomsi.game.entity.mobs.MobOrc;
 import main.java.com.khomsi.game.entity.mobs.MobSlime;
 import main.java.com.khomsi.game.entity.mobs.MobSlimeBlue;
 import main.java.com.khomsi.game.entity.npc.regular.NpcWomanW;
-import main.java.com.khomsi.game.entity.npc.sellers.NpcGardenerS;
+import main.java.com.khomsi.game.entity.npc.sellers.NpcSeller1;
 import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.objects.equipment.AxeObject;
 import main.java.com.khomsi.game.objects.equipment.GoldShieldObject;
@@ -119,7 +119,7 @@ public class PlaceObjects {
         //Map 1
         index = 0;
         mapNum = 1;
-        gameManager.npcList[mapNum][index] = new NpcGardenerS(gameManager);
+        gameManager.npcList[mapNum][index] = new NpcSeller1(gameManager);
         gameManager.npcList[mapNum][index].worldX = GameManager.TILE_SIZE * 20;
         gameManager.npcList[mapNum][index].worldY = GameManager.TILE_SIZE * 16;
         index++;

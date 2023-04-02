@@ -84,6 +84,7 @@ public class Player extends Entity {
         //The total defence value is decided by agility and shield
         defense = getDefense();
         setItems();
+        setDialogue();
     }
 
     public void setDefaultPosition() {
@@ -490,7 +491,6 @@ public class Player extends Entity {
             //if index not 999 - player touches the npc
             if (npcIndex != playerIndex) {
                 attackCanceled = true;
-                gameManager.gameState = GameManager.DIALOGUE_STATE;
                 gameManager.npcList[gameManager.currentMap][npcIndex].speak();
             }
         }
@@ -509,11 +509,16 @@ public class Player extends Entity {
             attack = getAttack();
             defense = getDefense();
             gameManager.playSE(11);
-            gameManager.gameState = GameManager.DIALOGUE_STATE;
-            gameManager.ui.currentDialog = "Your new level is " + level + " !\n" +
-                    "You became stronger!";
+
+                setDialogue();
+            startDialogue(this, 0);
             gameManager.pauseMusic(5);
         }
+    }
+
+    public void setDialogue() {
+        dialogues[0][0] = "Your new level is " + level + " !\n" +
+                "You became stronger!";
     }
 
     public void selectItem() {

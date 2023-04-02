@@ -17,11 +17,15 @@ public class DoorObject extends Entity {
         solidArea.height = 32;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+        setDialogue();
+    }
+
+    public void setDialogue() {
+        dialogues[0][0] = "You need a key to open the door!";
     }
 
     @Override
     public void interact() {
-        gameManager.gameState = GameManager.DIALOGUE_STATE;
-        gameManager.ui.currentDialog = "You need a key to open the door!";
+        startDialogue(this, 0);
     }
 }

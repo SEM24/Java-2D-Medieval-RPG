@@ -32,7 +32,9 @@ public class UI {
     public int npcSlotRow = 0;
     int subState = 0;
     int counter = 0;
-    public Entity seller;
+    int charIndex = 0;
+    public Entity npc;
+    String combinedText = "";
 
     public UI(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -140,11 +142,13 @@ public class UI {
     }
 
     private void tradeSelect() {
+        npc.dialogueSet = 0;
         showDialog();
+
         int x = GameManager.TILE_SIZE * 3;
         int y = GameManager.TILE_SIZE * 7;
-        if (seller != null && seller.name != null) {
-            drawShadowAndText(seller.name, x + GameManager.TILE_SIZE, y, 3, 3);
+        if (npc != null && npc.name != null) {
+            drawShadowAndText(npc.name, x + GameManager.TILE_SIZE, y, 3, 3);
         }
         //Draw window
         x = GameManager.TILE_SIZE * 14;
@@ -172,8 +176,7 @@ public class UI {
             showChooseCursor(x, y, 25);
             if (gameManager.keyHandler.enterPressed) {
                 commandNum = 0;
-                gameManager.gameState = GameManager.DIALOGUE_STATE;
-                currentDialog = "See you later!";
+                npc.startDialogue(npc, 1);
             }
         }
     }
@@ -182,7 +185,7 @@ public class UI {
         //Draw player inventory
         drawInventory(gameManager.player, false);
         //Draw npc inventory
-        drawInventory(seller, true);
+        drawInventory(npc, true);
         //Draw hint window
         drawHintCoin();
         int width;
@@ -191,31 +194,28 @@ public class UI {
         int y;
         //Price window
         int itemIndex = getItemIndexOnSlot(npcSlotCol, npcSlotRow);
-        if (itemIndex < seller.inventory.size()) {
+        if (itemIndex < npc.inventory.size()) {
             x = (int) (GameManager.TILE_SIZE * 5.5);
             y = (int) (GameManager.TILE_SIZE * 5.5);
             width = (int) (GameManager.TILE_SIZE * 2.5);
             height = GameManager.TILE_SIZE;
             drawSubWindow(x, y, width, height);
             graphics2D.drawImage(coin, x + 10, y + 5, 40, 40, null);
-            int price = seller.inventory.get(itemIndex).price;
+            int price = npc.inventory.get(itemIndex).price;
             String text = "" + price;
             x = getXAlignToRightText(text, GameManager.TILE_SIZE * 8 - 20);
             graphics2D.drawString(text, x, y + 34);
             //Buy item
             if (gameManager.keyHandler.enterPressed) {
-                if (seller.inventory.get(itemIndex).price > gameManager.player.coin) {
+                if (npc.inventory.get(itemIndex).price > gameManager.player.coin) {
                     subState = 0;
-                    gameManager.gameState = GameManager.DIALOGUE_STATE;
-                    currentDialog = "You need more coins to buy it!";
-                    showDialog();
+                    npc.startDialogue(npc, 2);
                 } else {
-                    if (gameManager.player.canObtainItem(seller.inventory.get(itemIndex))) {
-                        gameManager.player.coin -= seller.inventory.get(itemIndex).price;
+                    if (gameManager.player.canObtainItem(npc.inventory.get(itemIndex))) {
+                        gameManager.player.coin -= npc.inventory.get(itemIndex).price;
                     } else {
                         subState = 0;
-                        gameManager.gameState = GameManager.DIALOGUE_STATE;
-                        currentDialog = "Your inventory is full!";
+                        npc.startDialogue(npc, 3);
                     }
                 }
             }
@@ -248,8 +248,7 @@ public class UI {
                         gameManager.player.inventory.get(itemIndex) == gameManager.player.currentShield) {
                     commandNum = 0;
                     subState = 0;
-                    gameManager.gameState = GameManager.DIALOGUE_STATE;
-                    currentDialog = "You can't sell the equipped item!";
+                    npc.startDialogue(npc, 4);
                 } else {
                     if (gameManager.player.inventory.get(itemIndex).amount > 1) {
                         gameManager.player.inventory.get(itemIndex).amount--;
@@ -785,6 +784,31 @@ public class UI {
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30F));
         x += GameManager.TILE_SIZE;
         y += GameManager.TILE_SIZE;
+        if (npc.dialogues[npc.dialogueSet][npc.dialogueIndex] != null) {
+            char[] characters = npc.dialogues[npc.dialogueSet][npc.dialogueIndex].toCharArray();
+            if (charIndex < characters.length) {
+                gameManager.playSE(18);
+                String s = String.valueOf(characters[charIndex]);
+                combinedText = combinedText + s;
+                currentDialog = combinedText;
+                charIndex++;
+            }
+            if (gameManager.keyHandler.enterPressed) {
+                charIndex = 0;
+                combinedText = "";
+                if (gameManager.gameState == GameManager.DIALOGUE_STATE) {
+                    npc.dialogueIndex++;
+                    gameManager.keyHandler.enterPressed = false;
+                }
+            }
+        }
+        //If there's no text in array
+        else {
+            npc.dialogueIndex = 0;
+            if (gameManager.gameState == GameManager.DIALOGUE_STATE) {
+                gameManager.gameState = GameManager.PLAY_STATE;
+            }
+        }
         splitTextInDialog(currentDialog, x, y);
     }
 
