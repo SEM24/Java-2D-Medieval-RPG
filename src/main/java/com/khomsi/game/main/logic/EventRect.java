@@ -1,4 +1,4 @@
-package main.java.com.khomsi.game.main;
+package main.java.com.khomsi.game.main.logic;
 
 import java.awt.*;
 

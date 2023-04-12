@@ -5,9 +5,10 @@ import main.java.com.khomsi.game.entity.ProjectTile;
 import main.java.com.khomsi.game.main.GameManager;
 
 public class MagicArrowObject extends ProjectTile {
+    public static final String OBJ_NAME = "Blue Magic Arrow";
     public MagicArrowObject(GameManager gameManager) {
         super(gameManager);
-        name = "Blue Magic Arrow";
+        name = OBJ_NAME;
         speed = 7;
         maxHp = 90;
         hp = maxHp;

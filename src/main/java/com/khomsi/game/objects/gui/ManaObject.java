@@ -4,9 +4,10 @@ import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
 
 public class ManaObject extends Entity {
+    public static final String OBJ_NAME = "Mana";
     public ManaObject(GameManager gameManager) {
         super(gameManager);
-        name = "Mana";
+        name = OBJ_NAME;
         type = TYPE_PICK_UP_ONLY;
         value = 1;
         down = setup("/objects/ui/mana_full",

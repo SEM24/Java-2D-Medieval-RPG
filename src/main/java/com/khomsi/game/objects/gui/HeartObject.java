@@ -4,14 +4,16 @@ import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
 
 public class HeartObject extends Entity {
+    public static final String OBJ_NAME = "Heart";
+
     public HeartObject(GameManager gameManager) {
         super(gameManager);
+        name = OBJ_NAME;
         type = TYPE_PICK_UP_ONLY;
         value = 2;
         down = setup("/objects/ui/heart_full",
                 GameManager.TILE_SIZE * 2, GameManager.TILE_SIZE * 2);
 
-        name = "Heart";
         image = setup("/objects/ui/heart_full",
                 GameManager.TILE_SIZE * 2, GameManager.TILE_SIZE * 2);
         image2 = setup("/objects/ui/heart_half",

@@ -7,9 +7,11 @@ import main.java.com.khomsi.game.main.GameManager;
 import java.awt.*;
 
 public class FireBallObject extends ProjectTile {
+    public static final String OBJ_NAME = "FireBall";
+
     public FireBallObject(GameManager gameManager) {
         super(gameManager);
-        name = "FireBall";
+        name = OBJ_NAME;
         speed = 7;
         maxHp = 80;
         hp = maxHp;

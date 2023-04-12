@@ -5,6 +5,10 @@ import main.java.com.khomsi.game.data.SaveLoad;
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.entity.Player;
 import main.java.com.khomsi.game.enviroment.EnvironmentManagement;
+import main.java.com.khomsi.game.main.logic.CheckCollision;
+import main.java.com.khomsi.game.main.logic.Config;
+import main.java.com.khomsi.game.main.logic.EntityGenerator;
+import main.java.com.khomsi.game.main.logic.EventHandler;
 import main.java.com.khomsi.game.main.tools.*;
 import main.java.com.khomsi.game.tiles.Map;
 import main.java.com.khomsi.game.tiles.TileManager;
@@ -51,13 +55,14 @@ public class GameManager extends JPanel implements Runnable {
     public UI ui = new UI(this);
     //use threads to start, stop,repeat actions.
     public Thread gameThread;
+    public EntityGenerator entityGenerator = new EntityGenerator(this);
     public SaveLoad saveLoad = new SaveLoad(this);
     public Config config = new Config(this);
     public CheckCollision checkCollision = new CheckCollision(this);
     public PlaceObjects placeObjects = new PlaceObjects(this);
     public EventHandler eventHandler = new EventHandler(this);
     public PathFinder pathFinder = new PathFinder(this);
-    public EnvironmentManagement enManagment = new EnvironmentManagement(this);
+    public EnvironmentManagement enManagement = new EnvironmentManagement(this);
     public Map map = new Map(this);
     //ENTITY AND OBJECTS
     //TODO extend the massive, when you'll have more objects
@@ -104,7 +109,7 @@ public class GameManager extends JPanel implements Runnable {
 
     public void setupGame() {
         setDefaultObjects();
-        enManagment.setup();
+        enManagement.setup();
         gameState = TITLE_STATE;
 
         tempScreen = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -125,7 +130,7 @@ public class GameManager extends JPanel implements Runnable {
             player.setDefaultValues();
             placeObjects.setObject();
             placeObjects.setInteractiveTiles();
-            enManagment.lightning.resetDay();
+            enManagement.lightning.resetDay();
         }
     }
 
@@ -226,7 +231,7 @@ public class GameManager extends JPanel implements Runnable {
                     tile.update();
                 }
             }
-            enManagment.update();
+            enManagement.update();
         }
         if (gameState == PAUSE_STATE) {
             //Stop game
@@ -271,7 +276,7 @@ public class GameManager extends JPanel implements Runnable {
             //Make list empty to not overload it
             entities.clear();
             //Environment
-            enManagment.draw(g2d);
+            enManagement.draw(g2d);
             //Mini map
             map.drawMiniMap(g2d);
             //UI(text)

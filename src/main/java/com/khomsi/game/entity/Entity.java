@@ -178,24 +178,7 @@ public class Entity {
     public void update() {
         if (knockBack) {
             checkCollision();
-            if (collisionOn) {
-                knockBackCounter = 0;
-                knockBack = false;
-                speed = defaultSpeed;
-            } else {
-                switch (knockBackDirection) {
-                    case "up" -> worldY -= speed;
-                    case "down" -> worldY += speed;
-                    case "left" -> worldX -= speed;
-                    case "right" -> worldX += speed;
-                }
-            }
-            knockBackCounter++;
-            if (knockBackCounter == 10) {
-                knockBackCounter = 0;
-                knockBack = false;
-                speed = defaultSpeed;
-            }
+            collisionAndKnockBack();
         } else if (attacking) {
             entityAttack();
         } else {
@@ -232,6 +215,27 @@ public class Entity {
         }
     }
 
+    void collisionAndKnockBack() {
+        if (collisionOn) {
+            knockBackCounter = 0;
+            knockBack = false;
+            speed = defaultSpeed;
+        } else {
+            switch (knockBackDirection) {
+                case "up" -> worldY -= speed;
+                case "down" -> worldY += speed;
+                case "left" -> worldX -= speed;
+                case "right" -> worldX += speed;
+            }
+        }
+        knockBackCounter++;
+        if (knockBackCounter == 10) {
+            knockBackCounter = 0;
+            knockBack = false;
+            speed = defaultSpeed;
+        }
+    }
+
 
     public void damagePlayer(int attack) {
         //Check if player can receive the dmg
@@ -240,7 +244,7 @@ public class Entity {
             //Get opposite direction of this entity
             String canGuardDirection = getOppositeDirection(direction);
             if (gameManager.player.guarding && gameManager.player.direction.equals(canGuardDirection)) {
-                //Parry (11 frames window) //TODO find great num
+                //Parry (11 frames window)
                 if (gameManager.player.guardCounter < 11) {
                     damage = 0;
                     gameManager.playSE(16);

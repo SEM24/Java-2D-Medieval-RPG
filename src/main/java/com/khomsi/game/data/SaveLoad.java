@@ -1,21 +1,6 @@
 package main.java.com.khomsi.game.data;
 
-import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.objects.equipment.AxeObject;
-import main.java.com.khomsi.game.objects.equipment.GoldShieldObject;
-import main.java.com.khomsi.game.objects.equipment.MetalShieldObject;
-import main.java.com.khomsi.game.objects.equipment.MetalSwordObject;
-import main.java.com.khomsi.game.objects.gui.HeartObject;
-import main.java.com.khomsi.game.objects.gui.ManaObject;
-import main.java.com.khomsi.game.objects.interact.ChestObject;
-import main.java.com.khomsi.game.objects.interact.CoinBObject;
-import main.java.com.khomsi.game.objects.interact.KeyObject;
-import main.java.com.khomsi.game.objects.light.LanternObject;
-import main.java.com.khomsi.game.objects.outside.BedObject;
-import main.java.com.khomsi.game.objects.outside.DoorObject;
-import main.java.com.khomsi.game.objects.outside.TentObject;
-import main.java.com.khomsi.game.objects.spells.PotionObject;
 
 import java.io.*;
 
@@ -24,44 +9,6 @@ public class SaveLoad {
 
     public SaveLoad(GameManager gameManager) {
         this.gameManager = gameManager;
-    }
-
-    //    public Entity getObject(String itemNames) {
-//        Entity object = null;
-//        switch (itemNames) {
-//            case AxeObject.OBJ_NAME -> object = new AxeObject(gameManager);
-//            case GoldShieldObject.OBJ_NAME -> object = new GoldShieldObject(gameManager);
-//            case MetalShieldObject.OBJ_NAME -> object = new MetalShieldObject(gameManager);
-//            case MetalSwordObject.OBJ_NAME -> object = new MetalSwordObject(gameManager);
-//            case KeyObject.OBJ_NAME -> object = new KeyObject(gameManager);
-//            case LanternObject.OBJ_NAME -> object = new LanternObject(gameManager);
-//            case TentObject.OBJ_NAME -> object = new TentObject(gameManager);
-//            case PotionObject.OBJ_NAME -> object = new PotionObject(gameManager);
-//            case ChestObject.OBJ_NAME -> object = new ChestObject(gameManager);
-//        }
-//        return object;
-//    }
-
-    //FIXME re-write the code
-    public Entity getObject(String itemNames) {
-        Entity object = null;
-        switch (itemNames) {
-            case "Axe" -> object = new AxeObject(gameManager);
-            case "Gold Shield" -> object = new GoldShieldObject(gameManager);
-            case "Metal Shield" -> object = new MetalShieldObject(gameManager);
-            case "Metal Sword" -> object = new MetalSwordObject(gameManager);
-            case "Key" -> object = new KeyObject(gameManager);
-            case "Lantern" -> object = new LanternObject(gameManager);
-            case "Tent" -> object = new TentObject(gameManager);
-            case "Potion" -> object = new PotionObject(gameManager);
-            case "Chest" -> object = new ChestObject(gameManager);
-            case "Door" -> object = new DoorObject(gameManager);
-            case "Coin Bronze" -> object = new CoinBObject(gameManager);
-            case "Mana" -> object = new ManaObject(gameManager);
-            case "Heart" -> object = new HeartObject(gameManager);
-            case "Bed" -> object = new BedObject(gameManager);
-        }
-        return object;
     }
 
     /*
@@ -92,30 +39,29 @@ public class SaveLoad {
             initializer.currentWeaponSlot = gameManager.player.getCurrentWeaponSlot();
             initializer.currentShieldSlot = gameManager.player.getCurrentShieldSlot();
 
-            //FIXME re-write the code
-//            //Objects on map
-//            int maxMap = gameManager.maxMap;
-//            initializer.mapObjectNames = new String[maxMap][gameManager.object[1].length];
-//            initializer.mapObjectWorldX = new int[maxMap][gameManager.object[1].length];
-//            initializer.mapObjectWorldY = new int[maxMap][gameManager.object[1].length];
-//            initializer.mapObjectLootNames = new String[maxMap][gameManager.object[1].length];
-//            initializer.mapObjectOpened = new boolean[maxMap][gameManager.object[1].length];
-//
-//            for (int mapNum = 0; mapNum < maxMap; mapNum++) {
-//                for (int i = 0; i < gameManager.object[1].length; i++) {
-//                    if (gameManager.object[mapNum][i] == null) {
-//                        initializer.mapObjectNames[mapNum][i] = "NA";
-//                    } else {
-//                        initializer.mapObjectNames[mapNum][i] = gameManager.object[mapNum][i].name;
-//                        initializer.mapObjectWorldX[mapNum][i] = gameManager.object[mapNum][i].worldX;
-//                        initializer.mapObjectWorldY[mapNum][i] = gameManager.object[mapNum][i].worldY;
-//                        if (gameManager.object[mapNum][i].loot != null) {
-//                            initializer.mapObjectLootNames[mapNum][i] = gameManager.object[mapNum][i].loot.name;
-//                        }
-//                        initializer.mapObjectOpened[mapNum][i] = gameManager.object[mapNum][i].opened;
-//                    }
-//                }
-//            }
+            //Objects on map
+            int maxMap = gameManager.maxMap;
+            initializer.mapObjectNames = new String[maxMap][gameManager.object[1].length];
+            initializer.mapObjectWorldX = new int[maxMap][gameManager.object[1].length];
+            initializer.mapObjectWorldY = new int[maxMap][gameManager.object[1].length];
+            initializer.mapObjectLootNames = new String[maxMap][gameManager.object[1].length];
+            initializer.mapObjectOpened = new boolean[maxMap][gameManager.object[1].length];
+
+            for (int mapNum = 0; mapNum < maxMap; mapNum++) {
+                for (int i = 0; i < gameManager.object[1].length; i++) {
+                    if (gameManager.object[mapNum][i] == null) {
+                        initializer.mapObjectNames[mapNum][i] = "NA";
+                    } else {
+                        initializer.mapObjectNames[mapNum][i] = gameManager.object[mapNum][i].name;
+                        initializer.mapObjectWorldX[mapNum][i] = gameManager.object[mapNum][i].worldX;
+                        initializer.mapObjectWorldY[mapNum][i] = gameManager.object[mapNum][i].worldY;
+                        if (gameManager.object[mapNum][i].loot != null) {
+                            initializer.mapObjectLootNames[mapNum][i] = gameManager.object[mapNum][i].loot.name;
+                        }
+                        initializer.mapObjectOpened[mapNum][i] = gameManager.object[mapNum][i].opened;
+                    }
+                }
+            }
             //Write object in file
             os.writeObject(initializer);
         } catch (IOException e) {
@@ -148,7 +94,7 @@ public class SaveLoad {
             //Player inventory
             gameManager.player.inventory.clear();
             for (int i = 0; i < initializer.itemNames.size(); i++) {
-                gameManager.player.inventory.add(getObject(initializer.itemNames.get(i)));
+                gameManager.player.inventory.add(gameManager.entityGenerator.getObject(initializer.itemNames.get(i)));
                 gameManager.player.inventory.get(i).amount = initializer.itemAmounts.get(i);
             }
             //Player equipment
@@ -158,27 +104,27 @@ public class SaveLoad {
             gameManager.player.getDefense();
             gameManager.player.getAttackImage();
 
-
-            //FIXME re-write the code
             //Objects on map
-//            for (int mapnum = 0; mapnum < gameManager.maxMap; mapnum++) {
-//                for (int i = 0; i < gameManager.object[1].length; i++) {
-//                    if (initializer.mapObjectNames[mapnum][i].equals("NA")) {
-//                        gameManager.object[mapnum][i] = null;
-//                    } else {
-//                        gameManager.object[mapnum][i] = getObject(initializer.mapObjectNames[mapnum][i]);
-//                        gameManager.object[mapnum][i].worldX = initializer.mapObjectWorldX[mapnum][i];
-//                        gameManager.object[mapnum][i].worldY = initializer.mapObjectWorldY[mapnum][i];
-//                        if (initializer.mapObjectLootNames != null) {
-//                            gameManager.object[mapnum][i].loot = getObject(initializer.mapObjectLootNames[mapnum][i]);
-//                        }
-//                        gameManager.object[mapnum][i].opened = initializer.mapObjectOpened[mapnum][i];
-//                        if (gameManager.object[mapnum][i].opened) {
-//                            gameManager.object[mapnum][i].down = gameManager.object[mapnum][i].image2;
-//                        }
-//                    }
-//                }
-//            }
+            for (int mapnum = 0; mapnum < gameManager.maxMap; mapnum++) {
+                for (int i = 0; i < gameManager.object[1].length; i++) {
+                    if (initializer.mapObjectNames[mapnum][i].equals("NA")) {
+                        gameManager.object[mapnum][i] = null;
+                    } else {
+                        gameManager.object[mapnum][i]
+                                = gameManager.entityGenerator.getObject(initializer.mapObjectNames[mapnum][i]);
+                        gameManager.object[mapnum][i].worldX = initializer.mapObjectWorldX[mapnum][i];
+                        gameManager.object[mapnum][i].worldY = initializer.mapObjectWorldY[mapnum][i];
+                        if (initializer.mapObjectLootNames[mapnum][i] != null) {
+                            gameManager.object[mapnum][i].loot
+                                    = gameManager.entityGenerator.getObject(initializer.mapObjectLootNames[mapnum][i]);
+                        }
+                        gameManager.object[mapnum][i].opened = initializer.mapObjectOpened[mapnum][i];
+                        if (gameManager.object[mapnum][i].opened) {
+                            gameManager.object[mapnum][i].down = gameManager.object[mapnum][i].image2;
+                        }
+                    }
+                }
+            }
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Exception " + e.getMessage() + " in " + getClass().getSimpleName());
         }

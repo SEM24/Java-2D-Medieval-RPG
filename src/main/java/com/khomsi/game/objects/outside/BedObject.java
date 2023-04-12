@@ -4,10 +4,11 @@ import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
 
 public class BedObject extends Entity {
+    public static final String OBJ_NAME = "Bed";
     public BedObject(GameManager gameManager) {
         super(gameManager);
         type = TYPE_OBSTACLE;
-        name = "Bed";
+        name = OBJ_NAME;
 
         collision = true;
         solidArea.x = 15;

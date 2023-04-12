@@ -6,10 +6,10 @@ import main.java.com.khomsi.game.main.GameManager;
 import java.awt.*;
 
 public class RockObject extends ProjectTile {
-
+    public static final String OBJ_NAME = "Rock";
     public RockObject(GameManager gameManager) {
         super(gameManager);
-        name = "Rock";
+        name = OBJ_NAME;
         speed = 8;
         maxHp = 80;
         hp = maxHp;

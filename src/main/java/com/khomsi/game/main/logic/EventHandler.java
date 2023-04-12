@@ -1,6 +1,7 @@
-package main.java.com.khomsi.game.main;
+package main.java.com.khomsi.game.main.logic;
 
 import main.java.com.khomsi.game.entity.Entity;
+import main.java.com.khomsi.game.main.GameManager;
 
 public class EventHandler {
     GameManager gameManager;

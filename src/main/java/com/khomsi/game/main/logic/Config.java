@@ -1,4 +1,6 @@
-package main.java.com.khomsi.game.main;
+package main.java.com.khomsi.game.main.logic;
+
+import main.java.com.khomsi.game.main.GameManager;
 
 import java.io.*;
 import java.nio.file.Path;

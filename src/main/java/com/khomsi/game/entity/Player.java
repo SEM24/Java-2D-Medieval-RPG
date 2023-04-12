@@ -263,24 +263,7 @@ public class Player extends Entity {
             gameManager.checkCollision.checkEntity(this, gameManager.npcList);
             gameManager.checkCollision.checkEntity(this, gameManager.mobs);
             gameManager.checkCollision.checkEntity(this, gameManager.interactTile);
-            if (collisionOn) {
-                knockBackCounter = 0;
-                knockBack = false;
-                speed = defaultSpeed;
-            } else {
-                switch (knockBackDirection) {
-                    case "up" -> worldY -= speed;
-                    case "down" -> worldY += speed;
-                    case "left" -> worldX -= speed;
-                    case "right" -> worldX += speed;
-                }
-            }
-            knockBackCounter++;
-            if (knockBackCounter == 10) {
-                knockBackCounter = 0;
-                knockBack = false;
-                speed = defaultSpeed;
-            }
+            collisionAndKnockBack();
         } else if (attacking) {
             entityAttack();
         }
@@ -510,7 +493,7 @@ public class Player extends Entity {
             defense = getDefense();
             gameManager.playSE(11);
 
-                setDialogue();
+            setDialogue();
             startDialogue(this, 0);
             gameManager.pauseMusic(5);
         }
@@ -595,23 +578,25 @@ public class Player extends Entity {
 
     public boolean canObtainItem(Entity item) {
         boolean canObtain = false;
+        //Get item in seller's inventory
+        Entity newItem = gameManager.entityGenerator.getObject(item.name);
         //Check if item is stackable
-        if (item.stackable) {
-            int index = searchItemInventory(item.name);
+        if (newItem.stackable) {
+            int index = searchItemInventory(newItem.name);
             if (index != 999) {
                 inventory.get(index).amount++;
                 canObtain = true;
             } else {
                 //New item, so need to check vacancy
                 if (inventory.size() != maxInventorySize) {
-                    inventory.add(item);
+                    inventory.add(newItem);
                     canObtain = true;
                 }
             }
         } else {
             //Not stackable, so check vacancy
             if (inventory.size() != maxInventorySize) {
-                inventory.add(item);
+                inventory.add(newItem);
                 canObtain = true;
             }
         }

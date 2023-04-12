@@ -115,17 +115,17 @@ public class UI {
         counter++;
 
         if (counter < 120) {
-            gameManager.enManagment.lightning.filterAlfa += 0.01F;
-            if (gameManager.enManagment.lightning.filterAlfa > 1F)
-                gameManager.enManagment.lightning.filterAlfa = 1F;
+            gameManager.enManagement.lightning.filterAlfa += 0.01F;
+            if (gameManager.enManagement.lightning.filterAlfa > 1F)
+                gameManager.enManagement.lightning.filterAlfa = 1F;
         }
         if (counter >= 120) {
-            gameManager.enManagment.lightning.filterAlfa -= 0.01F;
-            if (gameManager.enManagment.lightning.filterAlfa <= 0F) {
-                gameManager.enManagment.lightning.filterAlfa = 0F;
+            gameManager.enManagement.lightning.filterAlfa -= 0.01F;
+            if (gameManager.enManagement.lightning.filterAlfa <= 0F) {
+                gameManager.enManagement.lightning.filterAlfa = 0F;
                 counter = 0;
-                gameManager.enManagment.lightning.dayState = Lightning.DAY;
-                gameManager.enManagment.lightning.dayCounter = 0;
+                gameManager.enManagement.lightning.dayState = Lightning.DAY;
+                gameManager.enManagement.lightning.dayCounter = 0;
                 gameManager.gameState = GameManager.PLAY_STATE;
                 gameManager.player.getImage();
             }
