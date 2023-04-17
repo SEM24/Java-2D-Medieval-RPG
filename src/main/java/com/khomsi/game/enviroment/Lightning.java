@@ -119,8 +119,12 @@ public class Lightning {
     }
 
     public void draw(Graphics2D g2d) {
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlfa));
-        g2d.drawImage(darknessFilter, 0, 0, null);
+        if (gameManager.currentArea == GameManager.OUTSIDE) {
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlfa));
+        }
+        if (gameManager.currentArea == GameManager.OUTSIDE || gameManager.currentArea == GameManager.DUNGEON) {
+            g2d.drawImage(darknessFilter, 0, 0, null);
+        }
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
         //Debug
         String situation = "";

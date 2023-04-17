@@ -48,11 +48,9 @@ public class Player extends Entity {
 
     public void setDefaultValues() {
         //player position of player
-        worldX = GameManager.TILE_SIZE * 23;
-        worldY = GameManager.TILE_SIZE * 21;
+        setDefaultPosition();
         defaultSpeed = 3;
         speed = defaultSpeed;
-        direction = "down";
         invincible = false;
 
         //player hp, 6 = 3 hearts, 5 = 2.5 hearts
@@ -69,7 +67,7 @@ public class Player extends Entity {
         agility = 1;
         xp = 0;
         nextLevelXp = 5;
-        coin = 70;
+        coin = 10;
         currentWeapon = new MetalSwordObject(gameManager);
         currentShield = new MetalShieldObject(gameManager);
         currentLight = null;
@@ -89,8 +87,8 @@ public class Player extends Entity {
 
     public void setDefaultPosition() {
         //player position of player
-        worldX = GameManager.TILE_SIZE * 21;
-        worldY = GameManager.TILE_SIZE * 22;
+        worldX = GameManager.TILE_SIZE * 30;
+        worldY = GameManager.TILE_SIZE * 21;
         direction = "down";
     }
 

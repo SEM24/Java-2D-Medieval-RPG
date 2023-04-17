@@ -59,15 +59,29 @@ public class EventHandler {
             canTouchEvent = true;
         }
         if (canTouchEvent) {
-            if (interact(0, 29, 19, "any")) damagePit(GameManager.DIALOGUE_STATE);
-            else if (interact(0, 30, 21, "right")) healingPool(GameManager.DIALOGUE_STATE);
+            if (interact(0, 27, 20, "any")) damagePit(GameManager.DIALOGUE_STATE);
+            else if (interact(0, 20, 35, "down")
+                    || interact(0, 19, 35, "down")
+                    || interact(0, 18, 35, "down")) healingPool(GameManager.DIALOGUE_STATE);
                 //Col and row of enter location is the place where
                 //the player will be spawned on new map
-            else if (interact(0, 12, 17, "any")) {
-                changeLocation(1, 21, 21);
+            else if (interact(0, 18, 25, "any")) { //Seller
+                changeLocation(1, 20, 22, GameManager.INDOOR);
                 gameManager.playSE(4);
-            } else if (interact(1, 21, 23, "any")) {
-                changeLocation(0, 12, 18);
+            }
+            //back to main map
+            else if (interact(1, 20, 23, "any")) {
+                changeLocation(0, 18, 26, GameManager.OUTSIDE);
+                gameManager.playSE(5);
+
+            }
+            //Dungeon
+            else if (interact(1, 25, 15, "up") ||
+                    interact(1, 24, 15, "up")) {
+                changeLocation(2, 16, 39, GameManager.DUNGEON);
+                gameManager.playSE(4);
+            } else if (interact(2, 15, 39, "left")) {
+                changeLocation(1, 25, 15, GameManager.INDOOR);
                 gameManager.playSE(5);
             }
             //gameManager.npcList[1][0], 1 - the map number, 0 - number of npc on this map
@@ -83,8 +97,9 @@ public class EventHandler {
         }
     }
 
-    private void changeLocation(int map, int col, int row) {
+    private void changeLocation(int map, int col, int row, int area) {
         gameManager.gameState = GameManager.TRANSITION_STATE;
+        gameManager.nextArea = area;
         tempMap = map;
         tempCol = col;
         tempRow = row;
@@ -125,8 +140,8 @@ public class EventHandler {
     private void teleport(int gameState) {
         gameManager.gameState = gameState;
         eventMaster.startDialogue(eventMaster, 0);
-        gameManager.player.worldX = GameManager.TILE_SIZE * 37;
-        gameManager.player.worldY = GameManager.TILE_SIZE * 10;
+        gameManager.player.worldX = GameManager.TILE_SIZE * 24;
+        gameManager.player.worldY = GameManager.TILE_SIZE * 11;
         gameManager.player.fallIntoPit = false;
     }
 

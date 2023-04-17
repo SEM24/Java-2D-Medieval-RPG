@@ -287,6 +287,7 @@ public class UI {
             gameManager.player.worldY = GameManager.TILE_SIZE * gameManager.eventHandler.tempRow;
             gameManager.eventHandler.previousEventX = gameManager.player.worldX;
             gameManager.eventHandler.previousEventY = gameManager.player.worldY;
+            gameManager.changeArea();
         }
     }
 

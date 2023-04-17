@@ -79,6 +79,7 @@ public class GameManager extends JPanel implements Runnable {
     public static final int FPS = 60;
     //GameState
     public int gameState;
+
     public static final int TITLE_STATE = 0;
 
     public static final int PLAY_STATE = 1;
@@ -91,6 +92,12 @@ public class GameManager extends JPanel implements Runnable {
     public static final int TRADE_STATE = 8;
     public static final int SLEEP_STATE = 9;
     public static final int MAP_STATE = 10;
+    //Area
+    public int currentArea;
+    public int nextArea;
+    public static final int OUTSIDE = 11;
+    public static final int INDOOR = 12;
+    public static final int DUNGEON = 13;
     //Until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
@@ -111,7 +118,7 @@ public class GameManager extends JPanel implements Runnable {
         setDefaultObjects();
         enManagement.setup();
         gameState = TITLE_STATE;
-
+        currentArea = OUTSIDE;
         tempScreen = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         //Everything will be recorded in buff tempScreen
         g2d = (Graphics2D) tempScreen.getGraphics();
@@ -375,5 +382,16 @@ public class GameManager extends JPanel implements Runnable {
     public void playSE(int i) {
         se.setFile(i);
         se.play();
+    }
+
+    public void changeArea() {
+        if (nextArea != currentArea) {
+            stopMusic();
+            if (nextArea == OUTSIDE) playMusic(0);
+            if (nextArea == INDOOR) playMusic(19);
+            if (nextArea == DUNGEON) playMusic(20);
+        }
+        currentArea = nextArea;
+        placeObjects.setMobs();
     }
 }

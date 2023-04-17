@@ -10,7 +10,7 @@ public class CoinBObject extends Entity {
         name = OBJ_NAME;
         type = TYPE_PICK_UP_ONLY;
         down = setup("/objects/coins/coins_bronze");
-        value = 1;
+        value = 5;
     }
 
     @Override
