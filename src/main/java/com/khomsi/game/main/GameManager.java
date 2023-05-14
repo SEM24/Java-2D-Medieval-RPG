@@ -1,5 +1,6 @@
 package main.java.com.khomsi.game.main;
 
+import main.java.com.khomsi.game.GameApplication;
 import main.java.com.khomsi.game.ai.PathFinder;
 import main.java.com.khomsi.game.data.SaveLoad;
 import main.java.com.khomsi.game.entity.Entity;

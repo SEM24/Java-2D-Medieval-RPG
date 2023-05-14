@@ -2,10 +2,7 @@ package main.java.com.khomsi.game.main.logic;
 
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.objects.equipment.AxeObject;
-import main.java.com.khomsi.game.objects.equipment.GoldShieldObject;
-import main.java.com.khomsi.game.objects.equipment.MetalShieldObject;
-import main.java.com.khomsi.game.objects.equipment.MetalSwordObject;
+import main.java.com.khomsi.game.objects.equipment.*;
 import main.java.com.khomsi.game.objects.gui.HeartObject;
 import main.java.com.khomsi.game.objects.gui.ManaObject;
 import main.java.com.khomsi.game.objects.interact.ChestObject;
@@ -14,6 +11,7 @@ import main.java.com.khomsi.game.objects.interact.KeyObject;
 import main.java.com.khomsi.game.objects.light.LanternObject;
 import main.java.com.khomsi.game.objects.outside.BedObject;
 import main.java.com.khomsi.game.objects.outside.DoorObject;
+import main.java.com.khomsi.game.objects.outside.StairsDownObject;
 import main.java.com.khomsi.game.objects.outside.TentObject;
 import main.java.com.khomsi.game.objects.projectTiles.FireBallObject;
 import main.java.com.khomsi.game.objects.projectTiles.MagicArrowObject;
@@ -27,6 +25,7 @@ public class EntityGenerator {
         this.gameManager = gameManager;
     }
 
+    //FIXME add new objects
     public Entity getObject(String itemNames) {
         Entity object = null;
         switch (itemNames) {
@@ -47,6 +46,8 @@ public class EntityGenerator {
             case RockObject.OBJ_NAME -> object = new RockObject(gameManager);
             case MagicArrowObject.OBJ_NAME -> object = new MagicArrowObject(gameManager);
             case PotionObject.OBJ_NAME -> object = new PotionObject(gameManager);
+            case StairsDownObject.OBJ_NAME -> object = new StairsDownObject(gameManager);
+            case HookObject.OBJ_NAME -> object = new HookObject(gameManager);
         }
         return object;
     }

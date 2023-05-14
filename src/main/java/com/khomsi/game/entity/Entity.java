@@ -110,6 +110,7 @@ public class Entity {
     public static final int TYPE_PICK_UP_ONLY = 7;
     public static final int TYPE_OBSTACLE = 8;
     public static final int TYPE_LIGHT = 9;
+    public static final int TYPE_HOOK = 10;
 
     //TOOLS
     public int dialogueIndex = 0;

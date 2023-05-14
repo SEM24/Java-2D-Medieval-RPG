@@ -15,27 +15,32 @@ public class Sound {
 
     public Sound() {
         //TODO make it automatic in future
-        soundURL[0] = getClass().getResource(resourcePath + "Main-Theme.wav");
-        soundURL[1] = getClass().getResource(resourcePath + "snd_pombark.wav");
-        soundURL[2] = getClass().getResource(resourcePath + "mus_sfx_a_grab.wav");
-        soundURL[3] = getClass().getResource(resourcePath + "mus_dununnn.wav");
-        soundURL[4] = getClass().getResource(resourcePath + "mus_dooropen.wav");
-        soundURL[5] = getClass().getResource(resourcePath + "mus_doorclose.wav");
-        soundURL[6] = getClass().getResource(resourcePath + "snd_power.wav");
-        soundURL[7] = getClass().getResource(resourcePath + "snd_victory.wav");
-        soundURL[8] = getClass().getResource(resourcePath + "hitmonster.wav");
-        soundURL[9] = getClass().getResource(resourcePath + "receivedamage.wav");
-        soundURL[10] = getClass().getResource(resourcePath + "sword-swipes.wav");
-        soundURL[11] = getClass().getResource(resourcePath + "level_up.wav");
-        soundURL[12] = getClass().getResource(resourcePath + "cursor.wav");
-        soundURL[13] = getClass().getResource(resourcePath + "cuttree.wav");
-        soundURL[14] = getClass().getResource(resourcePath + "game_over.wav");
-        soundURL[15] = getClass().getResource(resourcePath + "sleep.wav");
-        soundURL[16] = getClass().getResource(resourcePath + "parry.wav");
-        soundURL[17] = getClass().getResource(resourcePath + "blocked.wav");
-        soundURL[18] = getClass().getResource(resourcePath + "snd_text_2.wav");
-        soundURL[19] = getClass().getResource(resourcePath + "Merchant.wav");
-        soundURL[20] = getClass().getResource(resourcePath + "Dungeon.wav");
+        soundURL[0] = getResource("Main-Theme.wav");
+        soundURL[1] = getResource("snd_pombark.wav");
+        soundURL[2] = getResource("mus_sfx_a_grab.wav");
+        soundURL[3] = getResource("mus_dununnn.wav");
+        soundURL[4] = getResource("mus_dooropen.wav");
+        soundURL[5] = getResource("mus_doorclose.wav");
+        soundURL[6] = getResource("snd_power.wav");
+        soundURL[7] = getResource("snd_victory.wav");
+        soundURL[8] = getResource("hitmonster.wav");
+        soundURL[9] = getResource("receivedamage.wav");
+        soundURL[10] = getResource("sword-swipes.wav");
+        soundURL[11] = getResource("level_up.wav");
+        soundURL[12] = getResource("cursor.wav");
+        soundURL[13] = getResource("cuttree.wav");
+        soundURL[14] = getResource("game_over.wav");
+        soundURL[15] = getResource("sleep.wav");
+        soundURL[16] = getResource("parry.wav");
+        soundURL[17] = getResource("blocked.wav");
+        soundURL[18] = getResource("snd_text_2.wav");
+        soundURL[19] = getResource("Merchant.wav");
+        soundURL[20] = getResource("Dungeon.wav");
+        soundURL[21] = getResource("snd_switchpull_n.wav");
+    }
+
+    private URL getResource(String path) {
+        return getClass().getResource(resourcePath + path);
     }
 
     public void setFile(int i) {
