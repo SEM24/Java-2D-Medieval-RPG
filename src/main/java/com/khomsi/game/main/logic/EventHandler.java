@@ -80,7 +80,7 @@ public class EventHandler {
                     interact(1, 24, 15, "up")) {
                 changeLocation(2, 16, 39, GameManager.DUNGEON);
                 gameManager.playSE(4);
-            } else if (interact(2, 15, 39, "left")) {
+            } else if (interact(2, 15, 39, "any")) {
                 changeLocation(1, 25, 15, GameManager.INDOOR);
                 gameManager.playSE(5);
             }

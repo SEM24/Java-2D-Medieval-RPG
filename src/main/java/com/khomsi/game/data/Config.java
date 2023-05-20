@@ -1,4 +1,4 @@
-package main.java.com.khomsi.game.main.logic;
+package main.java.com.khomsi.game.data;
 
 import main.java.com.khomsi.game.main.GameManager;
 

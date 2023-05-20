@@ -7,7 +7,7 @@ import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.entity.Player;
 import main.java.com.khomsi.game.enviroment.EnvironmentManagement;
 import main.java.com.khomsi.game.main.logic.CheckCollision;
-import main.java.com.khomsi.game.main.logic.Config;
+import main.java.com.khomsi.game.data.Config;
 import main.java.com.khomsi.game.main.logic.EntityGenerator;
 import main.java.com.khomsi.game.main.logic.EventHandler;
 import main.java.com.khomsi.game.main.tools.*;

@@ -11,11 +11,11 @@ public class HookObject extends Entity {
         type = TYPE_HOOK;
         name = OBJ_NAME;
         down = setup("/objects/equipment/hook");
-        attackValue = 2;
+        attackValue = 1;
         attackArea.width = 30;
         attackArea.height = 30;
-        itemDescription = "[" + name + "]\n" + "Hook with\n" + attackValue + " attack.";
-        price = 13;
+        itemDescription = "[" + name + "]\n" + "You can break the walls \nwith it.";
+        price = 100;
         knockBackPower = 10;
         motion1Duration = 5;
         motion2Duration = 7;

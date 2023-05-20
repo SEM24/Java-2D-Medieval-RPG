@@ -2,6 +2,7 @@ package main.java.com.khomsi.game.entity;
 
 import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.main.tools.KeyHandler;
+import main.java.com.khomsi.game.objects.equipment.HookObject;
 import main.java.com.khomsi.game.objects.equipment.MetalShieldObject;
 import main.java.com.khomsi.game.objects.equipment.MetalSwordObject;
 import main.java.com.khomsi.game.objects.interact.KeyObject;
@@ -222,6 +223,26 @@ public class Player extends Entity {
             attackRight1 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_1", attackLRW, attackLRH);
             attackRight2 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_2", attackLRW, attackLRH);
             attackRight3 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_3", attackLRW, attackLRH);
+        }
+        if (currentWeapon.type == TYPE_HOOK) {
+            attackUp = setup(playerPath[playerSkin] + "/hook/player_up_attack", attackUpDownW, attackUpDownH);
+            attackUp1 = setup(playerPath[playerSkin] + "/hook/player_up_attack_1", attackUpDownW, attackUpDownH);
+            attackUp2 = setup(playerPath[playerSkin] + "/hook/player_up_attack_2", attackUpDownW, attackUpDownH);
+            attackUp3 = setup(playerPath[playerSkin] + "/hook/player_up_attack_3", attackUpDownW, attackUpDownH);
+
+            attackDown = setup(playerPath[playerSkin] + "/hook/player_down_attack", attackUpDownW, attackUpDownH);
+            attackDown1 = setup(playerPath[playerSkin] + "/hook/player_down_attack_1", attackUpDownW, attackUpDownH);
+            attackDown2 = setup(playerPath[playerSkin] + "/hook/player_down_attack_2", attackUpDownW, attackUpDownH);
+            attackDown3 = setup(playerPath[playerSkin] + "/hook/player_down_attack_3", attackUpDownW, attackUpDownH);
+
+            attackLeft = setup(playerPath[playerSkin] + "/hook/player_left_attack", attackLRW, attackLRH);
+            attackLeft1 = setup(playerPath[playerSkin] + "/hook/player_left_attack_1", attackLRW, attackLRH);
+            attackLeft2 = setup(playerPath[playerSkin] + "/hook/player_left_attack_2", attackLRW, attackLRH);
+            attackLeft3 = setup(playerPath[playerSkin] + "/hook/player_left_attack_3", attackLRW, attackLRH);
+            attackRight = setup(playerPath[playerSkin] + "/hook/player_right_attack", attackLRW, attackLRH);
+            attackRight1 = setup(playerPath[playerSkin] + "/hook/player_right_attack_1", attackLRW, attackLRH);
+            attackRight2 = setup(playerPath[playerSkin] + "/hook/player_right_attack_2", attackLRW, attackLRH);
+            attackRight3 = setup(playerPath[playerSkin] + "/hook/player_right_attack_3", attackLRW, attackLRH);
         }
     }
 
@@ -506,7 +527,7 @@ public class Player extends Entity {
         int itemIndex = gameManager.ui.getItemIndexOnSlot(gameManager.ui.playerSlotCol, gameManager.ui.playerSlotRow);
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
-            if (selectedItem.type == TYPE_SWORD || selectedItem.type == TYPE_AXE) {
+            if (selectedItem.type == TYPE_SWORD || selectedItem.type == TYPE_AXE || selectedItem.type == TYPE_HOOK) {
                 currentWeapon = selectedItem;
                 attack = getAttack();
                 getAttackImage();
