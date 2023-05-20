@@ -128,6 +128,7 @@ public class Entity {
     public ProjectTile projectTile;
     public Entity attacker;
     public String knockBackDirection;
+    public Entity linkedEntity;
 
     public Entity(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -184,15 +185,7 @@ public class Entity {
             entityAttack();
         } else {
             setAction();
-            checkCollision();
-            if (!collisionOn) {
-                switch (direction) {
-                    case "up" -> worldY -= speed;
-                    case "down" -> worldY += speed;
-                    case "left" -> worldX -= speed;
-                    case "right" -> worldX += speed;
-                }
-            }
+            changeDirection(direction);
             //TODO idk how to make special movement for each mob yet
             spriteMovement();
         }
@@ -627,6 +620,18 @@ public class Entity {
         }
     }
 
+    public void changeDirection(String direction) {
+        checkCollision();
+        if (!collisionOn) {
+            switch (direction) {
+                case "up" -> worldY -= speed;
+                case "down" -> worldY += speed;
+                case "left" -> worldX -= speed;
+                case "right" -> worldX += speed;
+            }
+        }
+    }
+
     public void setKnockBack(Entity target, Entity attacker, int knockBackPower) {
         this.attacker = attacker;
         target.knockBackDirection = attacker.direction;
@@ -791,6 +796,18 @@ public class Entity {
     public int getParticleMaxHp() {
         int maxHp = 0;
         return maxHp;
+    }
+
+    //    public void changeDirection() {
+//        switch (direction) {
+//            case "up" -> worldY -= speed;
+//            case "down" -> worldY += speed;
+//            case "left" -> worldX -= speed;
+//            case "right" -> worldX += speed;
+//        }
+//    }
+    public void moveObj(String direction) {
+
     }
 
     public void setAction() {

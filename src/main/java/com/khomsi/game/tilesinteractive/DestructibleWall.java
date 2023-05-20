@@ -2,8 +2,10 @@ package main.java.com.khomsi.game.tilesinteractive;
 
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
+import main.java.com.khomsi.game.objects.interact.CoinBObject;
 
 import java.awt.*;
+import java.util.Random;
 
 public class DestructibleWall extends InteractiveTile {
     public DestructibleWall(GameManager gameManager, int col, int row) {
@@ -51,5 +53,14 @@ public class DestructibleWall extends InteractiveTile {
     public int getParticleMaxHp() {
         int maxHp = 20;
         return maxHp;
+    }
+
+    @Override
+    public void checkDrop() {
+        int drop = new Random().nextInt(100) + 1;
+        //Set the 20% change of coin drop
+        if (drop <= 20) {
+            dropItem(new CoinBObject(gameManager));
+        }
     }
 }

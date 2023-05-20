@@ -2,12 +2,12 @@ package main.java.com.khomsi.game.main;
 
 import main.java.com.khomsi.game.GameApplication;
 import main.java.com.khomsi.game.ai.PathFinder;
+import main.java.com.khomsi.game.data.Config;
 import main.java.com.khomsi.game.data.SaveLoad;
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.entity.Player;
 import main.java.com.khomsi.game.enviroment.EnvironmentManagement;
 import main.java.com.khomsi.game.main.logic.CheckCollision;
-import main.java.com.khomsi.game.data.Config;
 import main.java.com.khomsi.game.main.logic.EntityGenerator;
 import main.java.com.khomsi.game.main.logic.EventHandler;
 import main.java.com.khomsi.game.main.tools.*;
@@ -67,9 +67,9 @@ public class GameManager extends JPanel implements Runnable {
     public Map map = new Map(this);
     //ENTITY AND OBJECTS
     //TODO extend the massive, when you'll have more objects
-    public Entity[][] object = new Entity[maxMap][20];
-    public Entity[][] npcList = new Entity[maxMap][10];
-    public Entity[][] mobs = new Entity[maxMap][10];
+    public Entity[][] object = new Entity[maxMap][30];
+    public Entity[][] npcList = new Entity[maxMap][20];
+    public Entity[][] mobs = new Entity[maxMap][20];
     List<Entity> entities = new ArrayList<>();
     public InteractiveTile[][] interactTile = new InteractiveTile[maxMap][50];
     public Entity[][] projectile = new Entity[maxMap][20];
@@ -264,13 +264,16 @@ public class GameManager extends JPanel implements Runnable {
         else {
             //Draw Tiles
             tileManager.draw(g2d);
+            for (Entity element : interactTile[currentMap]) {
+                if (element != null)
+                    element.draw(g2d);
+            }
             entities.add(player);
             //Add and render npc, obj, mobs, projectiles to draw list
             drawMethodArray(npcList);
             drawMethodArray(object);
             drawMethodArray(mobs);
             //Interactive tiles
-            drawMethodArray(interactTile);
             drawMethodArray(projectile);
             drawMethodList(particleList);
 
@@ -355,7 +358,6 @@ public class GameManager extends JPanel implements Runnable {
         }
     }
 
-    //FIXME full screen problem on current laptop, test on another one
     public void drawToScreen() {
         Graphics graphics = getGraphics();
         graphics.drawImage(tempScreen, 0, 0, screenWidthFull, screenHeightFull, null);
@@ -391,6 +393,7 @@ public class GameManager extends JPanel implements Runnable {
             if (nextArea == OUTSIDE) playMusic(0);
             if (nextArea == INDOOR) playMusic(19);
             if (nextArea == DUNGEON) playMusic(20);
+            placeObjects.npcOnMap2();
         }
         currentArea = nextArea;
         placeObjects.setMobs();

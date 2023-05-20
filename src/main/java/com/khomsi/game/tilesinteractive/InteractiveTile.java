@@ -6,11 +6,13 @@ import main.java.com.khomsi.game.main.GameManager;
 import java.awt.*;
 
 public class InteractiveTile extends Entity {
+    GameManager gameManager;
 
     public boolean destructible = false;
 
     public InteractiveTile(GameManager gameManager, int col, int row) {
         super(gameManager);
+        this.gameManager = gameManager;
     }
 
     public boolean isCorrectWeapon(Entity entity) {

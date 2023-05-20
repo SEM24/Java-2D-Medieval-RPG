@@ -2,8 +2,10 @@ package main.java.com.khomsi.game.tilesinteractive;
 
 import main.java.com.khomsi.game.entity.Entity;
 import main.java.com.khomsi.game.main.GameManager;
+import main.java.com.khomsi.game.objects.interact.CoinBObject;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Bush extends InteractiveTile {
     public Bush(GameManager gameManager, int col, int row) {
@@ -63,5 +65,8 @@ public class Bush extends InteractiveTile {
     public int getParticleMaxHp() {
         int maxHp = 20;
         return maxHp;
+    }
+    @Override
+    public void checkDrop() {
     }
 }

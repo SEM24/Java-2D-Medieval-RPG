@@ -2,7 +2,6 @@ package main.java.com.khomsi.game.entity;
 
 import main.java.com.khomsi.game.main.GameManager;
 import main.java.com.khomsi.game.main.tools.KeyHandler;
-import main.java.com.khomsi.game.objects.equipment.HookObject;
 import main.java.com.khomsi.game.objects.equipment.MetalShieldObject;
 import main.java.com.khomsi.game.objects.equipment.MetalSwordObject;
 import main.java.com.khomsi.game.objects.interact.KeyObject;
@@ -439,6 +438,7 @@ public class Player extends Entity {
                     gameManager.interactTile[gameManager.currentMap][index]);
 
             if (gameManager.interactTile[gameManager.currentMap][index].hp == 0) {
+                gameManager.interactTile[gameManager.currentMap][index].checkDrop();
                 gameManager.interactTile[gameManager.currentMap][index] =
                         gameManager.interactTile[gameManager.currentMap][index].getDestroyedForm();
             }
@@ -489,12 +489,13 @@ public class Player extends Entity {
 
 
     private void interactNpc(int npcIndex) {
-        if (gameManager.keyHandler.enterPressed) {
-            //if index not 999 - player touches the npc
-            if (npcIndex != playerIndex) {
+        //if index not 999 - player touches the npc
+        if (npcIndex != playerIndex) {
+            if (gameManager.keyHandler.enterPressed) {
                 attackCanceled = true;
                 gameManager.npcList[gameManager.currentMap][npcIndex].speak();
             }
+            gameManager.npcList[gameManager.currentMap][npcIndex].moveObj(direction);
         }
     }
 

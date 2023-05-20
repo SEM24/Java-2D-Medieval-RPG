@@ -4,6 +4,7 @@ import main.java.com.khomsi.game.entity.mobs.MobChestMimic;
 import main.java.com.khomsi.game.entity.mobs.MobOrc;
 import main.java.com.khomsi.game.entity.mobs.MobSlime;
 import main.java.com.khomsi.game.entity.mobs.MobSlimeBlue;
+import main.java.com.khomsi.game.entity.npc.object.NpcRock;
 import main.java.com.khomsi.game.entity.npc.regular.NpcWomanW;
 import main.java.com.khomsi.game.entity.npc.sellers.NpcSeller1;
 import main.java.com.khomsi.game.main.GameManager;
@@ -14,13 +15,11 @@ import main.java.com.khomsi.game.objects.interact.ChestObject;
 import main.java.com.khomsi.game.objects.interact.CoinBObject;
 import main.java.com.khomsi.game.objects.interact.KeyObject;
 import main.java.com.khomsi.game.objects.light.LanternObject;
-import main.java.com.khomsi.game.objects.outside.BedObject;
-import main.java.com.khomsi.game.objects.outside.DoorObject;
-import main.java.com.khomsi.game.objects.outside.StairsDownObject;
-import main.java.com.khomsi.game.objects.outside.TentObject;
+import main.java.com.khomsi.game.objects.outside.*;
 import main.java.com.khomsi.game.objects.spells.PotionObject;
 import main.java.com.khomsi.game.tilesinteractive.Bush;
 import main.java.com.khomsi.game.tilesinteractive.DestructibleWall;
+import main.java.com.khomsi.game.tilesinteractive.SwitchPress;
 
 public class PlaceObjects {
     GameManager gameManager;
@@ -125,6 +124,12 @@ public class PlaceObjects {
         gameManager.object[mapNum][index].setLoot(new PotionObject(gameManager));
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 41;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 29;
+        index++;
+
+        gameManager.object[mapNum][index] = new DungeonDoorClosedObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 29;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 19;
+
     }
 
     public void setInteractiveTiles() {
@@ -155,10 +160,6 @@ public class PlaceObjects {
         index++;
         gameManager.interactTile[mapNum][index] = new DestructibleWall(gameManager, 37, 35);
         index++;
-        gameManager.interactTile[mapNum][index] = new DestructibleWall(gameManager, 29, 20);
-        index++;
-        gameManager.interactTile[mapNum][index] = new DestructibleWall(gameManager, 30, 20);
-        index++;
         gameManager.interactTile[mapNum][index] = new DestructibleWall(gameManager, 35, 25);
         index++;
         gameManager.interactTile[mapNum][index] = new DestructibleWall(gameManager, 24, 26);
@@ -171,11 +172,19 @@ public class PlaceObjects {
         index++;
         gameManager.interactTile[mapNum][index] = new DestructibleWall(gameManager, 12, 19);
         index++;
+
+        gameManager.interactTile[mapNum][index] = new SwitchPress(gameManager, 39, 39);
+        index++;
+        gameManager.interactTile[mapNum][index] = new SwitchPress(gameManager, 40, 25);
+        index++;
+        gameManager.interactTile[mapNum][index] = new SwitchPress(gameManager, 23, 26);
+        index++;
     }
 
     public void setNpc() {
         npcOnMap0();
         npcOnMap1();
+        npcOnMap2();
     }
 
     private void npcOnMap0() {
@@ -197,6 +206,23 @@ public class PlaceObjects {
         gameManager.npcList[mapNum][index] = new NpcSeller1(gameManager);
         gameManager.npcList[mapNum][index].worldX = GameManager.TILE_SIZE * 20;
         gameManager.npcList[mapNum][index].worldY = GameManager.TILE_SIZE * 16;
+        index++;
+    }
+
+    public void npcOnMap2() {
+        int index = 0;
+        int mapNum = 2;
+        gameManager.npcList[mapNum][index] = new NpcRock(gameManager);
+        gameManager.npcList[mapNum][index].worldX = GameManager.TILE_SIZE * 35;
+        gameManager.npcList[mapNum][index].worldY = GameManager.TILE_SIZE * 38;
+        index++;
+        gameManager.npcList[mapNum][index] = new NpcRock(gameManager);
+        gameManager.npcList[mapNum][index].worldX = GameManager.TILE_SIZE * 33;
+        gameManager.npcList[mapNum][index].worldY = GameManager.TILE_SIZE * 26;
+        index++;
+        gameManager.npcList[mapNum][index] = new NpcRock(gameManager);
+        gameManager.npcList[mapNum][index].worldX = GameManager.TILE_SIZE * 28;
+        gameManager.npcList[mapNum][index].worldY = GameManager.TILE_SIZE * 23;
         index++;
     }
 
