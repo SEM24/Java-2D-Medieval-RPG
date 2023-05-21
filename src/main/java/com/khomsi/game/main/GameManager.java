@@ -99,6 +99,7 @@ public class GameManager extends JPanel implements Runnable {
     public static final int OUTSIDE = 11;
     public static final int INDOOR = 12;
     public static final int DUNGEON = 13;
+    public static final int BOSS_DUNGEON = 13;
     //Until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
@@ -128,6 +129,7 @@ public class GameManager extends JPanel implements Runnable {
     }
 
     public void resetGame(boolean restart) {
+        currentArea = OUTSIDE;
         player.setDefaultPosition();
         player.restoreStatus();
         player.resetCounters();
@@ -393,6 +395,8 @@ public class GameManager extends JPanel implements Runnable {
             if (nextArea == OUTSIDE) playMusic(0);
             if (nextArea == INDOOR) playMusic(19);
             if (nextArea == DUNGEON) playMusic(20);
+            //FIXME change the music
+            if (nextArea == BOSS_DUNGEON) playMusic(20);
             placeObjects.npcOnMap2();
         }
         currentArea = nextArea;

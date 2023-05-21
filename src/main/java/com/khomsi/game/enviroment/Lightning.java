@@ -47,9 +47,9 @@ public class Lightning {
             color[6] = new Color(0, 0, 0.1F, 0.82F);
             color[7] = new Color(0, 0, 0.1F, 0.87F);
             color[8] = new Color(0, 0, 0.1F, 0.91F);
-            color[9] = new Color(0, 0, 0.1F, 0.94F);
-            color[10] = new Color(0, 0, 0.1F, 0.96F);
-            color[11] = new Color(0, 0, 0.1F, 0.98F);
+            color[9] = new Color(0, 0, 0.1F, 0.92F);
+            color[10] = new Color(0, 0, 0.1F, 0.93F);
+            color[11] = new Color(0, 0, 0.1F, 0.94F);
 
             fraction[0] = 0F;
             fraction[1] = 0.4F;
@@ -122,7 +122,8 @@ public class Lightning {
         if (gameManager.currentArea == GameManager.OUTSIDE) {
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlfa));
         }
-        if (gameManager.currentArea == GameManager.OUTSIDE || gameManager.currentArea == GameManager.DUNGEON) {
+        if (gameManager.currentArea == GameManager.OUTSIDE || gameManager.currentArea == GameManager.DUNGEON
+                || gameManager.currentArea == GameManager.BOSS_DUNGEON) {
             g2d.drawImage(darknessFilter, 0, 0, null);
         }
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));

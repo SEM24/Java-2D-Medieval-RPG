@@ -72,7 +72,7 @@ public class SaveLoad {
     /*
      * Load method to get data info about player
      */
-    public void load() {
+    public boolean load() {
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("save.dat"))) {
             //Read object from file
             DataInitializer initializer = (DataInitializer) is.readObject();
@@ -105,28 +105,30 @@ public class SaveLoad {
             gameManager.player.getAttackImage();
 
             //Objects on map
-            for (int mapnum = 0; mapnum < gameManager.maxMap; mapnum++) {
+            for (int mapNum = 0; mapNum < gameManager.maxMap; mapNum++) {
                 for (int i = 0; i < gameManager.object[1].length; i++) {
-                    if (initializer.mapObjectNames[mapnum][i].equals("NA")) {
-                        gameManager.object[mapnum][i] = null;
+                    if (initializer.mapObjectNames[mapNum][i].equals("NA")) {
+                        gameManager.object[mapNum][i] = null;
                     } else {
-                        gameManager.object[mapnum][i]
-                                = gameManager.entityGenerator.getObject(initializer.mapObjectNames[mapnum][i]);
-                        gameManager.object[mapnum][i].worldX = initializer.mapObjectWorldX[mapnum][i];
-                        gameManager.object[mapnum][i].worldY = initializer.mapObjectWorldY[mapnum][i];
-                        if (initializer.mapObjectLootNames[mapnum][i] != null) {
-                            gameManager.object[mapnum][i].loot
-                                    = gameManager.entityGenerator.getObject(initializer.mapObjectLootNames[mapnum][i]);
+                        gameManager.object[mapNum][i]
+                                = gameManager.entityGenerator.getObject(initializer.mapObjectNames[mapNum][i]);
+                        gameManager.object[mapNum][i].worldX = initializer.mapObjectWorldX[mapNum][i];
+                        gameManager.object[mapNum][i].worldY = initializer.mapObjectWorldY[mapNum][i];
+                        if (initializer.mapObjectLootNames[mapNum][i] != null) {
+                            gameManager.object[mapNum][i].setLoot(
+                                    gameManager.entityGenerator.getObject(initializer.mapObjectLootNames[mapNum][i]));
                         }
-                        gameManager.object[mapnum][i].opened = initializer.mapObjectOpened[mapnum][i];
-                        if (gameManager.object[mapnum][i].opened) {
-                            gameManager.object[mapnum][i].down = gameManager.object[mapnum][i].image2;
+                        gameManager.object[mapNum][i].opened = initializer.mapObjectOpened[mapNum][i];
+                        if (gameManager.object[mapNum][i].opened) {
+                            gameManager.object[mapNum][i].down = gameManager.object[mapNum][i].image2;
                         }
                     }
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Exception " + e.getMessage() + " in " + getClass().getSimpleName());
+            return false;
         }
+        return true;
     }
 }

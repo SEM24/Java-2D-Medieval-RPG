@@ -1,9 +1,6 @@
 package main.java.com.khomsi.game.main.tools;
 
-import main.java.com.khomsi.game.entity.mobs.MobChestMimic;
-import main.java.com.khomsi.game.entity.mobs.MobOrc;
-import main.java.com.khomsi.game.entity.mobs.MobSlime;
-import main.java.com.khomsi.game.entity.mobs.MobSlimeBlue;
+import main.java.com.khomsi.game.entity.mobs.*;
 import main.java.com.khomsi.game.entity.npc.object.NpcRock;
 import main.java.com.khomsi.game.entity.npc.regular.NpcWomanW;
 import main.java.com.khomsi.game.entity.npc.sellers.NpcSeller1;
@@ -229,6 +226,7 @@ public class PlaceObjects {
     public void setMobs() {
         mobsOnMap0();
         mobsOnMap1();
+        mobsOnMap2();
     }
 
     private void mobsOnMap0() {
@@ -266,11 +264,26 @@ public class PlaceObjects {
     }
 
     private void mobsOnMap1() {
-        int mapNum;
-        //Set mobs on different map
-        mapNum = 1;
+        int index = 0;
+        int mapNum = 1;
 //        gameManager.mobs[mapNum][index] = new MobSlime(gameManager);
 //        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 28;
 //        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 14;
+    }
+    private void mobsOnMap2() {
+        int index = 0;
+        int mapNum = 2;
+        //Set mobs on different map
+        gameManager.mobs[mapNum][index] = new MobBat(gameManager);
+        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 36;
+        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 39;
+        index++;
+        gameManager.mobs[mapNum][index] = new MobBat(gameManager);
+        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 30;
+        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 25;
+        index++;
+        gameManager.mobs[mapNum][index] = new MobBat(gameManager);
+        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 9;
+        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 26;
     }
 }
