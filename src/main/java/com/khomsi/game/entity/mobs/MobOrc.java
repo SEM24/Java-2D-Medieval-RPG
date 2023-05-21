@@ -102,7 +102,7 @@ public class MobOrc extends Entity {
             //Check if it starts chasing
             checkStartChasing(gameManager.player, 5, 100);
             //Get random direction
-            getRandomDirection();
+            getRandomDirection(120);
         }
         //Check if attacking
         if (!attacking) {

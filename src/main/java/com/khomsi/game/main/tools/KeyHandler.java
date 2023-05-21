@@ -243,9 +243,11 @@ public class KeyHandler implements KeyListener {
                 switch (gameManager.ui.commandNum) {
                     case 0 -> gameManager.ui.titleScreenState = 1;
                     case 1 -> {
-                        gameManager.saveLoad.load();
-                        gameManager.gameState = GameManager.PLAY_STATE;
-                        gameManager.playMusic(0);
+                        if (gameManager.saveLoad.load()) {
+                            gameManager.saveLoad.load();
+                            gameManager.gameState = GameManager.PLAY_STATE;
+                            gameManager.playMusic(0);
+                        } else gameManager.ui.titleScreenState = 1;
                     }
                     case 2 -> System.exit(0);
                 }
@@ -259,7 +261,6 @@ public class KeyHandler implements KeyListener {
                 gameManager.ui.commandNum++;
                 if (gameManager.ui.commandNum > 2) gameManager.ui.commandNum = 0;
             }
-            if (code == KeyEvent.VK_C) gameManager.gameState = GameManager.CHARACTER_STATE;
 
             if (code == KeyEvent.VK_ENTER) {
                 //Set character's stats and skin, depends on chose

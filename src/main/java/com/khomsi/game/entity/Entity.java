@@ -675,9 +675,9 @@ public class Entity {
         }
     }
 
-    public void getRandomDirection() {
+    public void getRandomDirection(int interval) {
         lockCounter++;
-        if (lockCounter == 120) {
+        if (lockCounter == interval) {
             Random random = new Random();
             int rand = random.nextInt(100) + 1;
             if (rand <= 30) direction = "up";

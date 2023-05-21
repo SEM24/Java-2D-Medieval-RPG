@@ -73,7 +73,7 @@ public class MobSlime extends Entity {
             //Check if it starts chasing
             checkStartChasing(gameManager.player, 5, 100);
             //Get random direction
-            getRandomDirection();
+            getRandomDirection(120);
         }
     }
 

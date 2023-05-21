@@ -8,8 +8,9 @@ import main.java.com.khomsi.game.tilesinteractive.InteractiveTile;
 import main.java.com.khomsi.game.tilesinteractive.SwitchPress;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class NpcRock extends Entity {
     public static final String NPC_NAME = "Rock";
@@ -88,24 +89,16 @@ public class NpcRock extends Entity {
     }
 
     public void detectPlate() {
-        List<InteractiveTile> plates = new ArrayList<>();
-        List<Entity> rocks = new ArrayList<>();
+        int currentMap = gameManager.currentMap;
 
-        //Create plates
-        for (int i = 0; i < gameManager.interactTile[1].length; i++) {
-            if (gameManager.interactTile[gameManager.currentMap][i] != null &&
-                    gameManager.interactTile[gameManager.currentMap][i] instanceof SwitchPress) {
-                plates.add(gameManager.interactTile[gameManager.currentMap][i]);
-            }
-        }
-        //Create rocks
-        for (int i = 0; i < gameManager.npcList[1].length; i++) {
-            if (gameManager.npcList[gameManager.currentMap][i] != null &&
-                    gameManager.npcList[gameManager.currentMap][i] instanceof NpcRock) {
-                rocks.add(gameManager.npcList[gameManager.currentMap][i]);
-            }
-        }
-        int count = 0;
+        List<InteractiveTile> plates = Arrays.stream(gameManager.interactTile[currentMap])
+                .filter(SwitchPress.class::isInstance)
+                .toList();
+
+        List<Entity> rocks = Arrays.stream(gameManager.npcList[currentMap])
+                .filter(NpcRock.class::isInstance)
+                .toList();
+
         //Scan the plates
         for (InteractiveTile plate : plates) {
             int xDistance = Math.abs(worldX - plate.worldX);
@@ -121,25 +114,30 @@ public class NpcRock extends Entity {
                     linkedEntity = null;
             }
         }
-        //Scan the rocks
-        for (Entity rock : rocks) {
-            //Count the rocks on plates
-            if (rock.linkedEntity != null) count++;
-        }
+        // Count the rocks on plates
+        long count = rocks.stream()
+                .filter(rock -> rock.linkedEntity != null)
+                .count();
+
         //If all the rocks are on the plates, the door opens
         if (count == rocks.size()) {
-            for (int i = 0; i < gameManager.object[1].length; i++) {
-                if (gameManager.object[gameManager.currentMap][i] != null &&
-                        gameManager.object[gameManager.currentMap][i] instanceof DungeonDoorClosedObject) {
-                    gameManager.object[gameManager.currentMap][i] = null;
-                    gameManager.object[gameManager.currentMap][i] = new DungeonDoorOpenedObject(gameManager);
-                    gameManager.object[gameManager.currentMap][i].worldX = GameManager.TILE_SIZE * 29;
-                    gameManager.object[gameManager.currentMap][i].worldY = GameManager.TILE_SIZE * 19;
-                    i++;
-                    //TODO change SE to louder one
-                    gameManager.playSE(4);
-                }
-            }
+            Arrays.stream(gameManager.object[gameManager.currentMap])
+                    .filter(DungeonDoorClosedObject.class::isInstance)
+                    .findFirst()
+                    .ifPresent(obj -> {
+                        int index = IntStream.range(0, gameManager.object[gameManager.currentMap].length)
+                                .filter(i -> gameManager.object[gameManager.currentMap][i] == obj)
+                                .findFirst()
+                                .orElse(-1);
+
+                        if (index != -1) {
+                            gameManager.object[gameManager.currentMap][index] = new DungeonDoorOpenedObject(gameManager);
+                            gameManager.object[gameManager.currentMap][index].worldX = GameManager.TILE_SIZE * 29;
+                            gameManager.object[gameManager.currentMap][index].worldY = GameManager.TILE_SIZE * 19;
+                            // TODO: Change SE to louder one
+                            gameManager.playSE(4);
+                        }
+                    });
         }
     }
 }
