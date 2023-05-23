@@ -327,7 +327,7 @@ public class Entity {
                         if (spriteNum == 3) image = up3;
                     }
                     if (attacking) {
-                        tempScreenY = screenY - GameManager.TILE_SIZE;
+                        tempScreenY = screenY - up.getHeight();
                         if (spriteNum == 0) image = attackUp;
                         if (spriteNum == 1) image = attackUp1;
                         if (spriteNum == 2) image = attackUp2;
@@ -356,7 +356,7 @@ public class Entity {
                         if (spriteNum == 3) image = left3;
                     }
                     if (attacking) {
-                        tempScreenX = screenX - GameManager.TILE_SIZE;
+                        tempScreenX = screenX - left.getWidth();
                         if (spriteNum == 0) image = attackLeft;
                         if (spriteNum == 1) image = attackLeft1;
                         if (spriteNum == 2) image = attackLeft2;
@@ -593,19 +593,19 @@ public class Entity {
         int yDis = getYDistance(gameManager.player);
         switch (direction) {
             case "up" -> {
-                if (gameManager.player.worldY < worldY && yDis < straight && xDis < horizontal)
+                if (gameManager.player.getCenterY() < getCenterY() && yDis < straight && xDis < horizontal)
                     targetInRange = true;
             }
             case "down" -> {
-                if (gameManager.player.worldY > worldY && yDis < straight && xDis < horizontal)
+                if (gameManager.player.getCenterY() > getCenterY() && yDis < straight && xDis < horizontal)
                     targetInRange = true;
             }
             case "left" -> {
-                if (gameManager.player.worldX < worldX && xDis < straight && yDis < horizontal)
+                if (gameManager.player.getCenterX() < getCenterX() && xDis < straight && yDis < horizontal)
                     targetInRange = true;
             }
             case "right" -> {
-                if (gameManager.player.worldX > worldX && xDis < straight && yDis < horizontal)
+                if (gameManager.player.getCenterX() > getCenterX() && xDis < straight && yDis < horizontal)
                     targetInRange = true;
             }
         }
@@ -730,6 +730,14 @@ public class Entity {
         offBalanceCounter = 0;
     }
 
+    public int getCenterX() {
+        return worldX + left.getWidth() / 2;
+    }
+
+    public int getCenterY() {
+        return worldY + up.getHeight() / 2;
+    }
+
     public int getLeftX() {
         return worldX + solidArea.x;
     }
@@ -755,11 +763,11 @@ public class Entity {
     }
 
     public int getXDistance(Entity target) {
-        return Math.abs(worldX - target.worldX);
+        return Math.abs(getCenterX() - target.getCenterX());
     }
 
     public int getYDistance(Entity target) {
-        return Math.abs(worldY - target.worldY);
+        return Math.abs(getCenterY() - target.getCenterY());
     }
 
     public int getTileDistance(Entity target) {

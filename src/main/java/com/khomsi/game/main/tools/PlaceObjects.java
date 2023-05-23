@@ -227,6 +227,7 @@ public class PlaceObjects {
         mobsOnMap0();
         mobsOnMap1();
         mobsOnMap2();
+        mobsOnMap3();
     }
 
     private void mobsOnMap0() {
@@ -285,5 +286,14 @@ public class PlaceObjects {
         gameManager.mobs[mapNum][index] = new MobBat(gameManager);
         gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 9;
         gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 26;
+    }
+    private void mobsOnMap3() {
+        int index = 0;
+        int mapNum = 3;
+        //Set mobs on different map
+        gameManager.mobs[mapNum][index] = new MobDungeonBoss(gameManager);
+        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 23;
+        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 24;
+        index++;
     }
 }
