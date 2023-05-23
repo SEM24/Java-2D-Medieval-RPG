@@ -141,6 +141,7 @@ public class KeyHandler implements KeyListener {
             if (gameManager.ui.commandNum == 0) {
                 gameManager.gameState = GameManager.PLAY_STATE;
                 gameManager.resetGame(false);
+                //fixme check the se
                 gameManager.playMusic(0);
             } else if (gameManager.ui.commandNum == 1) {
                 gameManager.ui.titleScreenState = 0;

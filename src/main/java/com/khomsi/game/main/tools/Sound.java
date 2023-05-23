@@ -48,13 +48,22 @@ public class Sound {
             AudioInputStream stream = AudioSystem.getAudioInputStream(soundURL[i]);
             clip = AudioSystem.getClip();
             clip.open(stream);
-            fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            checkVolume();
+
+            // Check if the control is supported before retrieving it
+            if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                checkVolume();
+            } else {
+                System.err.println("Master Gain control is not supported.");
+                // Play the sound without applying volume adjustment
+                clip.start(); // Start playing the sound
+            }
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             System.err.println("Error in method setFile in class " + getClass().getSimpleName());
             e.printStackTrace();
         }
     }
+
 
     public void play() {
         clip.start();

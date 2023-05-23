@@ -788,10 +788,11 @@ public class UI {
         if (npc.dialogues[npc.dialogueSet][npc.dialogueIndex] != null) {
             char[] characters = npc.dialogues[npc.dialogueSet][npc.dialogueIndex].toCharArray();
             if (charIndex < characters.length) {
-                gameManager.playSE(18);
+                //FIXME check why se crushes the game, while talking with seller
                 String s = String.valueOf(characters[charIndex]);
                 combinedText = combinedText + s;
                 currentDialog = combinedText;
+                gameManager.playSE(18);
                 charIndex++;
             }
             if (gameManager.keyHandler.enterPressed) {

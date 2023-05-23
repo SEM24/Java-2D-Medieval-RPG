@@ -389,15 +389,18 @@ public class GameManager extends JPanel implements Runnable {
         se.play();
     }
 
+    //FIXME check the method
     public void changeArea() {
         if (nextArea != currentArea) {
             stopMusic();
-            if (nextArea == OUTSIDE) playMusic(0);
-            if (nextArea == INDOOR) playMusic(19);
-            if (nextArea == DUNGEON) playMusic(20);
-            //FIXME change the music
-            if (nextArea == BOSS_DUNGEON) playMusic(20);
-            placeObjects.npcOnMap2();
+            if (nextArea == OUTSIDE)
+                playMusic(0);
+            if (nextArea == INDOOR)
+                playMusic(19);
+            if (nextArea == DUNGEON || nextArea == BOSS_DUNGEON) {
+                playMusic(20);
+                placeObjects.npcOnMap2();
+            }
         }
         currentArea = nextArea;
         placeObjects.setMobs();
