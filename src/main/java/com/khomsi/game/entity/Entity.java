@@ -93,6 +93,7 @@ public class Entity {
     public int price;
     public int knockBackPower = 0;
     public boolean stackable = false;
+    public boolean inRage = false;
     public int amount = 1;
     public int lightRadius;
     public String itemDescription = "";
@@ -230,6 +231,23 @@ public class Entity {
         }
     }
 
+    public void moveTowardPlayer(int interval) {
+        lockCounter++;
+        Player player = gameManager.player;
+        if (lockCounter > interval) {
+            if (getXDistance(player) > getYDistance(player)) {
+                //Player is on the left side
+                if (player.getCenterX() < getCenterX()) {
+                    direction = "left";
+                } else direction = "right";
+            } else if (getXDistance(player) < getYDistance(player)) {
+                if (player.getCenterY() < getCenterY()) {
+                    direction = "up";
+                } else direction = "down";
+            }
+            lockCounter = 0;
+        }
+    }
 
     public void damagePlayer(int attack) {
         //Check if player can receive the dmg
@@ -305,14 +323,19 @@ public class Entity {
     }
 
     public void draw(Graphics2D graphics2D) {
+        /*
+         @multiplier  increase the draw distance of entity to avoid the optimization
+         (when object disappear earlier, than it moved from our screen)
+        */
+        int multiplier = 5;
         //actual coords to draw the stuff on game screen
         int screenX = worldX - gameManager.player.worldX + gameManager.player.screenX;
         int screenY = worldY - gameManager.player.worldY + gameManager.player.screenY;
         BufferedImage image = null;
 
-        if (worldX + GameManager.TILE_SIZE > gameManager.player.worldX - gameManager.player.screenX &&
+        if (worldX + GameManager.TILE_SIZE * multiplier > gameManager.player.worldX - gameManager.player.screenX &&
                 worldX - GameManager.TILE_SIZE < gameManager.player.worldX + gameManager.player.screenX &&
-                worldY + GameManager.TILE_SIZE > gameManager.player.worldY - gameManager.player.screenY &&
+                worldY + GameManager.TILE_SIZE * multiplier > gameManager.player.worldY - gameManager.player.screenY &&
                 worldY - GameManager.TILE_SIZE < gameManager.player.worldY + gameManager.player.screenY) {
             int tempScreenX = screenX;
             int tempScreenY = screenY;
@@ -677,7 +700,7 @@ public class Entity {
 
     public void getRandomDirection(int interval) {
         lockCounter++;
-        if (lockCounter == interval) {
+        if (lockCounter > interval) {
             Random random = new Random();
             int rand = random.nextInt(100) + 1;
             if (rand <= 30) direction = "up";

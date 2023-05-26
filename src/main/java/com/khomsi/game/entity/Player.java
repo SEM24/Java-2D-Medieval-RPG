@@ -62,7 +62,7 @@ public class Player extends Entity {
         //TODO basic var for arrows, future realisation
 //        ammo = 10;
         //more strength = more given damage
-        strength = 1;
+        strength = 5;
         //more agility = less received damage
         agility = 1;
         xp = 0;
@@ -406,14 +406,16 @@ public class Player extends Entity {
         if (mana > maxMana) {
             mana = maxMana;
         }
-        if (hp <= 0) {
-            gameManager.gameState = GameManager.GAME_OVER_STATE;
-            //To prevent pressing immediate retry, while you was pressing enter(attack)
-            gameManager.ui.commandNum = -1;
-            gameManager.stopMusic();
-            //TODO add another music while the player lost the game
-            //gameManager.playMusic(index);
-            gameManager.playSE(14);
+        if (!keyHandler.godMode) {
+            if (hp <= 0) {
+                gameManager.gameState = GameManager.GAME_OVER_STATE;
+                //To prevent pressing immediate retry, while you was pressing enter(attack)
+                gameManager.ui.commandNum = -1;
+                gameManager.stopMusic();
+                //TODO add another music while the player lost the game
+                //gameManager.playMusic(index);
+                gameManager.playSE(14);
+            }
         }
     }
 
@@ -516,7 +518,8 @@ public class Player extends Entity {
 
             setDialogue();
             startDialogue(this, 0);
-            gameManager.pauseMusic(5);
+            //FIXME fix the pause method
+//            gameManager.pauseMusic(5);
         }
     }
 

@@ -11,6 +11,7 @@ public class KeyHandler implements KeyListener {
             rightPressed, enterPressed, shootKeyPressed, spacePressed;
     //Debug
     public boolean debugMode = false;
+    public boolean godMode = false;
 
     public KeyHandler(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -221,8 +222,10 @@ public class KeyHandler implements KeyListener {
             gameManager.player.speed += 1;
         }
         //Debug menu
+        //TODO disable on production
         if (code == KeyEvent.VK_F9) debugMode = !debugMode;
-        if (code == KeyEvent.VK_F8) {
+        if (code == KeyEvent.VK_F8) godMode = !godMode;
+        if (code == KeyEvent.VK_F7) {
             switch (gameManager.currentMap) {
                 case 0 -> gameManager.tileManager.loadMap("/maps/world01.txt", 0);
                 case 1 -> gameManager.tileManager.loadMap("/maps/interior01.txt", 1);
@@ -276,7 +279,7 @@ public class KeyHandler implements KeyListener {
 
 
     private void characterState(int code) {
-        if (code == KeyEvent.VK_C) gameManager.gameState = GameManager.PLAY_STATE;
+        if (code == KeyEvent.VK_C || code == KeyEvent.VK_ESCAPE) gameManager.gameState = GameManager.PLAY_STATE;
         if (code == KeyEvent.VK_ENTER) {
             gameManager.player.selectItem();
         }

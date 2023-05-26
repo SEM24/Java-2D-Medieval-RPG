@@ -320,7 +320,7 @@ public class GameManager extends JPanel implements Runnable {
             graphics2D.setFont(new Font("Arial", Font.PLAIN, 20));
             graphics2D.setColor(Color.WHITE);
             int x = 10;
-            int y = 410;
+            int y = 390;
             int lineHeight = 20;
             graphics2D.drawString("World_X: " + player.worldX, x, y);
             y += lineHeight;
@@ -339,6 +339,8 @@ public class GameManager extends JPanel implements Runnable {
             graphics2D.drawString("Press Ctrl+F9 after ed map", x, y);
             y += lineHeight;
             graphics2D.drawString("Press F8 to reload tiles", x, y);
+            y += lineHeight;
+            graphics2D.drawString("God mode:" + keyHandler.godMode, x, y);
             //Show player bounds
             graphics2D.setColor(Color.RED);
             graphics2D.setStroke(new BasicStroke(2));
@@ -379,6 +381,7 @@ public class GameManager extends JPanel implements Runnable {
 
     public void pauseMusic(int time) {
         stopMusic();
+        //FIXME need to pass the num of music, depending on location. Probably create enum?
         Timer timer = new Timer(time * 1000, arg0 -> playMusic(0));
         timer.setRepeats(false); // Only execute once
         timer.start(); // Go go go!
