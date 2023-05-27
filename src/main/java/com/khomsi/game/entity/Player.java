@@ -62,7 +62,7 @@ public class Player extends Entity {
         //TODO basic var for arrows, future realisation
 //        ammo = 10;
         //more strength = more given damage
-        strength = 5;
+        strength = 3;
         //more agility = less received damage
         agility = 1;
         xp = 0;

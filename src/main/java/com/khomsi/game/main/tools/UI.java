@@ -73,6 +73,7 @@ public class UI {
         //Play state
         if (gameManager.gameState == GameManager.PLAY_STATE) {
             drawPlayerHp();
+            drawMobHp();
             drawMessage();
         }
         //Pause state
@@ -128,6 +129,49 @@ public class UI {
                 gameManager.enManagement.lightning.dayCounter = 0;
                 gameManager.gameState = GameManager.PLAY_STATE;
                 gameManager.player.getImage();
+            }
+        }
+    }
+
+    private void drawMobHp() {
+        for (int i = 0; i < gameManager.mobs[1].length; i++) {
+            Entity mob = gameManager.mobs[gameManager.currentMap][i];
+            if (mob != null && mob.inCamera()) {
+                //Monster Hp bar
+                if (mob.hpBarOn && !mob.isBoss) {
+                    //Get the length of hp bar, if hp - 4, then the scale is 12 pixels (4 times)
+                    double oneScale = (double) GameManager.TILE_SIZE / mob.maxHp;
+                    double hpBarValue = oneScale * mob.hp;
+
+                    graphics2D.setColor(new Color(35, 35, 35));
+                    graphics2D.fillRect(mob.getScreenX() - 1, mob.getScreenY() - 16,
+                            GameManager.TILE_SIZE + 2, 12);
+
+                    graphics2D.setColor(new Color(255, 0, 30));
+                    graphics2D.fillRect(mob.getScreenX(), mob.getScreenY() - 15, (int) hpBarValue, 10);
+                    mob.hpBarCounter++;
+                    //After 10 sec bar hides
+                    if (mob.hpBarCounter > 600) {
+                        mob.hpBarCounter = 0;
+                        mob.hpBarOn = false;
+                    }
+                } else if (mob.isBoss) {
+                    //Get the length of hp bar, if hp - 4, then the scale is 12 pixels (4 times)
+                    double oneScale = (double) GameManager.TILE_SIZE * 8 / mob.maxHp;
+                    double hpBarValue = oneScale * mob.hp;
+                    int x = GameManager.SCREEN_WIDTH / 2 - GameManager.TILE_SIZE * 4;
+                    int y = GameManager.TILE_SIZE * 10;
+
+                    graphics2D.setColor(new Color(35, 35, 35));
+                    graphics2D.fillRect(x - 1, y - 1,
+                            GameManager.TILE_SIZE * 8 + 2, 22);
+
+                    graphics2D.setColor(new Color(255, 0, 30));
+                    graphics2D.fillRect(x, y, (int) hpBarValue, 20);
+                    graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 24F));
+                    graphics2D.setColor(Color.WHITE);
+                    graphics2D.drawString(mob.name, x + 4, y - 10);
+                }
             }
         }
     }

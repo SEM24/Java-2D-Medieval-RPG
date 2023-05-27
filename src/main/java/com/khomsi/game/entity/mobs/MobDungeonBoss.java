@@ -24,6 +24,7 @@ public class MobDungeonBoss extends Entity {
         type = TYPE_MOB;
         defaultSpeed = 1;
         speed = defaultSpeed;
+        isBoss = true;
         //4 = 2 hearts
         maxHp = 50;
         hp = maxHp;

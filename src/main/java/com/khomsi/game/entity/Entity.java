@@ -35,7 +35,7 @@ public class Entity {
     public int spriteNum = 0;
     public int invincibleCounter = 0;
     int dieCounter = 0;
-    int hpBarCounter = 0;
+    public int hpBarCounter = 0;
     public int shootAvailableCounter = 0;
 
     int knockBackCounter = 0;
@@ -50,7 +50,7 @@ public class Entity {
     public boolean alive = true;
     public boolean die = false;
     public boolean fallIntoPit = false;
-    boolean hpBarOn = false;
+    public boolean hpBarOn = false;
     public boolean onPath = false;
 
     public boolean knockBack = false;
@@ -94,6 +94,7 @@ public class Entity {
     public int knockBackPower = 0;
     public boolean stackable = false;
     public boolean inRage = false;
+    public boolean isBoss;
     public int amount = 1;
     public int lightRadius;
     public String itemDescription = "";
@@ -322,21 +323,25 @@ public class Entity {
         spriteMovement(13);
     }
 
+    public boolean inCamera() {
+        int multiplier = 5;
+        return worldX + GameManager.TILE_SIZE * multiplier > gameManager.player.worldX - gameManager.player.screenX &&
+                worldX - GameManager.TILE_SIZE < gameManager.player.worldX + gameManager.player.screenX &&
+                worldY + GameManager.TILE_SIZE * multiplier > gameManager.player.worldY - gameManager.player.screenY &&
+                worldY - GameManager.TILE_SIZE < gameManager.player.worldY + gameManager.player.screenY;
+    }
+
     public void draw(Graphics2D graphics2D) {
         /*
          @multiplier  increase the draw distance of entity to avoid the optimization
          (when object disappear earlier, than it moved from our screen)
         */
-        int multiplier = 5;
         //actual coords to draw the stuff on game screen
-        int screenX = worldX - gameManager.player.worldX + gameManager.player.screenX;
-        int screenY = worldY - gameManager.player.worldY + gameManager.player.screenY;
+        int screenX = getScreenX();
+        int screenY = getScreenY();
         BufferedImage image = null;
 
-        if (worldX + GameManager.TILE_SIZE * multiplier > gameManager.player.worldX - gameManager.player.screenX &&
-                worldX - GameManager.TILE_SIZE < gameManager.player.worldX + gameManager.player.screenX &&
-                worldY + GameManager.TILE_SIZE * multiplier > gameManager.player.worldY - gameManager.player.screenY &&
-                worldY - GameManager.TILE_SIZE < gameManager.player.worldY + gameManager.player.screenY) {
+        if (inCamera()) {
             int tempScreenX = screenX;
             int tempScreenY = screenY;
 
@@ -401,24 +406,7 @@ public class Entity {
                     }
                 }
             }
-            //Monster Hp bar
-            if (type == TYPE_MOB && hpBarOn) {
-                //Get the length of hp bar, if hp - 4, then the scale is 12 pixels (4 times)
-                double oneScale = (double) GameManager.TILE_SIZE / maxHp;
-                double hpBarValue = oneScale * hp;
 
-                graphics2D.setColor(new Color(35, 35, 35));
-                graphics2D.fillRect(screenX - 1, screenY - 16, GameManager.TILE_SIZE + 2, 12);
-
-                graphics2D.setColor(new Color(255, 0, 30));
-                graphics2D.fillRect(screenX, screenY - 15, (int) hpBarValue, 10);
-                hpBarCounter++;
-                //After 10 sec bar hides
-                if (hpBarCounter > 600) {
-                    hpBarCounter = 0;
-                    hpBarOn = false;
-                }
-            }
 
             if (invincible) {
                 hpBarOn = true;
@@ -751,6 +739,14 @@ public class Entity {
         knockBackCounter = 0;
         guardCounter = 0;
         offBalanceCounter = 0;
+    }
+
+    public int getScreenX() {
+        return worldX - gameManager.player.worldX + gameManager.player.screenX;
+    }
+
+    public int getScreenY() {
+        return worldY - gameManager.player.worldY + gameManager.player.screenY;
     }
 
     public int getCenterX() {

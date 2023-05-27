@@ -41,7 +41,9 @@ public class ProjectTile extends Entity {
         if (entity == gameManager.player) {
             int mobIndex = gameManager.checkCollision.checkEntity(this, gameManager.mobs);
             if (mobIndex != gameManager.player.playerIndex) {
-                gameManager.player.damageMob(mobIndex, this, attack, knockBackPower);
+                System.out.println("before: " + attack);
+                gameManager.player.damageMob(mobIndex, this, getFireballAttack(), knockBackPower);
+                System.out.println("after: " + getFireballAttack());
                 generateParticle(entity.projectTile, gameManager.mobs[gameManager.currentMap][mobIndex]);
                 //After hitting the mob, projectile disappear
                 alive = false;
@@ -55,6 +57,12 @@ public class ProjectTile extends Entity {
                 alive = false;
             }
         }
+    }
+    //fireball level increases in every 2 lvl
+    private int getFireballAttack() {
+        int level = gameManager.player.level;
+        int attack = Math.max(1, level / 2);
+        return this.attack * attack;
     }
 
     public boolean haveResource(Entity entity) {
