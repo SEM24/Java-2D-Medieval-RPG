@@ -1,6 +1,6 @@
-package com.khomsi.game.main;
+package com.khomsi.game;
 
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
 
 import javax.swing.*;
 

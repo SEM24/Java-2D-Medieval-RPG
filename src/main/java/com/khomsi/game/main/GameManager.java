@@ -1,5 +1,6 @@
 package com.khomsi.game.main;
 
+import com.khomsi.game.GameApplication;
 import com.khomsi.game.ai.PathFinder;
 import com.khomsi.game.main.logic.EventHandler;
 import com.khomsi.game.main.tools.*;
