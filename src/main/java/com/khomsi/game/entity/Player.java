@@ -189,60 +189,60 @@ public class Player extends Entity {
         //TODO Each tool can be having diff colors,add index to the class and write the num here.
         //If the sword is chosen
         if (currentWeapon.type == TYPE_SWORD) {
-            attackUp = setup(playerPath[playerSkin] + "/attackSword/player_up_attack", attackUpDownW, attackUpDownH);
-            attackUp1 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_1", attackUpDownW, attackUpDownH);
-            attackUp2 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_2", attackUpDownW, attackUpDownH);
-            attackUp3 = setup(playerPath[playerSkin] + "/attackSword/player_up_attack_3", attackUpDownW, attackUpDownH);
-            attackDown = setup(playerPath[playerSkin] + "/attackSword/player_down_attack", attackUpDownW, attackUpDownH);
-            attackDown1 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_1", attackUpDownW, attackUpDownH);
-            attackDown2 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_2", attackUpDownW, attackUpDownH);
-            attackDown3 = setup(playerPath[playerSkin] + "/attackSword/player_down_attack_3", attackUpDownW, attackUpDownH);
-            attackLeft = setup(playerPath[playerSkin] + "/attackSword/player_left_attack", attackLRW, attackLRH);
-            attackLeft1 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_1", attackLRW, attackLRH);
-            attackLeft2 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_2", attackLRW, attackLRH);
-            attackLeft3 = setup(playerPath[playerSkin] + "/attackSword/player_left_attack_3", attackLRW, attackLRH);
-            attackRight = setup(playerPath[playerSkin] + "/attackSword/player_right_attack", attackLRW, attackLRH);
-            attackRight1 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_1", attackLRW, attackLRH);
-            attackRight2 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_2", attackLRW, attackLRH);
-            attackRight3 = setup(playerPath[playerSkin] + "/attackSword/player_right_attack_3", attackLRW, attackLRH);
+            attackUp = setup(playerPath[playerSkin] + "attacksword/player_up_attack", attackUpDownW, attackUpDownH);
+            attackUp1 = setup(playerPath[playerSkin] + "attacksword/player_up_attack_1", attackUpDownW, attackUpDownH);
+            attackUp2 = setup(playerPath[playerSkin] + "attacksword/player_up_attack_2", attackUpDownW, attackUpDownH);
+            attackUp3 = setup(playerPath[playerSkin] + "attacksword/player_up_attack_3", attackUpDownW, attackUpDownH);
+            attackDown = setup(playerPath[playerSkin] + "attacksword/player_down_attack", attackUpDownW, attackUpDownH);
+            attackDown1 = setup(playerPath[playerSkin] + "attacksword/player_down_attack_1", attackUpDownW, attackUpDownH);
+            attackDown2 = setup(playerPath[playerSkin] + "attacksword/player_down_attack_2", attackUpDownW, attackUpDownH);
+            attackDown3 = setup(playerPath[playerSkin] + "attacksword/player_down_attack_3", attackUpDownW, attackUpDownH);
+            attackLeft = setup(playerPath[playerSkin] + "attacksword/player_left_attack", attackLRW, attackLRH);
+            attackLeft1 = setup(playerPath[playerSkin] + "attacksword/player_left_attack_1", attackLRW, attackLRH);
+            attackLeft2 = setup(playerPath[playerSkin] + "attacksword/player_left_attack_2", attackLRW, attackLRH);
+            attackLeft3 = setup(playerPath[playerSkin] + "attacksword/player_left_attack_3", attackLRW, attackLRH);
+            attackRight = setup(playerPath[playerSkin] + "attacksword/player_right_attack", attackLRW, attackLRH);
+            attackRight1 = setup(playerPath[playerSkin] + "attacksword/player_right_attack_1", attackLRW, attackLRH);
+            attackRight2 = setup(playerPath[playerSkin] + "attacksword/player_right_attack_2", attackLRW, attackLRH);
+            attackRight3 = setup(playerPath[playerSkin] + "attacksword/player_right_attack_3", attackLRW, attackLRH);
         }
         if (currentWeapon.type == TYPE_AXE) {
-            attackUp = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe", attackUpDownW, attackUpDownH);
-            attackUp1 = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe_1", attackUpDownW, attackUpDownH);
-            attackUp2 = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe_2", attackUpDownW, attackUpDownH);
-            attackUp3 = setup(playerPath[playerSkin] + "/attackAxe/player_up_axe_3", attackUpDownW, attackUpDownH);
-            attackDown = setup(playerPath[playerSkin] + "/attackAxe/player_down_axe", attackUpDownW, attackUpDownH);
-            attackDown1 = setup(playerPath[playerSkin] + "/attackAxe/player_down_axe_1", attackUpDownW, attackUpDownH);
-            attackDown2 = setup(playerPath[playerSkin] + "/attackAxe/player_down_axe_2", attackUpDownW, attackUpDownH);
-            attackDown3 = setup(playerPath[playerSkin] + "/attackAxe/player_down_axe_3", attackUpDownW, attackUpDownH);
-            attackLeft = setup(playerPath[playerSkin] + "/attackAxe/player_left_axe", attackLRW, attackLRH);
-            attackLeft1 = setup(playerPath[playerSkin] + "/attackAxe/player_left_axe_1", attackLRW, attackLRH);
-            attackLeft2 = setup(playerPath[playerSkin] + "/attackAxe/player_left_axe_2", attackLRW, attackLRH);
-            attackLeft3 = setup(playerPath[playerSkin] + "/attackAxe/player_left_axe_3", attackLRW, attackLRH);
-            attackRight = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe", attackLRW, attackLRH);
-            attackRight1 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_1", attackLRW, attackLRH);
-            attackRight2 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_2", attackLRW, attackLRH);
-            attackRight3 = setup(playerPath[playerSkin] + "/attackAxe/player_right_axe_3", attackLRW, attackLRH);
+            attackUp = setup(playerPath[playerSkin] + "attackaxe/player_up_axe", attackUpDownW, attackUpDownH);
+            attackUp1 = setup(playerPath[playerSkin] + "attackaxe/player_up_axe_1", attackUpDownW, attackUpDownH);
+            attackUp2 = setup(playerPath[playerSkin] + "attackaxe/player_up_axe_2", attackUpDownW, attackUpDownH);
+            attackUp3 = setup(playerPath[playerSkin] + "attackaxe/player_up_axe_3", attackUpDownW, attackUpDownH);
+            attackDown = setup(playerPath[playerSkin] + "attackaxe/player_down_axe", attackUpDownW, attackUpDownH);
+            attackDown1 = setup(playerPath[playerSkin] + "attackaxe/player_down_axe_1", attackUpDownW, attackUpDownH);
+            attackDown2 = setup(playerPath[playerSkin] + "attackaxe/player_down_axe_2", attackUpDownW, attackUpDownH);
+            attackDown3 = setup(playerPath[playerSkin] + "attackaxe/player_down_axe_3", attackUpDownW, attackUpDownH);
+            attackLeft = setup(playerPath[playerSkin] + "attackaxe/player_left_axe", attackLRW, attackLRH);
+            attackLeft1 = setup(playerPath[playerSkin] + "attackaxe/player_left_axe_1", attackLRW, attackLRH);
+            attackLeft2 = setup(playerPath[playerSkin] + "attackaxe/player_left_axe_2", attackLRW, attackLRH);
+            attackLeft3 = setup(playerPath[playerSkin] + "attackaxe/player_left_axe_3", attackLRW, attackLRH);
+            attackRight = setup(playerPath[playerSkin] + "attackaxe/player_right_axe", attackLRW, attackLRH);
+            attackRight1 = setup(playerPath[playerSkin] + "attackaxe/player_right_axe_1", attackLRW, attackLRH);
+            attackRight2 = setup(playerPath[playerSkin] + "attackaxe/player_right_axe_2", attackLRW, attackLRH);
+            attackRight3 = setup(playerPath[playerSkin] + "attackaxe/player_right_axe_3", attackLRW, attackLRH);
         }
         if (currentWeapon.type == TYPE_HOOK) {
-            attackUp = setup(playerPath[playerSkin] + "/hook/player_up_attack", attackUpDownW, attackUpDownH);
-            attackUp1 = setup(playerPath[playerSkin] + "/hook/player_up_attack_1", attackUpDownW, attackUpDownH);
-            attackUp2 = setup(playerPath[playerSkin] + "/hook/player_up_attack_2", attackUpDownW, attackUpDownH);
-            attackUp3 = setup(playerPath[playerSkin] + "/hook/player_up_attack_3", attackUpDownW, attackUpDownH);
+            attackUp = setup(playerPath[playerSkin] + "hook/player_up_attack", attackUpDownW, attackUpDownH);
+            attackUp1 = setup(playerPath[playerSkin] + "hook/player_up_attack_1", attackUpDownW, attackUpDownH);
+            attackUp2 = setup(playerPath[playerSkin] + "hook/player_up_attack_2", attackUpDownW, attackUpDownH);
+            attackUp3 = setup(playerPath[playerSkin] + "hook/player_up_attack_3", attackUpDownW, attackUpDownH);
 
-            attackDown = setup(playerPath[playerSkin] + "/hook/player_down_attack", attackUpDownW, attackUpDownH);
-            attackDown1 = setup(playerPath[playerSkin] + "/hook/player_down_attack_1", attackUpDownW, attackUpDownH);
-            attackDown2 = setup(playerPath[playerSkin] + "/hook/player_down_attack_2", attackUpDownW, attackUpDownH);
-            attackDown3 = setup(playerPath[playerSkin] + "/hook/player_down_attack_3", attackUpDownW, attackUpDownH);
+            attackDown = setup(playerPath[playerSkin] + "hook/player_down_attack", attackUpDownW, attackUpDownH);
+            attackDown1 = setup(playerPath[playerSkin] + "hook/player_down_attack_1", attackUpDownW, attackUpDownH);
+            attackDown2 = setup(playerPath[playerSkin] + "hook/player_down_attack_2", attackUpDownW, attackUpDownH);
+            attackDown3 = setup(playerPath[playerSkin] + "hook/player_down_attack_3", attackUpDownW, attackUpDownH);
 
-            attackLeft = setup(playerPath[playerSkin] + "/hook/player_left_attack", attackLRW, attackLRH);
-            attackLeft1 = setup(playerPath[playerSkin] + "/hook/player_left_attack_1", attackLRW, attackLRH);
-            attackLeft2 = setup(playerPath[playerSkin] + "/hook/player_left_attack_2", attackLRW, attackLRH);
-            attackLeft3 = setup(playerPath[playerSkin] + "/hook/player_left_attack_3", attackLRW, attackLRH);
-            attackRight = setup(playerPath[playerSkin] + "/hook/player_right_attack", attackLRW, attackLRH);
-            attackRight1 = setup(playerPath[playerSkin] + "/hook/player_right_attack_1", attackLRW, attackLRH);
-            attackRight2 = setup(playerPath[playerSkin] + "/hook/player_right_attack_2", attackLRW, attackLRH);
-            attackRight3 = setup(playerPath[playerSkin] + "/hook/player_right_attack_3", attackLRW, attackLRH);
+            attackLeft = setup(playerPath[playerSkin] + "hook/player_left_attack", attackLRW, attackLRH);
+            attackLeft1 = setup(playerPath[playerSkin] + "hook/player_left_attack_1", attackLRW, attackLRH);
+            attackLeft2 = setup(playerPath[playerSkin] + "hook/player_left_attack_2", attackLRW, attackLRH);
+            attackLeft3 = setup(playerPath[playerSkin] + "hook/player_left_attack_3", attackLRW, attackLRH);
+            attackRight = setup(playerPath[playerSkin] + "hook/player_right_attack", attackLRW, attackLRH);
+            attackRight1 = setup(playerPath[playerSkin] + "hook/player_right_attack_1", attackLRW, attackLRH);
+            attackRight2 = setup(playerPath[playerSkin] + "hook/player_right_attack_2", attackLRW, attackLRH);
+            attackRight3 = setup(playerPath[playerSkin] + "hook/player_right_attack_3", attackLRW, attackLRH);
         }
     }
 
