@@ -1,22 +1,22 @@
-package main.java.com.khomsi.game.main.tools;
+package com.khomsi.game.main.tools;
 
-import main.java.com.khomsi.game.entity.mobs.*;
-import main.java.com.khomsi.game.entity.npc.object.NpcRock;
-import main.java.com.khomsi.game.entity.npc.regular.NpcWomanW;
-import main.java.com.khomsi.game.entity.npc.sellers.NpcSeller1;
-import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.objects.equipment.AxeObject;
-import main.java.com.khomsi.game.objects.equipment.GoldShieldObject;
-import main.java.com.khomsi.game.objects.equipment.HookObject;
-import main.java.com.khomsi.game.objects.interact.ChestObject;
-import main.java.com.khomsi.game.objects.interact.CoinBObject;
-import main.java.com.khomsi.game.objects.interact.KeyObject;
-import main.java.com.khomsi.game.objects.light.LanternObject;
-import main.java.com.khomsi.game.objects.outside.*;
-import main.java.com.khomsi.game.objects.spells.PotionObject;
-import main.java.com.khomsi.game.tilesinteractive.Bush;
-import main.java.com.khomsi.game.tilesinteractive.DestructibleWall;
-import main.java.com.khomsi.game.tilesinteractive.SwitchPress;
+import com.khomsi.game.entity.mobs.*;
+import com.khomsi.game.entity.npc.object.NpcRock;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.objects.interact.ChestObject;
+import com.khomsi.game.objects.interact.CoinBObject;
+import com.khomsi.game.objects.outside.*;
+import com.khomsi.game.entity.npc.regular.NpcWomanW;
+import com.khomsi.game.entity.npc.sellers.NpcSeller1;
+import com.khomsi.game.objects.equipment.AxeObject;
+import com.khomsi.game.objects.equipment.GoldShieldObject;
+import com.khomsi.game.objects.equipment.HookObject;
+import com.khomsi.game.objects.interact.KeyObject;
+import com.khomsi.game.objects.light.LanternObject;
+import com.khomsi.game.objects.spells.PotionObject;
+import com.khomsi.game.tilesinteractive.Bush;
+import com.khomsi.game.tilesinteractive.DestructibleWall;
+import com.khomsi.game.tilesinteractive.SwitchPress;
 
 public class PlaceObjects {
     GameManager gameManager;

@@ -1,4 +1,4 @@
-package main.java.com.khomsi.game.main.tools;
+package com.khomsi.game.main.tools;
 
 import javax.sound.sampled.*;
 import java.io.IOException;

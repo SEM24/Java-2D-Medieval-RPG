@@ -1,7 +1,7 @@
-package main.java.com.khomsi.game.entity.mobs;
+package com.khomsi.game.entity.mobs;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
+import com.khomsi.game.main.GameManager;
 
 public class MobChestMimic extends Entity {
     public MobChestMimic(GameManager gameManager) {

@@ -1,11 +1,11 @@
-package main.java.com.khomsi.game.entity.npc.object;
+package com.khomsi.game.entity.npc.object;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.objects.outside.DungeonDoorClosedObject;
-import main.java.com.khomsi.game.objects.outside.DungeonDoorOpenedObject;
-import main.java.com.khomsi.game.tilesinteractive.InteractiveTile;
-import main.java.com.khomsi.game.tilesinteractive.SwitchPress;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
+import com.khomsi.game.objects.outside.DungeonDoorClosedObject;
+import com.khomsi.game.objects.outside.DungeonDoorOpenedObject;
+import com.khomsi.game.tilesinteractive.InteractiveTile;
+import com.khomsi.game.tilesinteractive.SwitchPress;
 
 import java.awt.*;
 import java.util.Arrays;

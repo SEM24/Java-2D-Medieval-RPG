@@ -1,10 +1,10 @@
-package main.java.com.khomsi.game.entity;
+package com.khomsi.game.entity;
 
-import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.main.tools.Tools;
-import main.java.com.khomsi.game.objects.gui.HeartObject;
-import main.java.com.khomsi.game.objects.gui.ManaObject;
-import main.java.com.khomsi.game.objects.interact.CoinBObject;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.tools.Tools;
+import com.khomsi.game.objects.gui.HeartObject;
+import com.khomsi.game.objects.gui.ManaObject;
+import com.khomsi.game.objects.interact.CoinBObject;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

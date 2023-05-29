@@ -1,11 +1,11 @@
-package main.java.com.khomsi.game.entity;
+package com.khomsi.game.entity;
 
-import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.main.tools.KeyHandler;
-import main.java.com.khomsi.game.objects.equipment.MetalShieldObject;
-import main.java.com.khomsi.game.objects.equipment.MetalSwordObject;
-import main.java.com.khomsi.game.objects.interact.KeyObject;
-import main.java.com.khomsi.game.objects.projectTiles.FireBallObject;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.tools.KeyHandler;
+import com.khomsi.game.objects.equipment.MetalShieldObject;
+import com.khomsi.game.objects.equipment.MetalSwordObject;
+import com.khomsi.game.objects.interact.KeyObject;
+import com.khomsi.game.objects.projectTiles.FireBallObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,7 +14,7 @@ public class Player extends Entity {
     KeyHandler keyHandler;
     public final String[] playerPath = {"/player/male/", "/player/female/"};
     //Male/Female type of skin
-    public int playerSkin;
+    public int playerSkin = 1;
     public final int screenX, screenY;
     public int playerIndex = 999;
     public boolean attackCanceled = false;

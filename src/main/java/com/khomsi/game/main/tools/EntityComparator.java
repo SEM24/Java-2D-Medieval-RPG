@@ -1,6 +1,6 @@
-package main.java.com.khomsi.game.main.tools;
+package com.khomsi.game.main.tools;
 
-import main.java.com.khomsi.game.entity.Entity;
+import com.khomsi.game.entity.Entity;
 
 import java.util.Comparator;
 

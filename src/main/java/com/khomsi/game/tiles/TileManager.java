@@ -1,7 +1,7 @@
-package main.java.com.khomsi.game.tiles;
+package com.khomsi.game.tiles;
 
-import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.main.tools.Tools;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.tools.Tools;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

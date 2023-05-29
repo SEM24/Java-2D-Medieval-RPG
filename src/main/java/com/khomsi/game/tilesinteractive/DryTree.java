@@ -1,7 +1,7 @@
-package main.java.com.khomsi.game.tilesinteractive;
+package com.khomsi.game.tilesinteractive;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
+import com.khomsi.game.main.GameManager;
 
 import java.awt.*;
 

@@ -1,6 +1,6 @@
-package main.java.com.khomsi.game.entity;
+package com.khomsi.game.entity;
 
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
 
 public class ProjectTile extends Entity {
     Entity entity;

@@ -1,6 +1,6 @@
-package main.java.com.khomsi.game.tiles;
+package com.khomsi.game.tiles;
 
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

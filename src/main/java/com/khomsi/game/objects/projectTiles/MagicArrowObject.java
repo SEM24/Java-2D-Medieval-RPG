@@ -1,8 +1,8 @@
-package main.java.com.khomsi.game.objects.projectTiles;
+package com.khomsi.game.objects.projectTiles;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.entity.ProjectTile;
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.ProjectTile;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
 
 public class MagicArrowObject extends ProjectTile {
     public static final String OBJ_NAME = "Blue Magic Arrow";

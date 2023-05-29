@@ -1,6 +1,6 @@
-package main.java.com.khomsi.game.main.tools;
+package com.khomsi.game.main.tools;
 
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

@@ -1,10 +1,10 @@
-package main.java.com.khomsi.game.entity.npc.sellers;
+package com.khomsi.game.entity.npc.sellers;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.objects.equipment.GoldShieldObject;
-import main.java.com.khomsi.game.objects.equipment.MetalSwordObject;
-import main.java.com.khomsi.game.objects.spells.PotionObject;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.objects.equipment.MetalSwordObject;
+import com.khomsi.game.entity.Entity;
+import com.khomsi.game.objects.equipment.GoldShieldObject;
+import com.khomsi.game.objects.spells.PotionObject;
 
 import java.awt.*;
 

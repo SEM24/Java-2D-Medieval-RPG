@@ -1,19 +1,18 @@
-package main.java.com.khomsi.game.main;
+package com.khomsi.game.main;
 
-import main.java.com.khomsi.game.GameApplication;
-import main.java.com.khomsi.game.ai.PathFinder;
-import main.java.com.khomsi.game.data.Config;
-import main.java.com.khomsi.game.data.SaveLoad;
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.entity.Player;
-import main.java.com.khomsi.game.enviroment.EnvironmentManagement;
-import main.java.com.khomsi.game.main.logic.CheckCollision;
-import main.java.com.khomsi.game.main.logic.EntityGenerator;
-import main.java.com.khomsi.game.main.logic.EventHandler;
-import main.java.com.khomsi.game.main.tools.*;
-import main.java.com.khomsi.game.tiles.Map;
-import main.java.com.khomsi.game.tiles.TileManager;
-import main.java.com.khomsi.game.tilesinteractive.InteractiveTile;
+import com.khomsi.game.ai.PathFinder;
+import com.khomsi.game.main.logic.EventHandler;
+import com.khomsi.game.main.tools.*;
+import com.khomsi.game.data.Config;
+import com.khomsi.game.data.SaveLoad;
+import com.khomsi.game.entity.Entity;
+import com.khomsi.game.entity.Player;
+import com.khomsi.game.enviroment.EnvironmentManagement;
+import com.khomsi.game.main.logic.CheckCollision;
+import com.khomsi.game.main.logic.EntityGenerator;
+import com.khomsi.game.tiles.Map;
+import com.khomsi.game.tiles.TileManager;
+import com.khomsi.game.tilesinteractive.InteractiveTile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -162,10 +161,10 @@ public class GameManager extends JPanel implements Runnable {
     }
 
     public void startGameThread() {
-        //pass gamePanel to thread
-        gameThread = new Thread(this);
-        //automatically calls run method
-        gameThread.start();
+            //pass gamePanel to thread
+            gameThread = new Thread(this);
+            //automatically calls run method
+            gameThread.start();
     }
 
     @Override

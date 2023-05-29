@@ -1,8 +1,7 @@
-package main.java.com.khomsi.game.objects.light;
+package com.khomsi.game.objects.light;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.objects.interact.KeyObject;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
 
 public class LanternObject extends Entity {
     public static final String OBJ_NAME = "Lantern";

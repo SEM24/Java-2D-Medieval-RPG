@@ -1,7 +1,7 @@
-package main.java.com.khomsi.game.objects.outside;
+package com.khomsi.game.objects.outside;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
 
 public class DungeonDoorOpenedObject extends Entity {
 

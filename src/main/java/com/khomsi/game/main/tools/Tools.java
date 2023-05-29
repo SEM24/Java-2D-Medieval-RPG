@@ -1,12 +1,9 @@
-package main.java.com.khomsi.game.main.tools;
+package com.khomsi.game.main.tools;
 
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class Tools {
     public BufferedImage scaledImage(BufferedImage image, int width, int height) {

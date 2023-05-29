@@ -1,7 +1,7 @@
-package main.java.com.khomsi.game.objects.spells;
+package com.khomsi.game.objects.spells;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
 
 public class PotionObject extends Entity {
 

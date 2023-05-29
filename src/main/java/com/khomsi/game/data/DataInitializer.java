@@ -1,4 +1,4 @@
-package main.java.com.khomsi.game.data;
+package com.khomsi.game.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;

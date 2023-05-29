@@ -1,19 +1,19 @@
-package main.java.com.khomsi.game.main.logic;
+package com.khomsi.game.main.logic;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
-import main.java.com.khomsi.game.objects.equipment.*;
-import main.java.com.khomsi.game.objects.gui.HeartObject;
-import main.java.com.khomsi.game.objects.gui.ManaObject;
-import main.java.com.khomsi.game.objects.interact.ChestObject;
-import main.java.com.khomsi.game.objects.interact.CoinBObject;
-import main.java.com.khomsi.game.objects.interact.KeyObject;
-import main.java.com.khomsi.game.objects.light.LanternObject;
-import main.java.com.khomsi.game.objects.outside.*;
-import main.java.com.khomsi.game.objects.projectTiles.FireBallObject;
-import main.java.com.khomsi.game.objects.projectTiles.MagicArrowObject;
-import main.java.com.khomsi.game.objects.projectTiles.RockObject;
-import main.java.com.khomsi.game.objects.spells.PotionObject;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.objects.equipment.*;
+import com.khomsi.game.objects.gui.ManaObject;
+import com.khomsi.game.objects.interact.ChestObject;
+import com.khomsi.game.objects.interact.CoinBObject;
+import com.khomsi.game.objects.interact.KeyObject;
+import com.khomsi.game.objects.outside.*;
+import com.khomsi.game.objects.projectTiles.FireBallObject;
+import com.khomsi.game.entity.Entity;
+import com.khomsi.game.objects.gui.HeartObject;
+import com.khomsi.game.objects.light.LanternObject;
+import com.khomsi.game.objects.projectTiles.MagicArrowObject;
+import com.khomsi.game.objects.projectTiles.RockObject;
+import com.khomsi.game.objects.spells.PotionObject;
 
 public class EntityGenerator {
     GameManager gameManager;

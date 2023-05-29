@@ -1,7 +1,7 @@
-package main.java.com.khomsi.game.entity.npc.regular;
+package com.khomsi.game.entity.npc.regular;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
 
 import java.awt.*;
 import java.util.Random;

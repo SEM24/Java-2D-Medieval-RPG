@@ -1,7 +1,7 @@
-package main.java.com.khomsi.game.objects.interact;
+package com.khomsi.game.objects.interact;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
 
 public class KeyObject extends Entity {
     public static final String OBJ_NAME = "Key";

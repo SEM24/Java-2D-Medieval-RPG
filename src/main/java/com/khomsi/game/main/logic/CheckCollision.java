@@ -1,7 +1,7 @@
-package main.java.com.khomsi.game.main.logic;
+package com.khomsi.game.main.logic;
 
-import main.java.com.khomsi.game.entity.Entity;
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
 
 public class CheckCollision {
     GameManager panel;

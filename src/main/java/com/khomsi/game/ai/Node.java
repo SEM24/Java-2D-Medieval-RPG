@@ -1,4 +1,4 @@
-package main.java.com.khomsi.game.ai;
+package com.khomsi.game.ai;
 
 public class Node {
     Node parent;

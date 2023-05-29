@@ -1,6 +1,6 @@
-package main.java.com.khomsi.game.tilesinteractive;
+package com.khomsi.game.tilesinteractive;
 
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
 
 public class TrunkIT extends InteractiveTile {
 

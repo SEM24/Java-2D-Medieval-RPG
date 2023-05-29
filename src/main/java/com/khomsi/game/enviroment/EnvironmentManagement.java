@@ -1,6 +1,6 @@
-package main.java.com.khomsi.game.enviroment;
+package com.khomsi.game.enviroment;
 
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
 
 import java.awt.*;
 

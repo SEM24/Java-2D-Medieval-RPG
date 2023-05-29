@@ -1,4 +1,4 @@
-package main.java.com.khomsi.game.tiles;
+package com.khomsi.game.tiles;
 
 import java.awt.image.BufferedImage;
 

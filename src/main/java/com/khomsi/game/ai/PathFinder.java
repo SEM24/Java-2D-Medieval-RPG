@@ -1,6 +1,6 @@
-package main.java.com.khomsi.game.ai;
+package com.khomsi.game.ai;
 
-import main.java.com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.GameManager;
 
 import java.util.ArrayList;
 import java.util.List;
