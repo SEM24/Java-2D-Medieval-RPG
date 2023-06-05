@@ -1,5 +1,6 @@
 package com.khomsi.game.main.logic;
 
+import com.khomsi.game.data.GameProgress;
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
 
@@ -106,6 +107,12 @@ public class EventHandler {
                     changeLocation(2, 9, 15, GameManager.BOSS_DUNGEON);
                     gameManager.playSE(4);
                 }
+                //Start cutscene with the boss
+                if (interact(3, 24, 10, "any") ||
+                        interact(3, 25, 10, "any") ||
+                        interact(3, 26, 10, "any")) {
+                    dungeonBoss();
+                }
             }
         }
     }
@@ -192,5 +199,12 @@ public class EventHandler {
         gameManager.player.worldX = GameManager.TILE_SIZE * 24;
         gameManager.player.worldY = GameManager.TILE_SIZE * 11;
         gameManager.player.fallIntoPit = false;
+    }
+
+    public void dungeonBoss() {
+        if (!gameManager.bossBattleOn && !GameProgress.DUNGEON_BOSS_DEFEATED) {
+            gameManager.gameState = GameManager.CUTSCENE_STATE;
+            gameManager.cutSceneManager.sceneNumber = CutSceneManager.DUNGEON_BOSS;
+        }
     }
 }

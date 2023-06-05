@@ -1,18 +1,19 @@
 package com.khomsi.game.main.tools;
 
+import com.khomsi.game.data.GameProgress;
 import com.khomsi.game.entity.mobs.*;
 import com.khomsi.game.entity.npc.object.NpcRock;
-import com.khomsi.game.main.GameManager;
-import com.khomsi.game.objects.interact.ChestObject;
-import com.khomsi.game.objects.interact.CoinBObject;
-import com.khomsi.game.objects.outside.*;
 import com.khomsi.game.entity.npc.regular.NpcWomanW;
 import com.khomsi.game.entity.npc.sellers.NpcSeller1;
+import com.khomsi.game.main.GameManager;
 import com.khomsi.game.objects.equipment.AxeObject;
 import com.khomsi.game.objects.equipment.GoldShieldObject;
 import com.khomsi.game.objects.equipment.HookObject;
+import com.khomsi.game.objects.interact.ChestObject;
+import com.khomsi.game.objects.interact.CoinBObject;
 import com.khomsi.game.objects.interact.KeyObject;
 import com.khomsi.game.objects.light.LanternObject;
+import com.khomsi.game.objects.outside.*;
 import com.khomsi.game.objects.spells.PotionObject;
 import com.khomsi.game.tilesinteractive.Bush;
 import com.khomsi.game.tilesinteractive.DestructibleWall;
@@ -29,6 +30,7 @@ public class PlaceObjects {
         objectsOnMap0();
         objectsOnMap1();
         objectsOnMap2();
+        objectsOnMap3();
     }
 
     private void objectsOnMap0() {
@@ -127,6 +129,14 @@ public class PlaceObjects {
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 29;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 19;
 
+    }
+
+    private void objectsOnMap3() {
+        int index = 0;
+        int mapNum = 3;
+        gameManager.object[mapNum][index] = new DungeonDoorOpenedObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 25;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 8;
     }
 
     public void setInteractiveTiles() {
@@ -271,6 +281,7 @@ public class PlaceObjects {
 //        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 28;
 //        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 14;
     }
+
     private void mobsOnMap2() {
         int index = 0;
         int mapNum = 2;
@@ -287,13 +298,16 @@ public class PlaceObjects {
         gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 9;
         gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 26;
     }
+
     private void mobsOnMap3() {
         int index = 0;
         int mapNum = 3;
-        //Set mobs on different map
-        gameManager.mobs[mapNum][index] = new MobDungeonBoss(gameManager);
-        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 23;
-        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 24;
-        index++;
+        if (!GameProgress.DUNGEON_BOSS_DEFEATED) {
+            //Set mobs on different map
+            gameManager.mobs[mapNum][index] = new MobDungeonBoss(gameManager);
+            gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 23;
+            gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 24;
+            index++;
+        }
     }
 }

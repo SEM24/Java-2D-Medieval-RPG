@@ -74,7 +74,7 @@ public class Map extends TileManager {
         int playerX = (int) (x + gameManager.player.worldX / scale);
         int playerY = (int) (y + gameManager.player.worldY / scale);
         int playerSize = (GameManager.TILE_SIZE / 3);
-        g2D.drawImage(gameManager.player.setup(gameManager.player.playerPath[gameManager.player.playerSkin] + "mini_map"),
+        g2D.drawImage(gameManager.player.setup(gameManager.player.PLAYER_PATH[gameManager.player.playerSkin] + "mini_map"),
                 playerX - 6, playerY - 6, playerSize, playerSize, null);
     }
 }

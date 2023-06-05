@@ -1,5 +1,6 @@
 package com.khomsi.game.entity;
 
+import com.khomsi.game.entity.player.Player;
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.main.tools.Tools;
 import com.khomsi.game.objects.gui.HeartObject;
@@ -57,8 +58,11 @@ public class Entity {
     public boolean guarding = false;
     public boolean transparent = false;
     public boolean offBalance = false;
-    public Entity loot;
+    public boolean markered = false;
     public boolean opened = false;
+    public boolean bossSleep = false;
+    public boolean drawing = true;
+    public Entity loot;
 
 
     //Entity stats
@@ -180,38 +184,40 @@ public class Entity {
     }
 
     public void update() {
-        if (knockBack) {
-            checkCollision();
-            collisionAndKnockBack();
-        } else if (attacking) {
-            entityAttack();
-        } else {
-            setAction();
-            changeDirection(direction);
-            //TODO idk how to make special movement for each mob yet
-            spriteMovement();
-        }
-        if (invincible) {
-            invincibleCounter++;
-            //1 sec
-            if (invincibleCounter > 40) {
-                invincible = false;
-                invincibleCounter = 0;
+        if (!bossSleep) {
+            if (knockBack) {
+                checkCollision();
+                collisionAndKnockBack();
+            } else if (attacking) {
+                entityAttack();
+            } else {
+                setAction();
+                changeDirection(direction);
+                //TODO idk how to make special movement for each mob yet
+                spriteMovement();
             }
-        }
-        if (shootAvailableCounter < 30) {
-            shootAvailableCounter++;
-        }
-        if (offBalance) {
-            offBalanceCounter++;
-            if (offBalanceCounter > 60) {
-                offBalance = false;
-                offBalanceCounter = 0;
+            if (invincible) {
+                invincibleCounter++;
+                //1 sec
+                if (invincibleCounter > 40) {
+                    invincible = false;
+                    invincibleCounter = 0;
+                }
+            }
+            if (shootAvailableCounter < 30) {
+                shootAvailableCounter++;
+            }
+            if (offBalance) {
+                offBalanceCounter++;
+                if (offBalanceCounter > 60) {
+                    offBalance = false;
+                    offBalanceCounter = 0;
+                }
             }
         }
     }
 
-    void collisionAndKnockBack() {
+    protected void collisionAndKnockBack() {
         if (collisionOn) {
             knockBackCounter = 0;
             knockBack = false;

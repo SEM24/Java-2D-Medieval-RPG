@@ -1,11 +1,11 @@
 package com.khomsi.game.main.tools;
 
-import com.khomsi.game.main.GameManager;
-import com.khomsi.game.objects.gui.ManaObject;
-import com.khomsi.game.objects.interact.CoinBObject;
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.enviroment.Lightning;
+import com.khomsi.game.main.GameManager;
 import com.khomsi.game.objects.gui.HeartObject;
+import com.khomsi.game.objects.gui.ManaObject;
+import com.khomsi.game.objects.interact.CoinBObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -832,7 +832,6 @@ public class UI {
         if (npc.dialogues[npc.dialogueSet][npc.dialogueIndex] != null) {
             char[] characters = npc.dialogues[npc.dialogueSet][npc.dialogueIndex].toCharArray();
             if (charIndex < characters.length) {
-                //FIXME check why se crushes the game, while talking with seller
                 String s = String.valueOf(characters[charIndex]);
                 combinedText = combinedText + s;
                 currentDialog = combinedText;
@@ -842,7 +841,8 @@ public class UI {
             if (gameManager.keyHandler.enterPressed) {
                 charIndex = 0;
                 combinedText = "";
-                if (gameManager.gameState == GameManager.DIALOGUE_STATE) {
+                if (gameManager.gameState == GameManager.DIALOGUE_STATE
+                        || gameManager.gameState == GameManager.CUTSCENE_STATE) {
                     npc.dialogueIndex++;
                     gameManager.keyHandler.enterPressed = false;
                 }
@@ -853,6 +853,9 @@ public class UI {
             npc.dialogueIndex = 0;
             if (gameManager.gameState == GameManager.DIALOGUE_STATE) {
                 gameManager.gameState = GameManager.PLAY_STATE;
+            }
+            if (gameManager.gameState == GameManager.CUTSCENE_STATE) {
+                gameManager.cutSceneManager.scenePhase++;
             }
         }
         splitTextInDialog(currentDialog, x, y);

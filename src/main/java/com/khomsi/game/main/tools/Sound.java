@@ -37,6 +37,7 @@ public class Sound {
         soundURL[19] = getResource("Merchant.wav");
         soundURL[20] = getResource("Dungeon.wav");
         soundURL[21] = getResource("snd_switchpull_n.wav");
+        soundURL[22] = getResource("boss_music.wav");
     }
 
     private URL getResource(String path) {

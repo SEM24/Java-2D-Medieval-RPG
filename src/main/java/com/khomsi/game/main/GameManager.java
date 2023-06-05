@@ -2,15 +2,16 @@ package com.khomsi.game.main;
 
 import com.khomsi.game.GameApplication;
 import com.khomsi.game.ai.PathFinder;
-import com.khomsi.game.main.logic.EventHandler;
-import com.khomsi.game.main.tools.*;
 import com.khomsi.game.data.Config;
 import com.khomsi.game.data.SaveLoad;
 import com.khomsi.game.entity.Entity;
-import com.khomsi.game.entity.Player;
+import com.khomsi.game.entity.player.Player;
 import com.khomsi.game.enviroment.EnvironmentManagement;
 import com.khomsi.game.main.logic.CheckCollision;
+import com.khomsi.game.main.logic.CutSceneManager;
 import com.khomsi.game.main.logic.EntityGenerator;
+import com.khomsi.game.main.logic.EventHandler;
+import com.khomsi.game.main.tools.*;
 import com.khomsi.game.tiles.Map;
 import com.khomsi.game.tiles.TileManager;
 import com.khomsi.game.tilesinteractive.InteractiveTile;
@@ -64,6 +65,7 @@ public class GameManager extends JPanel implements Runnable {
     public EventHandler eventHandler = new EventHandler(this);
     public PathFinder pathFinder = new PathFinder(this);
     public EnvironmentManagement enManagement = new EnvironmentManagement(this);
+    public CutSceneManager cutSceneManager = new CutSceneManager(this);
     public Map map = new Map(this);
     //ENTITY AND OBJECTS
     //TODO extend the massive, when you'll have more objects
@@ -93,6 +95,7 @@ public class GameManager extends JPanel implements Runnable {
     public static final int TRADE_STATE = 8;
     public static final int SLEEP_STATE = 9;
     public static final int MAP_STATE = 10;
+    public static final int CUTSCENE_STATE = 11;
     //Area
     public int currentArea;
     public int nextArea;
@@ -103,6 +106,7 @@ public class GameManager extends JPanel implements Runnable {
     //Until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
+    public boolean bossBattleOn = false;
 
     public GameManager() {
         //set size of this class
@@ -129,7 +133,10 @@ public class GameManager extends JPanel implements Runnable {
     }
 
     public void resetGame(boolean restart) {
+        stopMusic();
         currentArea = OUTSIDE;
+        removeMarkedEntity();
+        bossBattleOn = false;
         player.setDefaultPosition();
         player.restoreStatus();
         player.resetCounters();
@@ -162,10 +169,10 @@ public class GameManager extends JPanel implements Runnable {
     }
 
     public void startGameThread() {
-            //pass gamePanel to thread
-            gameThread = new Thread(this);
-            //automatically calls run method
-            gameThread.start();
+        //pass gamePanel to thread
+        gameThread = new Thread(this);
+        //automatically calls run method
+        gameThread.start();
     }
 
     @Override
@@ -292,6 +299,8 @@ public class GameManager extends JPanel implements Runnable {
             enManagement.draw(g2d);
             //Mini map
             map.drawMiniMap(g2d);
+            //CutScene
+            cutSceneManager.draw(g2d);
             //UI(text)
             ui.draw(g2d);
         }
@@ -357,6 +366,17 @@ public class GameManager extends JPanel implements Runnable {
                 }
                 if (!list.get(i).alive) {
                     list.remove(i);
+                }
+            }
+        }
+    }
+
+    public void removeMarkedEntity() {
+        for (int mapNum = 0; mapNum < maxMap; mapNum++) {
+            for (int i = 0; i < object[1].length; i++) {
+                if (object[mapNum][i] != null && object[mapNum][i].markered) {
+                    //Delete this object
+                    object[mapNum][i] = null;
                 }
             }
         }

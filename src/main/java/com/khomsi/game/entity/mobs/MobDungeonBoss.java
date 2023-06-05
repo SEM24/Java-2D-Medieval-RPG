@@ -1,10 +1,12 @@
 package com.khomsi.game.entity.mobs;
 
+import com.khomsi.game.data.GameProgress;
+import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
+import com.khomsi.game.objects.gui.HeartObject;
 import com.khomsi.game.objects.gui.ManaObject;
 import com.khomsi.game.objects.interact.CoinBObject;
-import com.khomsi.game.entity.Entity;
-import com.khomsi.game.objects.gui.HeartObject;
+import com.khomsi.game.objects.outside.DungeonDoorClosedObject;
 
 import java.util.Random;
 
@@ -17,6 +19,7 @@ public class MobDungeonBoss extends Entity {
         setDefaultValues();
         getImage();
         getAttackImage();
+        setDialogue();
     }
 
     private void setDefaultValues() {
@@ -32,6 +35,7 @@ public class MobDungeonBoss extends Entity {
         defense = 2;
         xp = 50;
         knockBackPower = 5;
+        bossSleep = true;
 
         int size = GameManager.TILE_SIZE * MULTIPLIER;
         //Boundaries
@@ -175,6 +179,12 @@ public class MobDungeonBoss extends Entity {
         }
     }
 
+    public void setDialogue() {
+        dialogues[0][0] = "So you finally came to me?";
+        dialogues[0][1] = "You are the fool that thinks you can beat me?";
+        dialogues[0][2] = "GO TO HELL!";
+    }
+
     @Override
     public void setAction() {
         //TODO change stats
@@ -207,11 +217,30 @@ public class MobDungeonBoss extends Entity {
 
     @Override
     public void checkDrop() {
+        finishFight();
+
         int drop = new Random().nextInt(100) + 1;
 
         //Set the mob's drop, 50% chance of coin, 30 of heart and mana
         if (drop < 50) dropItem(new CoinBObject(gameManager));
         if (drop >= 50 && drop < 80) dropItem(new HeartObject(gameManager));
         if (drop >= 80 && drop < 100) dropItem(new ManaObject(gameManager));
+    }
+
+    private void finishFight() {
+        gameManager.bossBattleOn = false;
+        GameProgress.DUNGEON_BOSS_DEFEATED = true;
+        //Restore the previous music
+        gameManager.stopMusic();
+        //FIXME change later
+        gameManager.playMusic(20);
+        //Open the door
+        for (int i = 0; i < gameManager.object[1].length; i++) {
+            if (gameManager.object[gameManager.currentMap][i] != null
+                    && gameManager.object[gameManager.currentMap][i].name.equals(DungeonDoorClosedObject.OBJ_NAME)) {
+                gameManager.object[gameManager.currentMap][i] = null;
+                gameManager.playSE(5);
+            }
+        }
     }
 }

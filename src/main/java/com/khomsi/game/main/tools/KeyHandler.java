@@ -41,7 +41,8 @@ public class KeyHandler implements KeyListener {
             pauseState(code);
         }
         //Dialog state
-        else if (gameManager.gameState == GameManager.DIALOGUE_STATE) {
+        else if (gameManager.gameState == GameManager.DIALOGUE_STATE
+                || gameManager.gameState == GameManager.CUTSCENE_STATE) {
             dialogState(code);
         }
         //Character state
