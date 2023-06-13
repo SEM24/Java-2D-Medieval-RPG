@@ -39,5 +39,5 @@ build/
 /out/
 /.idea/
 /src/main/resources/META-INF/
-/src/main/resources/META-INF/
 /src/test/
+/save.dat
