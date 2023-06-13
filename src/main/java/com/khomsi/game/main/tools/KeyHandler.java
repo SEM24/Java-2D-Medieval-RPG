@@ -7,8 +7,8 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     GameManager gameManager;
-    public boolean upPressed, downPressed, leftPressed,
-            rightPressed, enterPressed, shootKeyPressed, spacePressed;
+    public boolean isUpPressed, isDownPressed, isLeftPressed,
+            isRightPressed, isEnterPressed, isShootKeyPressed, isSpacePressed;
     //Debug
     public boolean debugMode = false;
     public boolean godMode = false;
@@ -27,7 +27,6 @@ public class KeyHandler implements KeyListener {
         //returns int, associated with the key in this event
         //for example, 17-ctrl, 8-backspace, 10-enter
         int code = e.getKeyCode();
-
         //Title state
         if (gameManager.gameState == GameManager.TITLE_STATE) {
             titleState(code);
@@ -74,24 +73,24 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
-
-        if (code == KeyEvent.VK_W) upPressed = false;
-        if (code == KeyEvent.VK_S) downPressed = false;
-        if (code == KeyEvent.VK_A) leftPressed = false;
-        if (code == KeyEvent.VK_D) rightPressed = false;
-        if (code == KeyEvent.VK_ENTER) enterPressed = false;
-        if (code == KeyEvent.VK_SPACE) spacePressed = false;
+        // Update the state of the controller
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) isUpPressed = false;
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) isDownPressed = false;
+        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) isLeftPressed = false;
+        if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) isRightPressed = false;
+        if (code == KeyEvent.VK_ENTER) isEnterPressed = false;
+        if (code == KeyEvent.VK_SPACE) isSpacePressed = false;
         //When player unpressed shift, he walks
         if (code == KeyEvent.VK_SHIFT && gameManager.playerRun) {
             gameManager.player.speed -= 1;
             gameManager.playerRun = false;
         }
-        if (code == KeyEvent.VK_CONTROL) shootKeyPressed = false;
+        if (code == KeyEvent.VK_CONTROL) isShootKeyPressed = false;
     }
 
     private void tradeState(int code) {
         if (code == KeyEvent.VK_ENTER) {
-            enterPressed = true;
+            isEnterPressed = true;
         }
         //First selection state
         if (gameManager.ui.subState == 0) {
@@ -125,14 +124,14 @@ public class KeyHandler implements KeyListener {
     }
 
     private void gameOverState(int code) {
-        if (code == KeyEvent.VK_W) {
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             gameManager.ui.commandNum--;
             if (gameManager.ui.commandNum < 0) {
                 gameManager.ui.commandNum = 1;
             }
             gameManager.playSE(12);
         }
-        if (code == KeyEvent.VK_S) {
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             gameManager.ui.commandNum++;
             if (gameManager.ui.commandNum > 1) {
                 gameManager.ui.commandNum = 0;
@@ -155,25 +154,25 @@ public class KeyHandler implements KeyListener {
 
     private void optionState(int code) {
         if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = GameManager.PLAY_STATE;
-        if (code == KeyEvent.VK_ENTER) enterPressed = true;
+        if (code == KeyEvent.VK_ENTER) isEnterPressed = true;
 
         int maxCommandNum = 0;
         switch (gameManager.ui.subState) {
             case 0 -> maxCommandNum = 5;
             case 3 -> maxCommandNum = 1;
         }
-        if (code == KeyEvent.VK_W) {
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             gameManager.ui.commandNum--;
             gameManager.playSE(12);
             if (gameManager.ui.commandNum < 0) gameManager.ui.commandNum = maxCommandNum;
         }
-        if (code == KeyEvent.VK_S) {
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             gameManager.ui.commandNum++;
             gameManager.playSE(12);
             if (gameManager.ui.commandNum > maxCommandNum) gameManager.ui.commandNum = 0;
         }
         //Change volume
-        if (code == KeyEvent.VK_A) {
+        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (gameManager.ui.subState == 0) {
                 if (gameManager.ui.commandNum == 1 && gameManager.music.volumeScale > 0) {
                     gameManager.music.volumeScale--;
@@ -186,7 +185,7 @@ public class KeyHandler implements KeyListener {
                 }
             }
         }
-        if (code == KeyEvent.VK_D) {
+        if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             if (gameManager.ui.subState == 0) {
                 if (gameManager.ui.commandNum == 1 && gameManager.music.volumeScale < 5) {
                     gameManager.music.volumeScale++;
@@ -202,15 +201,15 @@ public class KeyHandler implements KeyListener {
     }
 
     private void playerState(int code) {
-        if (code == KeyEvent.VK_W) upPressed = true;
-        if (code == KeyEvent.VK_S) downPressed = true;
-        if (code == KeyEvent.VK_A) leftPressed = true;
-        if (code == KeyEvent.VK_D) rightPressed = true;
-        if (code == KeyEvent.VK_CONTROL) shootKeyPressed = true;
-        if (code == KeyEvent.VK_ENTER) enterPressed = true;
-        if (code == KeyEvent.VK_SPACE) spacePressed = true;
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) isUpPressed = true;
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) isDownPressed = true;
+        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) isLeftPressed = true;
+        if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) isRightPressed = true;
+        if (code == KeyEvent.VK_CONTROL) isShootKeyPressed = true;
+        if (code == KeyEvent.VK_ENTER) isEnterPressed = true;
+        if (code == KeyEvent.VK_SPACE) isSpacePressed = true;
         //Show character stats
-        if (code == KeyEvent.VK_C) gameManager.gameState = GameManager.CHARACTER_STATE;
+        if (code == KeyEvent.VK_E) gameManager.gameState = GameManager.CHARACTER_STATE;
         //Pause the game
         if (code == KeyEvent.VK_P) gameManager.gameState = GameManager.PAUSE_STATE;
         if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = GameManager.OPTION_STATE;
@@ -236,11 +235,11 @@ public class KeyHandler implements KeyListener {
 
     private void titleState(int code) {
         if (gameManager.ui.titleScreenState == 0) {
-            if (code == KeyEvent.VK_W) {
+            if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 gameManager.ui.commandNum--;
                 if (gameManager.ui.commandNum < 0) gameManager.ui.commandNum = 2;
             }
-            if (code == KeyEvent.VK_S) {
+            if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 gameManager.ui.commandNum++;
                 if (gameManager.ui.commandNum > 2) gameManager.ui.commandNum = 0;
             }
@@ -258,11 +257,11 @@ public class KeyHandler implements KeyListener {
                 }
             }
         } else if (gameManager.ui.titleScreenState == 1) {
-            if (code == KeyEvent.VK_W) {
+            if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 gameManager.ui.commandNum--;
                 if (gameManager.ui.commandNum < 0) gameManager.ui.commandNum = 2;
             }
-            if (code == KeyEvent.VK_S) {
+            if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 gameManager.ui.commandNum++;
                 if (gameManager.ui.commandNum > 2) gameManager.ui.commandNum = 0;
             }
@@ -280,7 +279,7 @@ public class KeyHandler implements KeyListener {
 
 
     private void characterState(int code) {
-        if (code == KeyEvent.VK_C || code == KeyEvent.VK_ESCAPE) gameManager.gameState = GameManager.PLAY_STATE;
+        if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) gameManager.gameState = GameManager.PLAY_STATE;
         if (code == KeyEvent.VK_ENTER) {
             gameManager.player.selectItem();
         }
@@ -288,23 +287,23 @@ public class KeyHandler implements KeyListener {
     }
 
     private void playerInventory(int code) {
-        if (code == KeyEvent.VK_W) {
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             if (gameManager.ui.playerSlotRow != 0)
                 gameManager.ui.playerSlotRow--;
 
             gameManager.playSE(12);
         }
-        if (code == KeyEvent.VK_A) {
+        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (gameManager.ui.playerSlotCol != 0)
                 gameManager.ui.playerSlotCol--;
             gameManager.playSE(12);
         }
-        if (code == KeyEvent.VK_S) {
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             if (gameManager.ui.playerSlotRow != 3)
                 gameManager.ui.playerSlotRow++;
             gameManager.playSE(12);
         }
-        if (code == KeyEvent.VK_D) {
+        if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             if (gameManager.ui.playerSlotCol != 4)
                 gameManager.ui.playerSlotCol++;
             gameManager.playSE(12);
@@ -312,23 +311,23 @@ public class KeyHandler implements KeyListener {
     }
 
     private void npcInventory(int code) {
-        if (code == KeyEvent.VK_W) {
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             if (gameManager.ui.npcSlotRow != 0)
                 gameManager.ui.npcSlotRow--;
 
             gameManager.playSE(12);
         }
-        if (code == KeyEvent.VK_A) {
+        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (gameManager.ui.npcSlotCol != 0)
                 gameManager.ui.npcSlotCol--;
             gameManager.playSE(12);
         }
-        if (code == KeyEvent.VK_S) {
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             if (gameManager.ui.npcSlotRow != 3)
                 gameManager.ui.npcSlotRow++;
             gameManager.playSE(12);
         }
-        if (code == KeyEvent.VK_D) {
+        if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             if (gameManager.ui.npcSlotCol != 4)
                 gameManager.ui.npcSlotCol++;
             gameManager.playSE(12);
@@ -336,11 +335,10 @@ public class KeyHandler implements KeyListener {
     }
 
     private void dialogState(int code) {
-        if (code == KeyEvent.VK_ENTER) enterPressed = true;
+        if (code == KeyEvent.VK_ENTER) isEnterPressed = true;
     }
 
     private void pauseState(int code) {
         if (code == KeyEvent.VK_P) gameManager.gameState = GameManager.PLAY_STATE;
     }
-
 }

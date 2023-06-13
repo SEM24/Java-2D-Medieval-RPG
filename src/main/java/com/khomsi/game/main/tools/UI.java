@@ -182,7 +182,7 @@ public class UI {
             case 1 -> tradeBuy();
             case 2 -> tradeSell();
         }
-        gameManager.keyHandler.enterPressed = false;
+        gameManager.keyHandler.isEnterPressed = false;
     }
 
     private void tradeSelect() {
@@ -206,19 +206,19 @@ public class UI {
         graphics2D.drawString("Buy", x, y);
         if (commandNum == 0) {
             showChooseCursor(x, y, 25);
-            if (gameManager.keyHandler.enterPressed) subState = 1;
+            if (gameManager.keyHandler.isEnterPressed) subState = 1;
         }
         y += GameManager.TILE_SIZE;
         graphics2D.drawString("Sell", x, y);
         if (commandNum == 1) {
             showChooseCursor(x, y, 25);
-            if (gameManager.keyHandler.enterPressed) subState = 2;
+            if (gameManager.keyHandler.isEnterPressed) subState = 2;
         }
         y += GameManager.TILE_SIZE;
         graphics2D.drawString("Leave", x, y);
         if (commandNum == 2) {
             showChooseCursor(x, y, 25);
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 commandNum = 0;
                 npc.startDialogue(npc, 1);
             }
@@ -250,7 +250,7 @@ public class UI {
             x = getXAlignToRightText(text, GameManager.TILE_SIZE * 8 - 20);
             graphics2D.drawString(text, x, y + 34);
             //Buy item
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 if (npc.inventory.get(itemIndex).price > gameManager.player.coin) {
                     subState = 0;
                     npc.startDialogue(npc, 2);
@@ -287,7 +287,7 @@ public class UI {
             x = getXAlignToRightText(text, GameManager.TILE_SIZE * 18 - 20);
             graphics2D.drawString(text, x, y + 34);
             //Sell item
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 if (gameManager.player.inventory.get(itemIndex) == gameManager.player.currentWeapon ||
                         gameManager.player.inventory.get(itemIndex) == gameManager.player.currentShield) {
                     commandNum = 0;
@@ -381,7 +381,7 @@ public class UI {
             case 2 -> showControl(frameX, frameY);
             case 3 -> endGameConfirm(frameX, frameY);
         }
-        gameManager.keyHandler.enterPressed = false;
+        gameManager.keyHandler.isEnterPressed = false;
     }
 
     public void optionTop(int frameX, int frameY) {
@@ -399,7 +399,7 @@ public class UI {
         graphics2D.drawString("Full Screen", textX, textY);
         if (commandNum == 0) {
             showChooseCursor(textX, textY, 25);
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 gameManager.fullScreenOn = !gameManager.fullScreenOn;
                 subState = 1;
             }
@@ -417,7 +417,7 @@ public class UI {
         graphics2D.drawString("Control", textX, textY);
         if (commandNum == 3) {
             showChooseCursor(textX, textY, 25);
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 subState = 2;
                 commandNum = 0;
             }
@@ -427,7 +427,7 @@ public class UI {
         graphics2D.drawString("End Game", textX, textY);
         if (commandNum == 4) {
             showChooseCursor(textX, textY, 25);
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 subState = 3;
                 commandNum = 0;
             }
@@ -438,7 +438,7 @@ public class UI {
         graphics2D.drawString("Back", textX, textY);
         if (commandNum == 5) {
             showChooseCursor(textX, textY, 25);
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 gameManager.gameState = GameManager.PLAY_STATE;
                 commandNum = 0;
             }
@@ -838,13 +838,13 @@ public class UI {
                 gameManager.playSE(18);
                 charIndex++;
             }
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 charIndex = 0;
                 combinedText = "";
                 if (gameManager.gameState == GameManager.DIALOGUE_STATE
                         || gameManager.gameState == GameManager.CUTSCENE_STATE) {
                     npc.dialogueIndex++;
-                    gameManager.keyHandler.enterPressed = false;
+                    gameManager.keyHandler.isEnterPressed = false;
                 }
             }
         }
@@ -899,7 +899,7 @@ public class UI {
         //Draw cursor
         if (commandNum == 0) {
             showChooseCursor(textX, textY, 25);
-            if (gameManager.keyHandler.enterPressed) subState = 0;
+            if (gameManager.keyHandler.isEnterPressed) subState = 0;
         }
     }
 
@@ -934,7 +934,7 @@ public class UI {
         textY += GameManager.TILE_SIZE;
         graphics2D.drawString("CTRL", textX, textY);
         textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("C", textX, textY);
+        graphics2D.drawString("E", textX, textY);
         textY += GameManager.TILE_SIZE;
         graphics2D.drawString("P", textX, textY);
         textY += GameManager.TILE_SIZE;
@@ -948,7 +948,7 @@ public class UI {
         graphics2D.drawString("Back", textX, textY);
         if (commandNum == 0) {
             showChooseCursor(textX, textY, 25);
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 subState = 0;
                 commandNum = 3;
             }
@@ -967,7 +967,7 @@ public class UI {
         graphics2D.drawString(text, textX, textY);
         if (commandNum == 0) {
             showChooseCursor(textX, textY, 25);
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 //Quit the game
                 subState = 0;
                 gameManager.ui.titleScreenState = 0;
@@ -983,7 +983,7 @@ public class UI {
         graphics2D.drawString(text, textX, textY);
         if (commandNum == 1) {
             showChooseCursor(textX, textY, 25);
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 //Quit the game
                 subState = 0;
                 commandNum = 4;

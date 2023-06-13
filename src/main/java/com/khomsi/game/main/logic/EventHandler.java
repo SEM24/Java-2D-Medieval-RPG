@@ -146,7 +146,7 @@ public class EventHandler {
     }
 
     private void speak(Entity entity) {
-        if (gameManager.keyHandler.enterPressed) {
+        if (gameManager.keyHandler.isEnterPressed) {
             gameManager.gameState = GameManager.DIALOGUE_STATE;
             gameManager.player.attackCanceled = true;
             entity.speak();
@@ -174,7 +174,7 @@ public class EventHandler {
     }
 
     private void healingPool(int gameState) {
-        if (gameManager.keyHandler.enterPressed) {
+        if (gameManager.keyHandler.isEnterPressed) {
             gameManager.gameState = gameState;
             gameManager.player.attackCanceled = true;
             if (gameManager.player.coin > 0) {

@@ -88,9 +88,13 @@ public class Player extends Entity {
 
     public void setDefaultPosition() {
         //player position of player
-        gameManager.currentMap = 3;
-        worldX = GameManager.TILE_SIZE * 25;
-        worldY = GameManager.TILE_SIZE * 1;
+        gameManager.currentMap = 0;
+        worldX = GameManager.TILE_SIZE * 30;
+        worldY = GameManager.TILE_SIZE * 21;
+        //TODO remove later
+//        gameManager.currentMap = 3;
+//        worldX = GameManager.TILE_SIZE * 25;
+//        worldY = GameManager.TILE_SIZE * 1;
         direction = "down";
     }
 
@@ -288,23 +292,23 @@ public class Player extends Entity {
             entityAttack();
         }
         //You can't guard while attacking
-        else if (keyHandler.spacePressed) {
+        else if (keyHandler.isSpacePressed) {
             guarding = true;
             guardCounter++;
 
         }
         //to avoid moving the character without pressing buttons
-        else if (keyHandler.upPressed || keyHandler.downPressed ||
-                keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.enterPressed) {
+        else if (keyHandler.isUpPressed || keyHandler.isDownPressed ||
+                keyHandler.isLeftPressed || keyHandler.isRightPressed || keyHandler.isEnterPressed) {
 
             //use else if to avoid diagonal movement, if it's not needed, use just if
-            if (keyHandler.upPressed) {
+            if (keyHandler.isUpPressed) {
                 direction = "up";
-            } else if (keyHandler.downPressed) {
+            } else if (keyHandler.isDownPressed) {
                 direction = "down";
-            } else if (keyHandler.leftPressed) {
+            } else if (keyHandler.isLeftPressed) {
                 direction = "left";
-            } else if (keyHandler.rightPressed) {
+            } else if (keyHandler.isRightPressed) {
                 direction = "right";
             }
 
@@ -312,7 +316,7 @@ public class Player extends Entity {
             //Check Event
             gameManager.eventHandler.checkEvent();
             //Change the direction of player
-            if (!collisionOn && !keyHandler.enterPressed) {
+            if (!collisionOn && !keyHandler.isEnterPressed) {
                 switch (direction) {
                     case "up" -> worldY -= speed;
                     case "down" -> worldY += speed;
@@ -322,13 +326,13 @@ public class Player extends Entity {
                 spriteMovement();
             }
             //To prevent sword swing when interact with events by enter press
-            if (keyHandler.enterPressed && !attackCanceled) {
+            if (keyHandler.isEnterPressed && !attackCanceled) {
                 gameManager.playSE(10);
                 attacking = true;
                 spriteCounter = 0;
             }
             attackCanceled = false;
-            gameManager.keyHandler.enterPressed = false;
+            gameManager.keyHandler.isEnterPressed = false;
             guarding = false;
             guardCounter = 0;
             //Change the player's walk/attack sprites
@@ -348,7 +352,7 @@ public class Player extends Entity {
 
         //Shoot projectTiles, if the previous tile is still on the screen,
         //you can't shoot next one
-        if (keyHandler.shootKeyPressed && !projectTile.alive
+        if (keyHandler.isShootKeyPressed && !projectTile.alive
                 && shootAvailableCounter == 30 && projectTile.haveResource(this)) {
             //Set default coord, direction, alive state and entity
             projectTile.set(worldX, worldY, direction, true, this);
@@ -495,7 +499,7 @@ public class Player extends Entity {
     private void interactNpc(int npcIndex) {
         //if index not 999 - player touches the npc
         if (npcIndex != playerIndex) {
-            if (gameManager.keyHandler.enterPressed) {
+            if (gameManager.keyHandler.isEnterPressed) {
                 attackCanceled = true;
                 gameManager.npcList[gameManager.currentMap][npcIndex].speak();
             }
@@ -571,7 +575,7 @@ public class Player extends Entity {
             }
             //Obstacle
             else if (gameManager.object[gameManager.currentMap][index].type == TYPE_OBSTACLE) {
-                if (keyHandler.enterPressed) {
+                if (keyHandler.isEnterPressed) {
                     attackCanceled = true;
                     gameManager.object[gameManager.currentMap][index].interact();
                 }
