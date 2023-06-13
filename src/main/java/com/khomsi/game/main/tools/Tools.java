@@ -2,8 +2,11 @@ package com.khomsi.game.main.tools;
 
 import com.khomsi.game.main.GameManager;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 public class Tools {
     public BufferedImage scaledImage(BufferedImage image, int width, int height) {
@@ -28,5 +31,23 @@ public class Tools {
             graphics2D.drawImage(image, screenX, screenY,
                     GameManager.TILE_SIZE, GameManager.TILE_SIZE, null);
         }
+    }
+
+    //Method with default values for images
+    public BufferedImage setup(String imageName) {
+        return setup(imageName, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
+    }
+
+    public BufferedImage setup(String imagePath, int width, int height) {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(Objects.requireNonNull(
+                    getClass().getResourceAsStream(imagePath + ".png")));
+            image = scaledImage(image, width, height);
+        } catch (IOException e) {
+            System.err.println("Error in setup in " + getClass().getSimpleName());
+            e.printStackTrace();
+        }
+        return image;
     }
 }

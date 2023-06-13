@@ -1,6 +1,7 @@
 package com.khomsi.game.enviroment;
 
 import com.khomsi.game.main.GameManager;
+import com.khomsi.game.main.tools.Tools;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,6 +18,7 @@ public class Lightning {
     public static final int NIGHT = 2;
     public static final int DAWN = 3;
     public int dayState = DAY;
+    Tools tools = new Tools();
 
     public Lightning(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -86,7 +88,6 @@ public class Lightning {
             setLightSource();
             gameManager.player.lightUpdated = false;
         }
-        //TODO adjust settings with day-night
         //Check the state of the day
         if (dayState == DAY) {
             dayCounter++;
@@ -127,16 +128,22 @@ public class Lightning {
             g2d.drawImage(darknessFilter, 0, 0, null);
         }
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
-        //Debug
-        String situation = "";
-        switch (dayState) {
-            case DAY -> situation = "Day";
-            case NIGHTFALL -> situation = "NightFall";
-            case NIGHT -> situation = "Night";
-            case DAWN -> situation = "Dawn";
+        debugDayState(g2d);
+        gameManager.ui.drawClock(g2d, dayState, filterAlfa);
+    }
+
+    private void debugDayState(Graphics2D g2d) {
+        if (gameManager.keyHandler.debugMode) {
+            String situation = "";
+            switch (dayState) {
+                case DAY -> situation = "Day";
+                case NIGHTFALL -> situation = "NightFall";
+                case NIGHT -> situation = "Night";
+                case DAWN -> situation = "Dawn";
+            }
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(g2d.getFont().deriveFont(45F));
+            g2d.drawString(situation, 750, 500);
         }
-        g2d.setColor(Color.WHITE);
-        g2d.setFont(g2d.getFont().deriveFont(45F));
-        g2d.drawString(situation, 750, 500);
     }
 }

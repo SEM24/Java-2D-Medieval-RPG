@@ -1,7 +1,6 @@
 package com.khomsi.game.main.tools;
 
 import com.khomsi.game.entity.Entity;
-import com.khomsi.game.enviroment.Lightning;
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.objects.gui.HeartObject;
 import com.khomsi.game.objects.gui.ManaObject;
@@ -14,11 +13,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.khomsi.game.enviroment.Lightning.*;
+
 public class UI {
     GameManager gameManager;
     Graphics2D graphics2D;
+    Tools tools = new Tools();
     public Font playMeGames;
     BufferedImage heartFull, heartHalf, heartEmpty, manaFull, manaEmpty, coin;
+    private BufferedImage arrow, sun, moon, line, nightFall;
     List<String> message = new ArrayList<>();
     List<Integer> messageCounter = new ArrayList<>();
     public String currentDialog = "";
@@ -125,7 +128,7 @@ public class UI {
             if (gameManager.enManagement.lightning.filterAlfa <= 0F) {
                 gameManager.enManagement.lightning.filterAlfa = 0F;
                 counter = 0;
-                gameManager.enManagement.lightning.dayState = Lightning.DAY;
+                gameManager.enManagement.lightning.dayState = DAY;
                 gameManager.enManagement.lightning.dayCounter = 0;
                 gameManager.gameState = GameManager.PLAY_STATE;
                 gameManager.player.getImage();
@@ -901,6 +904,75 @@ public class UI {
             showChooseCursor(textX, textY, 25);
             if (gameManager.keyHandler.isEnterPressed) subState = 0;
         }
+    }
+
+    public void drawClock(Graphics2D g2d, int dayState, float filterAlfa) {
+        int clockX = 730;
+        int clockY = 50;
+        int clockGap = 42;
+        int clockWidth = GameManager.TILE_SIZE * 6;
+        int clockHeight = (int) (GameManager.TILE_SIZE * 1.3);
+        final int LINE_COUNT = 5;
+        final int WINDOW_OFFSET_X = 20;
+        final int WINDOW_OFFSET_Y = 4;
+        int startX = clockX - WINDOW_OFFSET_X - 1;
+        int endX = clockX + (clockGap * 4 + 1) + WINDOW_OFFSET_X;
+
+        moon = tools.setup("/clock/clock_moon");
+        sun = tools.setup("/clock/clock_sun");
+        arrow = tools.setup("/clock/clock_arrow");
+        line = tools.setup("/clock/clock_line");
+        //Add the NightFall day
+        nightFall = tools.setup("/clock/clock_nightfall");
+
+        if (gameManager.gameState != GameManager.CHARACTER_STATE) {
+            //Draw window for clocks
+            drawRoundUiWindow(clockX - WINDOW_OFFSET_X, clockY - WINDOW_OFFSET_Y, clockWidth, clockHeight, g2d);
+            // Draw lines
+            for (int i = 0; i < LINE_COUNT; i++) {
+                int xPos = clockX + (clockGap * i);
+                g2d.drawImage(line, xPos, clockY + WINDOW_OFFSET_Y, null);
+            }
+            int xPos = clockX + (clockGap * 4 + 1);
+            int yPos = (int) (clockY - WINDOW_OFFSET_Y * 3.2);
+            g2d.drawImage(moon, xPos + WINDOW_OFFSET_X, yPos, null);
+
+            xPos = (xPos - clockGap * 2);
+            yPos = yPos - WINDOW_OFFSET_Y;
+            g2d.drawImage(nightFall, xPos, yPos, null);
+
+            xPos = startX + 1;
+            g2d.drawImage(sun, xPos, yPos, null);
+
+            // Calculate arrow position based on dayState and filterAlfa
+            int arrowX;
+            int arrowY = clockY + WINDOW_OFFSET_Y * 6;
+
+            if (dayState == DAY) {
+                arrowX = startX;
+            } else if (dayState == NIGHTFALL || dayState == NIGHT) {
+                arrowX = (int) (startX + (endX - startX) * filterAlfa);
+            } else { // DAWN
+                arrowX = endX - (int) ((endX - startX) * filterAlfa);
+
+                // Reverse the arrow movement during the dawn phase
+                arrowX = endX - (arrowX - startX);
+
+                if (arrowX < startX) {
+                    arrowX = startX;
+                }
+            }
+            g2d.drawImage(arrow, arrowX, arrowY, null);
+        }
+    }
+
+    //TODO Move setup to separate class and call here
+    public void drawRoundUiWindow(int x, int y, int width, int height, Graphics2D g2d) {
+        //Less %, more transparent
+        int alpha = 120; // % transparent
+        Color color = new Color(36, 36, 36, alpha);
+        g2d.setColor(color);
+        g2d.fillRoundRect(x, y, width, height, 8, 8);
     }
 
     private void showControl(int frameX, int frameY) {

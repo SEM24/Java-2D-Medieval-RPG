@@ -7,17 +7,14 @@ import com.khomsi.game.objects.gui.HeartObject;
 import com.khomsi.game.objects.gui.ManaObject;
 import com.khomsi.game.objects.interact.CoinBObject;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 //parent class for player, monster etc
-public class Entity {
+public class Entity extends Tools{
     //IMAGES
     public BufferedImage image, image2, image3;
     //Store our walking images in this variables
@@ -130,7 +127,8 @@ public class Entity {
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public GameManager gameManager;
-    public Tools tools = new Tools();
+    //FIXME
+//    public Tools tools = new Tools();
     public ProjectTile projectTile;
     public Entity attacker;
     public String knockBackDirection;
@@ -450,23 +448,6 @@ public class Entity {
         }
     }
 
-    //Method with default values for images
-    public BufferedImage setup(String imageName) {
-        return setup(imageName, GameManager.TILE_SIZE, GameManager.TILE_SIZE);
-    }
-
-    public BufferedImage setup(String imagePath, int width, int height) {
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(imagePath + ".png")));
-            image = tools.scaledImage(image, width, height);
-        } catch (IOException e) {
-            System.err.println("Error in setup in " + getClass().getSimpleName());
-            e.printStackTrace();
-        }
-        return image;
-    }
 
     private void changeAlfa(Graphics2D graphics2D, float alfaValue) {
         graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alfaValue));
