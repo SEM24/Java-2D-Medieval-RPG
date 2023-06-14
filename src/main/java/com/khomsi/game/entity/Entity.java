@@ -3,8 +3,8 @@ package com.khomsi.game.entity;
 import com.khomsi.game.entity.player.Player;
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.main.tools.Tools;
-import com.khomsi.game.objects.gui.HeartObject;
-import com.khomsi.game.objects.gui.ManaObject;
+import com.khomsi.game.objects.spells.HeartObject;
+import com.khomsi.game.objects.spells.ManaObject;
 import com.khomsi.game.objects.interact.CoinBObject;
 
 import java.awt.*;
@@ -127,8 +127,6 @@ public class Entity extends Tools{
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public GameManager gameManager;
-    //FIXME
-//    public Tools tools = new Tools();
     public ProjectTile projectTile;
     public Entity attacker;
     public String knockBackDirection;

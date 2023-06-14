@@ -58,7 +58,7 @@ public class Player extends Entity {
         level = 1;
         maxHp = 6;
         hp = maxHp;
-        maxMana = 4;
+        maxMana = 6;
         mana = maxMana;
         //TODO basic var for arrows, future realisation
 //        ammo = 10;
@@ -508,13 +508,21 @@ public class Player extends Entity {
     }
 
     private void checkLevelUp() {
+        int maxValue = 12;
         if (xp >= nextLevelXp) {
             level++;
             //This will make it so the exp resets but also takes into
             // account any exp collected that is over the nextLevelExp
             xp = xp - nextLevelXp;
             nextLevelXp = nextLevelXp * 2;
-            maxHp += 2;
+            // Increase maxHp by 2 if it is less than maxValue
+            if (maxHp < maxValue) {
+                maxHp += 2;
+            }
+            // Increase maxMana by 1 if it is less than maxValue
+            if (maxMana < maxValue) {
+                maxMana += 1;
+            }
             strength++;
             agility++;
             attack = getAttack();

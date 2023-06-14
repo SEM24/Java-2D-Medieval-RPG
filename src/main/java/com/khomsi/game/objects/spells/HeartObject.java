@@ -1,4 +1,4 @@
-package com.khomsi.game.objects.gui;
+package com.khomsi.game.objects.spells;
 
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.entity.Entity;

@@ -129,7 +129,7 @@ public class Lightning {
         }
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
         debugDayState(g2d);
-        gameManager.ui.drawClock(g2d, dayState, filterAlfa);
+        gameManager.ui.drawClock(dayState, filterAlfa);
     }
 
     private void debugDayState(Graphics2D g2d) {

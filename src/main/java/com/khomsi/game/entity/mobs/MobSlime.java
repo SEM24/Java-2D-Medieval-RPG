@@ -1,8 +1,8 @@
 package com.khomsi.game.entity.mobs;
 
 import com.khomsi.game.main.GameManager;
-import com.khomsi.game.objects.gui.HeartObject;
-import com.khomsi.game.objects.gui.ManaObject;
+import com.khomsi.game.objects.spells.HeartObject;
+import com.khomsi.game.objects.spells.ManaObject;
 import com.khomsi.game.objects.interact.CoinBObject;
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.objects.projectTiles.RockObject;
