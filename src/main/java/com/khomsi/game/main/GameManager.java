@@ -12,6 +12,7 @@ import com.khomsi.game.main.logic.CutSceneManager;
 import com.khomsi.game.main.logic.EntityGenerator;
 import com.khomsi.game.main.logic.EventHandler;
 import com.khomsi.game.main.tools.*;
+import com.khomsi.game.main.tools.ui.UI;
 import com.khomsi.game.tiles.Map;
 import com.khomsi.game.tiles.TileManager;
 import com.khomsi.game.tilesinteractive.InteractiveTile;

@@ -1,7 +1,6 @@
 package com.khomsi.game.enviroment;
 
 import com.khomsi.game.main.GameManager;
-import com.khomsi.game.main.tools.Tools;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,8 +17,6 @@ public class Lightning {
     public static final int NIGHT = 2;
     public static final int DAWN = 3;
     public int dayState = DAY;
-    Tools tools = new Tools();
-
     public Lightning(GameManager gameManager) {
         this.gameManager = gameManager;
         setLightSource();
@@ -129,7 +126,7 @@ public class Lightning {
         }
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
         debugDayState(g2d);
-        gameManager.ui.drawClock(dayState, filterAlfa);
+        gameManager.ui.hud.drawClock(dayState, filterAlfa);
     }
 
     private void debugDayState(Graphics2D g2d) {

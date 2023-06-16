@@ -1,15 +1,8 @@
-package com.khomsi.game.main.tools;
+package com.khomsi.game.main.tools.ui;
 
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
-import com.khomsi.game.objects.hud.ClockHud;
-import com.khomsi.game.objects.hud.HeartHud;
-import com.khomsi.game.objects.hud.ManaHud;
-import com.khomsi.game.objects.hud.WindowHud;
 import com.khomsi.game.objects.interact.CoinBObject;
-import com.khomsi.game.objects.interact.KeyObject;
-import com.khomsi.game.objects.spells.HeartObject;
-import com.khomsi.game.objects.spells.ManaObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,20 +11,18 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.khomsi.game.enviroment.Lightning.*;
+import static com.khomsi.game.enviroment.Lightning.DAY;
 
 public class UI {
     GameManager gameManager;
     Graphics2D graphics2D;
+    public HUD hud;
     public Font playMeGames;
-    private BufferedImage heartFull, heartHalf, heartEmpty, manaFull, manaEmpty, coin;
-    private BufferedImage heartHud1, heartHud2, heartHud3, heartHud4, heartHud5, heartHud6;
-    private BufferedImage manaHud1, manaHud2, manaHud3, manaHud4, manaHud5, manaHud6;
-    private BufferedImage arrow, sun, moon, line, nightFall;
-    private BufferedImage coinHud, keyHud;
     List<String> message = new ArrayList<>();
     List<Integer> messageCounter = new ArrayList<>();
     public String currentDialog = "";
+    private BufferedImage coin;
+
     public int commandNum = 0;
     //0: first screen, 1: second screen
     public int titleScreenState = 0;
@@ -40,159 +31,29 @@ public class UI {
     public int playerSlotRow = 0;
     public int npcSlotCol = 0;
     public int npcSlotRow = 0;
-    int subState = 0;
-    int counter = 0;
-    int charIndex = 0;
+    public int subState = 0;
+    public int counter = 0;
+    public int charIndex = 0;
     public Entity npc;
     String combinedText = "";
 
     public UI(GameManager gameManager) {
         this.gameManager = gameManager;
+        hud = new HUD(this, gameManager);
+
         try (InputStream input = getClass().getResourceAsStream("/font/PlaymegamesReguler-2OOee.ttf")) {
             playMeGames = Font.createFont(Font.TRUETYPE_FONT, input);
         } catch (FontFormatException | IOException e) {
             System.err.println("Error in importing fonts in " + getClass().getSimpleName());
             e.printStackTrace();
         }
-        initializeHudImages(gameManager);
+        initializeImages(gameManager);
     }
 
-    private void initializeHudImages(GameManager gameManager) {
-        //HUD object
-        Entity heart = new HeartObject(gameManager);
-        heartFull = heart.image;
-        heartHalf = heart.image2;
-        heartEmpty = heart.image3;
-
-        Entity mana = new ManaObject(gameManager);
-        manaFull = mana.image;
-        manaEmpty = mana.image2;
-
+    private void initializeImages(GameManager gameManager) {
         Entity bronzeCoin = new CoinBObject(gameManager);
         coin = bronzeCoin.down;
-        Entity clock = new ClockHud(gameManager);
-        arrow = clock.image2;
-        nightFall = clock.down;
-        moon = clock.down1;
-        sun = clock.image;
-        line = clock.image3;
-
-        Entity heartHud = new HeartHud(gameManager);
-        heartHud1 = heartHud.down;
-        heartHud2 = heartHud.down1;
-        heartHud3 = heartHud.down2;
-
-        heartHud4 = heartHud.image;
-        heartHud5 = heartHud.image2;
-        heartHud6 = heartHud.image3;
-
-        Entity manaHud = new ManaHud(gameManager);
-        manaHud1 = manaHud.down;
-        manaHud2 = manaHud.down1;
-        manaHud3 = manaHud.down2;
-
-        manaHud4 = manaHud.image;
-        manaHud5 = manaHud.image2;
-        manaHud6 = manaHud.image3;
-
-        Entity windowHud = new WindowHud(gameManager);
-        coinHud = windowHud.image;
-        keyHud = windowHud.image2;
-    }
-
-    private void drawHudBars() {
-        int clockWidth = (int) (GameManager.TILE_SIZE * 4.4);
-        int clockHeight = (int) (GameManager.TILE_SIZE * 1.5);
-
-        int windowX = GameManager.TILE_SIZE / 3;
-        int y = 10;
-        // Draw the subwindow
-        drawRoundUiWindow(windowX - 20, y - 4, clockWidth, clockHeight);
-
-        drawItemsOnHudWindow();
-        int y1 = 34;
-        int startX = GameManager.TILE_SIZE - 60;
-
-        drawBar(startX, 10, gameManager.player.maxHp, gameManager.player.hp, heartHud1,
-                heartHud2, heartHud3, heartHud4, heartHud5, heartHud6);
-        drawBar(startX, y1, gameManager.player.maxMana,
-                gameManager.player.mana, manaHud1, manaHud2, manaHud3, manaHud4, manaHud5, manaHud6);
-    }
-
-    private void drawItemsOnHudWindow() {
-        // Draw coin image and number of coins
-        int startX = GameManager.TILE_SIZE + 80;
-        int startY = 3;
-        drawImageWithText(coinHud, String.valueOf(gameManager.player.coin), startX, startY, 36);
-
-        // Draw key image and number of keys
-        startY = 25;
-        drawImageWithText(keyHud, searchItemForHud(KeyObject.OBJ_NAME), startX, startY, 67);
-    }
-
-    private void drawImageWithText(BufferedImage image, String text, int startX, int startY, int textY) {
-        graphics2D.drawImage(image, startX, startY, null);
-        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 21F));
-        graphics2D.setColor(Color.WHITE);
-        graphics2D.drawString(text, (int) (GameManager.TILE_SIZE * 3.6), textY);
-    }
-
-
-    public String searchItemForHud(String name) {
-        int counter = 0;
-        for (int i = 0; i < gameManager.player.inventory.size(); i++) {
-            if (gameManager.player.inventory.get(i).name.equals(name)) {
-                counter++;
-            }
-        }
-        return String.valueOf(counter);
-    }
-
-    private void drawBar(int startX, int startY, int max, int current, BufferedImage beginningImage, BufferedImage middleImage,
-                         BufferedImage endImage, BufferedImage emptyStartImage,
-                         BufferedImage middleEmptyImage, BufferedImage emptyEndImage) {
-        // Calculate the number of beginning, middle, and end sections based on current value
-        int beginningCount = (current < 1) ? 0 : 1;
-        int endCount = (current == max) ? 1 : 0;
-        int i = 0;
-        // Calculate the number of middle sections
-        int middleCount = Math.max(0, current - beginningCount - endCount);
-        int defaultX = startX;
-        // Draw empty bar start
-        graphics2D.drawImage(emptyStartImage, startX, startY, null);
-        startX += 12;
-
-        // Draw middle
-        while (i < max - 2) {
-            graphics2D.drawImage(middleEmptyImage, startX, startY, null);
-            i++;
-            startX += 9;
-        }
-
-        // Draw empty end section
-        graphics2D.drawImage(emptyEndImage, startX + 3, startY, null);
-
-        // Draw current bar
-        startX = defaultX;
-        i = 0;
-
-        // Draw beginning section (if current value is greater than or equal to 1)
-        if (beginningCount > 0) {
-            graphics2D.drawImage(beginningImage, startX, startY, null);
-            startX += 12;
-        }
-
-        // Draw middle sections
-        while (i < middleCount) {
-            graphics2D.drawImage(middleImage, startX, startY, null);
-            i++;
-            startX += 9;
-        }
-
-        // Draw end section (if current value is equal to max)
-        if (endCount > 0) {
-            graphics2D.drawImage(endImage, startX + 3, startY, null);
-        }
+        hud.initializeHudImages();
     }
 
     public void addMessage(String text) {
@@ -210,13 +71,13 @@ public class UI {
         }
         //Play state
         if (gameManager.gameState == GameManager.PLAY_STATE) {
-            drawHudBars();
+            hud.drawHudBars();
             drawMobHp();
             drawMessage();
         }
         //Pause state
         if (gameManager.gameState == GameManager.PAUSE_STATE) {
-            drawHudBars();
+            hud.drawHudBars();
             drawPauseScreen();
         }
         //Dialog state
@@ -997,68 +858,6 @@ public class UI {
         }
     }
 
-    public void drawClock(int dayState, float filterAlfa) {
-        int clockX = 730;
-        int clockY = 10;
-        int clockGap = 42;
-        int clockWidth = GameManager.TILE_SIZE * 6;
-        int clockHeight = (int) (GameManager.TILE_SIZE * 1.3);
-        final int LINE_COUNT = 5;
-        final int WINDOW_OFFSET_X = 20;
-        final int WINDOW_OFFSET_Y = 4;
-        int startX = clockX - WINDOW_OFFSET_X - 1;
-        int endX = clockX + (clockGap * 4 + 1) + WINDOW_OFFSET_X;
-
-        if (gameManager.gameState != GameManager.CHARACTER_STATE) {
-            //Draw window for clocks
-            drawRoundUiWindow(clockX - WINDOW_OFFSET_X, clockY - WINDOW_OFFSET_Y, clockWidth, clockHeight);
-            // Draw lines
-            for (int i = 0; i < LINE_COUNT; i++) {
-                int xPos = clockX + (clockGap * i);
-                graphics2D.drawImage(line, xPos, clockY + WINDOW_OFFSET_Y, null);
-            }
-            int xPos = clockX + (clockGap * 4 + 1);
-            int yPos = (int) (clockY - WINDOW_OFFSET_Y * 3.2);
-            graphics2D.drawImage(moon, xPos + WINDOW_OFFSET_X, yPos, null);
-
-            xPos = (xPos - clockGap * 2);
-            yPos = yPos - WINDOW_OFFSET_Y;
-            graphics2D.drawImage(nightFall, xPos, yPos, null);
-
-            xPos = startX + 1;
-            graphics2D.drawImage(sun, xPos, yPos, null);
-
-            // Calculate arrow position based on dayState and filterAlfa
-            int arrowX;
-            int arrowY = clockY + WINDOW_OFFSET_Y * 6;
-
-            if (dayState == DAY) {
-                arrowX = startX;
-            } else if (dayState == NIGHTFALL || dayState == NIGHT) {
-                arrowX = (int) (startX + (endX - startX) * filterAlfa);
-            } else { // DAWN
-                arrowX = endX - (int) ((endX - startX) * filterAlfa);
-
-                // Reverse the arrow movement during the dawn phase
-                arrowX = endX - (arrowX - startX);
-
-                if (arrowX < startX) {
-                    arrowX = startX;
-                }
-            }
-            graphics2D.drawImage(arrow, arrowX, arrowY, null);
-        }
-    }
-
-    //TODO Move setup to separate class and call here
-    public void drawRoundUiWindow(int x, int y, int width, int height) {
-        //Less %, more transparent
-        int alpha = 120; // % transparent
-        Color color = new Color(36, 36, 36, alpha);
-        graphics2D.setColor(color);
-        graphics2D.fillRoundRect(x, y, width, height, 8, 8);
-    }
-
     private void showControl(int frameX, int frameY) {
         int textX;
         int textY;
@@ -1165,3 +964,4 @@ public class UI {
         return tailX - length;
     }
 }
+
