@@ -55,11 +55,12 @@ public class Map extends TileManager {
     }
 
     public void drawMiniMap(Graphics2D g2D) {
-        if (miniMapOn) {
+        if (miniMapOn && gameManager.gameState != GameManager.CHARACTER_STATE
+                && gameManager.nextArea != GameManager.DUNGEON) {
             int width = 200;
             int height = 200;
-            int x = GameManager.SCREEN_WIDTH - width - 50;
-            int y = 50;
+            int x = GameManager.SCREEN_WIDTH - width - 20;
+            int y = 70;
             g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8F));
             drawPlayerPosition(g2D, worldMap, x, y, width, height);
             g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));

@@ -11,7 +11,10 @@ import com.khomsi.game.main.logic.CheckCollision;
 import com.khomsi.game.main.logic.CutSceneManager;
 import com.khomsi.game.main.logic.EntityGenerator;
 import com.khomsi.game.main.logic.EventHandler;
-import com.khomsi.game.main.tools.*;
+import com.khomsi.game.main.tools.EntityComparator;
+import com.khomsi.game.main.tools.KeyHandler;
+import com.khomsi.game.main.tools.PlaceObjects;
+import com.khomsi.game.main.tools.Sound;
 import com.khomsi.game.main.tools.ui.UI;
 import com.khomsi.game.tiles.Map;
 import com.khomsi.game.tiles.TileManager;
@@ -47,8 +50,7 @@ public class GameManager extends JPanel implements Runnable {
     int screenWidthFull = SCREEN_WIDTH;
     int screenHeightFull = SCREEN_HEIGHT;
     BufferedImage tempScreen;
-    Graphics2D g2d;
-
+   public Graphics2D g2d;
 
     //TOOLS FOR GAME
     public KeyHandler keyHandler = new KeyHandler(this);
@@ -413,20 +415,22 @@ public class GameManager extends JPanel implements Runnable {
         se.play();
     }
 
-    //FIXME check the method
     public void changeArea() {
         if (nextArea != currentArea) {
             stopMusic();
-            if (nextArea == OUTSIDE)
+            if (nextArea == OUTSIDE) {
                 playMusic(0);
-            if (nextArea == INDOOR)
+            }
+            if (nextArea == INDOOR) {
                 playMusic(19);
+            }
             if (nextArea == DUNGEON || nextArea == BOSS_DUNGEON) {
                 playMusic(20);
                 placeObjects.npcOnMap2();
             }
         }
-        currentArea = nextArea;
+        //FIXME cause the micro lag when called
         placeObjects.setMobs();
+        currentArea = nextArea;
     }
 }

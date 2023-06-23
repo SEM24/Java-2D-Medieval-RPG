@@ -37,7 +37,7 @@ public class Player extends Entity {
         solidAreaDefaultY = solidArea.y;
         //boundaries of player
         //adjust it if needed
-        solidArea.width = 31;
+        solidArea.width = 32;
         solidArea.height = 32;
 
         setDefaultValues();
@@ -95,7 +95,7 @@ public class Player extends Entity {
 //        gameManager.currentMap = 3;
 //        worldX = GameManager.TILE_SIZE * 25;
 //        worldY = GameManager.TILE_SIZE * 1;
-        direction = "down";
+//        direction = "down";
     }
 
     public void restoreStatus() {

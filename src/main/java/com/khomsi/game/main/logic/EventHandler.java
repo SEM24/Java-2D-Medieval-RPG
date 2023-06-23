@@ -4,6 +4,8 @@ import com.khomsi.game.data.GameProgress;
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
 
+import java.awt.*;
+
 public class EventHandler {
     GameManager gameManager;
     Entity eventMaster;
@@ -80,7 +82,7 @@ public class EventHandler {
                     gameManager.playSE(5);
                 }
                 //Enter Dungeon in seller house
-                else if (interact(1, 25, 15, "up") || interact(1, 24, 15, "up")) {
+                else if (interact(1, 25, 15, "up", 15)) {
                     changeLocation(2, 16, 39, GameManager.DUNGEON);
                     gameManager.playSE(4);
                 }
@@ -108,9 +110,8 @@ public class EventHandler {
                     gameManager.playSE(4);
                 }
                 //Start cutscene with the boss
-                if (interact(3, 24, 10, "any") ||
-                        interact(3, 25, 10, "any") ||
-                        interact(3, 26, 10, "any")) {
+                if (interact(3, 25, 10, "any") ||
+                        interact(3, 26, 10, "any", 10)) {
                     dungeonBoss();
                 }
             }
@@ -118,20 +119,30 @@ public class EventHandler {
     }
 
     public boolean interact(int map, int col, int row, String direction) {
+        return interact(map, col, row, direction, 0);
+    }
+
+    public boolean interact(int map, int col, int row, String direction, int tolerance) {
         boolean interact = false;
 
         if (map == gameManager.currentMap) {
-
             gameManager.player.solidArea.x = gameManager.player.worldX + gameManager.player.solidArea.x;
             gameManager.player.solidArea.y = gameManager.player.worldY + gameManager.player.solidArea.y;
 
             eventRect[map][col][row].x = col * GameManager.TILE_SIZE + eventRect[map][col][row].x;
             eventRect[map][col][row].y = row * GameManager.TILE_SIZE + eventRect[map][col][row].y;
-            //if player's solidArea is colliding with event's solidArea, event can be played only 1 time
-            if (gameManager.player.solidArea.intersects(eventRect[map][col][row]) &&
-                    !eventRect[map][col][row].eventDone) {
-                if (gameManager.player.direction.contentEquals(direction) ||
-                        direction.contentEquals("any")) {
+            // Define a smaller rectangle for player's collision area with tolerance
+            //This way we can adjust the solid area of interaction, so if player collide on solid area, it will interact
+            //any way
+            Rectangle playerCollisionArea = new Rectangle(
+                    gameManager.player.solidArea.x,
+                    gameManager.player.solidArea.y,
+                    gameManager.player.solidArea.width + tolerance,
+                    gameManager.player.solidArea.height
+            );
+            // If player's collision area intersects with event's solidArea, event can be played only 1 time
+            if (playerCollisionArea.intersects(eventRect[map][col][row]) && !eventRect[map][col][row].eventDone) {
+                if (gameManager.player.direction.contentEquals(direction) || direction.contentEquals("any")) {
                     interact = true;
                     previousEventX = gameManager.player.worldX;
                     previousEventY = gameManager.player.worldY;

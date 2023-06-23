@@ -55,7 +55,7 @@ public class GameApplication {
 
         show.addActionListener(actionEvent -> window.setVisible(true));
         MenuItem exit = new MenuItem("Exit");
-        exit.addActionListener(actionEvent -> System.exit(0));
+        exit.addActionListener(actionEvent -> handleExit(systemTray, trayIcon));
         popupMenu.add(show);
         popupMenu.add(exit);
         trayIcon.setPopupMenu(popupMenu);
@@ -64,5 +64,11 @@ public class GameApplication {
         } catch (AWTException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void handleExit(SystemTray systemTray, TrayIcon trayIcon) {
+        systemTray.remove(trayIcon); // Remove the tray icon
+        window.dispose(); // Dispose the window
+        System.exit(0); // Terminate the application
     }
 }

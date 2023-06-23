@@ -214,8 +214,10 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_P) gameManager.gameState = GameManager.PAUSE_STATE;
         if (code == KeyEvent.VK_ESCAPE) gameManager.gameState = GameManager.OPTION_STATE;
         //Opens the map
-        if (code == KeyEvent.VK_M) gameManager.gameState = GameManager.MAP_STATE;
-        if (code == KeyEvent.VK_X) gameManager.map.miniMapOn = !gameManager.map.miniMapOn;
+        if (code == KeyEvent.VK_M && gameManager.nextArea != GameManager.DUNGEON)
+            gameManager.gameState = GameManager.MAP_STATE;
+        if (code == KeyEvent.VK_X)
+            gameManager.map.miniMapOn = !gameManager.map.miniMapOn;
         //When player pressed shift, he runs
         if (code == KeyEvent.VK_SHIFT && !gameManager.playerRun) {
             gameManager.playerRun = true;

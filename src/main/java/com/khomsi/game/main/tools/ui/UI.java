@@ -17,11 +17,12 @@ public class UI {
     GameManager gameManager;
     Graphics2D graphics2D;
     public HUD hud;
+    Settings settings;
+    BufferedImage coin;
     public Font playMeGames;
     List<String> message = new ArrayList<>();
     List<Integer> messageCounter = new ArrayList<>();
     public String currentDialog = "";
-    private BufferedImage coin;
 
     public int commandNum = 0;
     //0: first screen, 1: second screen
@@ -39,8 +40,7 @@ public class UI {
 
     public UI(GameManager gameManager) {
         this.gameManager = gameManager;
-        hud = new HUD(this, gameManager);
-
+        this.hud = new HUD(this, gameManager);
         try (InputStream input = getClass().getResourceAsStream("/font/PlaymegamesReguler-2OOee.ttf")) {
             playMeGames = Font.createFont(Font.TRUETYPE_FONT, input);
         } catch (FontFormatException | IOException e) {
@@ -48,17 +48,6 @@ public class UI {
             e.printStackTrace();
         }
         initializeImages(gameManager);
-    }
-
-    private void initializeImages(GameManager gameManager) {
-        Entity bronzeCoin = new CoinBObject(gameManager);
-        coin = bronzeCoin.down;
-        hud.initializeHudImages();
-    }
-
-    public void addMessage(String text) {
-        message.add(text);
-        messageCounter.add(0);
     }
 
     public void draw(Graphics2D graphics2D) {
@@ -111,28 +100,7 @@ public class UI {
         }
     }
 
-    private void drawSleepScreen() {
-        counter++;
-
-        if (counter < 120) {
-            gameManager.enManagement.lightning.filterAlfa += 0.01F;
-            if (gameManager.enManagement.lightning.filterAlfa > 1F)
-                gameManager.enManagement.lightning.filterAlfa = 1F;
-        }
-        if (counter >= 120) {
-            gameManager.enManagement.lightning.filterAlfa -= 0.01F;
-            if (gameManager.enManagement.lightning.filterAlfa <= 0F) {
-                gameManager.enManagement.lightning.filterAlfa = 0F;
-                counter = 0;
-                gameManager.enManagement.lightning.dayState = DAY;
-                gameManager.enManagement.lightning.dayCounter = 0;
-                gameManager.gameState = GameManager.PLAY_STATE;
-                gameManager.player.getImage();
-            }
-        }
-    }
-
-    private void drawMobHp() {
+    void drawMobHp() {
         for (int i = 0; i < gameManager.mobs[1].length; i++) {
             Entity mob = gameManager.mobs[gameManager.currentMap][i];
             if (mob != null && mob.inCamera()) {
@@ -175,7 +143,7 @@ public class UI {
         }
     }
 
-    private void drawTradeScreen() {
+    void drawTradeScreen() {
         switch (subState) {
             case 0 -> tradeSelect();
             case 1 -> tradeBuy();
@@ -183,7 +151,6 @@ public class UI {
         }
         gameManager.keyHandler.isEnterPressed = false;
     }
-
     private void tradeSelect() {
         npc.dialogueSet = 0;
         showDialog();
@@ -318,6 +285,17 @@ public class UI {
         graphics2D.drawString("Your coins: " + gameManager.player.coin, x + 24, y + 60);
     }
 
+    private void initializeImages(GameManager gameManager) {
+        Entity bronzeCoin = new CoinBObject(gameManager);
+        coin = bronzeCoin.down;
+        hud.initializeHudImages();
+    }
+
+    public void addMessage(String text) {
+        message.add(text);
+        messageCounter.add(0);
+    }
+
     private void drawTransitionScreen() {
         counter++;
         graphics2D.setColor(new Color(0, 0, 0, counter * 5));
@@ -331,6 +309,27 @@ public class UI {
             gameManager.eventHandler.previousEventX = gameManager.player.worldX;
             gameManager.eventHandler.previousEventY = gameManager.player.worldY;
             gameManager.changeArea();
+        }
+    }
+
+    void drawSleepScreen() {
+        counter++;
+
+        if (counter < 120) {
+            gameManager.enManagement.lightning.filterAlfa += 0.01F;
+            if (gameManager.enManagement.lightning.filterAlfa > 1F)
+                gameManager.enManagement.lightning.filterAlfa = 1F;
+        }
+        if (counter >= 120) {
+            gameManager.enManagement.lightning.filterAlfa -= 0.01F;
+            if (gameManager.enManagement.lightning.filterAlfa <= 0F) {
+                gameManager.enManagement.lightning.filterAlfa = 0F;
+                counter = 0;
+                gameManager.enManagement.lightning.dayState = DAY;
+                gameManager.enManagement.lightning.dayCounter = 0;
+                gameManager.gameState = GameManager.PLAY_STATE;
+                gameManager.player.getImage();
+            }
         }
     }
 
@@ -376,8 +375,8 @@ public class UI {
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
         switch (subState) {
             case 0 -> optionTop(frameX, frameY);
-            case 1 -> fullScreenNotification(frameX, frameY);
-            case 2 -> showControl(frameX, frameY);
+            case 1 -> settings.fullScreenNotification(frameX, frameY);
+            case 2 -> settings.showControl(frameX, frameY);
             case 3 -> endGameConfirm(frameX, frameY);
         }
         gameManager.keyHandler.isEnterPressed = false;
@@ -464,11 +463,11 @@ public class UI {
         gameManager.config.saveConfig();
     }
 
-    private void showChooseCursor(int textX, int textY, int cursorX) {
+    public void showChooseCursor(int textX, int textY, int cursorX) {
         graphics2D.drawString(">", textX - cursorX, textY);
     }
 
-    private void drawInventory(Entity entity, boolean cursor) {
+    void drawInventory(Entity entity, boolean cursor) {
         //Frame
         int frameX, frameY;
         int frameWidth, frameHeight;
@@ -766,7 +765,7 @@ public class UI {
         }
     }
 
-    private void drawShadowAndText(String text, int x, int y, int sx, int sy) {
+    void drawShadowAndText(String text, int x, int y, int sx, int sy) {
         //Shadow
         graphics2D.setColor(Color.BLACK);
         graphics2D.drawString(text, x + sx, y + sy);
@@ -816,7 +815,7 @@ public class UI {
         splitTextInDialog(currentDialog, x, y);
     }
 
-    private void splitTextInDialog(String currentDialog, int x, int y) {
+    public void splitTextInDialog(String currentDialog, int x, int y) {
         //split the text inside dialog, so it fits the window
         for (String line : currentDialog.split("\n")) {
             graphics2D.drawString(line, x, y);
@@ -840,74 +839,6 @@ public class UI {
         graphics2D.setColor(color);
         graphics2D.setStroke(new BasicStroke(5));
         graphics2D.drawRect(x + 5, y + 5, width - 10, height - 10);
-    }
-
-
-    private void fullScreenNotification(int frameX, int frameY) {
-        int textX = frameX + GameManager.TILE_SIZE;
-        int textY = frameY + GameManager.TILE_SIZE * 3;
-        currentDialog = "The changes will be \napplied after restarting \nthe game.";
-        splitTextInDialog(currentDialog, textX, textY);
-        //Back text
-        textY = frameY + GameManager.TILE_SIZE * 9;
-        graphics2D.drawString("Back", textX, textY);
-        //Draw cursor
-        if (commandNum == 0) {
-            showChooseCursor(textX, textY, 25);
-            if (gameManager.keyHandler.isEnterPressed) subState = 0;
-        }
-    }
-
-    private void showControl(int frameX, int frameY) {
-        int textX;
-        int textY;
-        String text = "Control";
-        textX = getXCenterText(text);
-        textY = frameY + GameManager.TILE_SIZE;
-        graphics2D.drawString(text, textX, textY);
-        textX = frameX + GameManager.TILE_SIZE;
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("Move", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("Confirm/Attack", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("Shoot/Cast", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("Inventory", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("Pause", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("Settings", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("Map/MiniMap", textX, textY);
-        textX = frameX + GameManager.TILE_SIZE * 6;
-        textY = frameY + GameManager.TILE_SIZE * 2;
-
-        graphics2D.drawString("WASD", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("ENTER", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("CTRL", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("E", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("P", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("ESC", textX, textY);
-        textY += GameManager.TILE_SIZE;
-        graphics2D.drawString("M/X", textX, textY);
-
-        //Back button
-        textX = frameX + GameManager.TILE_SIZE;
-        textY = frameY + GameManager.TILE_SIZE * 9;
-        graphics2D.drawString("Back", textX, textY);
-        if (commandNum == 0) {
-            showChooseCursor(textX, textY, 25);
-            if (gameManager.keyHandler.isEnterPressed) {
-                subState = 0;
-                commandNum = 3;
-            }
-        }
     }
 
     private void endGameConfirm(int frameX, int frameY) {
@@ -954,12 +885,12 @@ public class UI {
         graphics2D.drawString(pauseText, x, y);
     }
 
-    private int getXCenterText(String text) {
+    int getXCenterText(String text) {
         int length = (int) graphics2D.getFontMetrics().getStringBounds(text, graphics2D).getWidth();
         return GameManager.SCREEN_WIDTH / 2 - length / 2;
     }
 
-    private int getXAlignToRightText(String text, int tailX) {
+    int getXAlignToRightText(String text, int tailX) {
         int length = (int) graphics2D.getFontMetrics().getStringBounds(text, graphics2D).getWidth();
         return tailX - length;
     }

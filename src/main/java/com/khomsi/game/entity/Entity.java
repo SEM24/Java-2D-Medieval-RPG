@@ -3,9 +3,9 @@ package com.khomsi.game.entity;
 import com.khomsi.game.entity.player.Player;
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.main.tools.Tools;
+import com.khomsi.game.objects.interact.CoinBObject;
 import com.khomsi.game.objects.spells.HeartObject;
 import com.khomsi.game.objects.spells.ManaObject;
-import com.khomsi.game.objects.interact.CoinBObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 //parent class for player, monster etc
-public class Entity extends Tools{
+public class Entity extends Tools {
     //IMAGES
     public BufferedImage image, image2, image3;
     //Store our walking images in this variables
@@ -267,9 +267,17 @@ public class Entity extends Tools{
                     offBalance = true;
                     //Return sprite to previous one, stan effect
                     spriteCounter -= 60;
-                } else {
-                    //Normal guard
-                    damage /= 3;
+                }
+                //Normal guard
+                else {
+                    System.out.println("before damage: " + damage);
+                    // Normal guard
+                    if (damage < 1) {
+                        damage = 1;  // Make sure damage is non-negative
+                    } else {
+                        damage /= 3;  // Divide the damage by 3
+                    }
+                    System.out.println("after damage: " + damage);
                     gameManager.playSE(17);
                 }
             }
@@ -629,6 +637,7 @@ public class Entity extends Tools{
     }
 
     public void setKnockBack(Entity target, Entity attacker, int knockBackPower) {
+        gameManager.playerRun = false;
         this.attacker = attacker;
         target.knockBackDirection = attacker.direction;
         target.speed += knockBackPower;
