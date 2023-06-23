@@ -50,7 +50,7 @@ public class GameManager extends JPanel implements Runnable {
     int screenWidthFull = SCREEN_WIDTH;
     int screenHeightFull = SCREEN_HEIGHT;
     BufferedImage tempScreen;
-   public Graphics2D g2d;
+    public Graphics2D g2d;
 
     //TOOLS FOR GAME
     public KeyHandler keyHandler = new KeyHandler(this);
@@ -73,8 +73,9 @@ public class GameManager extends JPanel implements Runnable {
     //ENTITY AND OBJECTS
     //TODO extend the massive, when you'll have more objects
     public Entity[][] object = new Entity[maxMap][30];
-    public Entity[][] npcList = new Entity[maxMap][20];
-    public Entity[][] mobs = new Entity[maxMap][20];
+    public Entity[][] npcList = new Entity[maxMap][30];
+    public Entity[][] mobs = new Entity[maxMap][30];
+    public Entity[][] animatedTiles = new Entity[maxMap][30];
     List<Entity> entities = new ArrayList<>();
     public InteractiveTile[][] interactTile = new InteractiveTile[maxMap][50];
     public Entity[][] projectile = new Entity[maxMap][20];
@@ -220,6 +221,10 @@ public class GameManager extends JPanel implements Runnable {
                 if (npc != null)
                     npc.update();
 
+            for (Entity animated : animatedTiles[currentMap])
+                if (animated != null)
+                    animated.update();
+
             //Mob loop
             for (int i = 0; i < mobs[1].length; i++) {
                 if (mobs[currentMap][i] != null) {
@@ -283,6 +288,7 @@ public class GameManager extends JPanel implements Runnable {
             entities.add(player);
             //Add and render npc, obj, mobs, projectiles to draw list
             drawMethodArray(npcList);
+            drawMethodArray(animatedTiles);
             drawMethodArray(object);
             drawMethodArray(mobs);
             //Interactive tiles

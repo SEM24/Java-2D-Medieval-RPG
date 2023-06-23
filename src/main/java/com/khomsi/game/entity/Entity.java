@@ -189,7 +189,6 @@ public class Entity extends Tools {
             } else {
                 setAction();
                 changeDirection(direction);
-                //TODO idk how to make special movement for each mob yet
                 spriteMovement();
             }
             if (invincible) {
@@ -342,10 +341,6 @@ public class Entity extends Tools {
     }
 
     public void draw(Graphics2D graphics2D) {
-        /*
-         @multiplier  increase the draw distance of entity to avoid the optimization
-         (when object disappear earlier, than it moved from our screen)
-        */
         //actual coords to draw the stuff on game screen
         int screenX = getScreenX();
         int screenY = getScreenY();
@@ -819,14 +814,6 @@ public class Entity extends Tools {
         return maxHp;
     }
 
-    //    public void changeDirection() {
-//        switch (direction) {
-//            case "up" -> worldY -= speed;
-//            case "down" -> worldY += speed;
-//            case "left" -> worldX -= speed;
-//            case "right" -> worldX += speed;
-//        }
-//    }
     public void moveObj(String direction) {
 
     }

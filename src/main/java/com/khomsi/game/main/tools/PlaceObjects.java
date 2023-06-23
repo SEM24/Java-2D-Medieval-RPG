@@ -18,6 +18,8 @@ import com.khomsi.game.objects.spells.PotionObject;
 import com.khomsi.game.tilesinteractive.Bush;
 import com.khomsi.game.tilesinteractive.DestructibleWall;
 import com.khomsi.game.tilesinteractive.SwitchPress;
+import com.khomsi.game.tilesinteractive.animated.water.WaterBubbles;
+import com.khomsi.game.tilesinteractive.animated.water.WaterHurricane;
 
 public class PlaceObjects {
     GameManager gameManager;
@@ -156,6 +158,7 @@ public class PlaceObjects {
         gameManager.interactTile[mapNum][index] = new Bush(gameManager, 21, 28);
         index++;
         gameManager.interactTile[mapNum][index] = new Bush(gameManager, 28, 28);
+
     }
 
     private void interactiveTilesOnMap2() {
@@ -192,6 +195,7 @@ public class PlaceObjects {
         npcOnMap0();
         npcOnMap1();
         npcOnMap2();
+        setAnimatedTiles();
     }
 
     private void npcOnMap0() {
@@ -202,6 +206,30 @@ public class PlaceObjects {
         gameManager.npcList[mapNum][index].worldX = GameManager.TILE_SIZE * 26;
         gameManager.npcList[mapNum][index].worldY = GameManager.TILE_SIZE * 21;
         index++;
+    }
+
+    public void setAnimatedTiles() {
+        drawWaterAnimationOnMap0();
+    }
+
+    private void drawWaterAnimationOnMap0() {
+        int index = 0;
+        int mapNum = 0;
+        gameManager.animatedTiles[mapNum][index] = new WaterBubbles(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 35;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 18;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new WaterBubbles(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 38;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 20;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new WaterBubbles(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 39;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 19;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new WaterHurricane(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 37;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 21;
     }
 
     private void npcOnMap1() {
