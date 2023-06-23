@@ -1,7 +1,7 @@
-package com.khomsi.game.tilesinteractive.animated.water;
+package com.khomsi.game.tilesanimated.water;
 
 import com.khomsi.game.main.GameManager;
-import com.khomsi.game.tilesinteractive.animated.AnimatedTile;
+import com.khomsi.game.tilesanimated.AnimatedTile;
 
 public class WaterBubbles extends AnimatedTile {
     public WaterBubbles(GameManager gameManager) {

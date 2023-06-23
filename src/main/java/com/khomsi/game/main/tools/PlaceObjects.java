@@ -18,8 +18,8 @@ import com.khomsi.game.objects.spells.PotionObject;
 import com.khomsi.game.tilesinteractive.Bush;
 import com.khomsi.game.tilesinteractive.DestructibleWall;
 import com.khomsi.game.tilesinteractive.SwitchPress;
-import com.khomsi.game.tilesinteractive.animated.water.WaterBubbles;
-import com.khomsi.game.tilesinteractive.animated.water.WaterHurricane;
+import com.khomsi.game.tilesanimated.water.WaterBubbles;
+import com.khomsi.game.tilesanimated.water.WaterHurricane;
 
 public class PlaceObjects {
     GameManager gameManager;
