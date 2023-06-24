@@ -13,12 +13,12 @@ import com.khomsi.game.main.logic.EntityGenerator;
 import com.khomsi.game.main.logic.EventHandler;
 import com.khomsi.game.main.tools.EntityComparator;
 import com.khomsi.game.main.tools.KeyHandler;
-import com.khomsi.game.main.tools.PlaceObjects;
 import com.khomsi.game.main.tools.Sound;
 import com.khomsi.game.main.tools.ui.UI;
+import com.khomsi.game.objects.PlaceObjects;
 import com.khomsi.game.tiles.Map;
 import com.khomsi.game.tiles.TileManager;
-import com.khomsi.game.tilesinteractive.InteractiveTile;
+import com.khomsi.game.tiles.interactive.InteractiveTile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -221,10 +221,6 @@ public class GameManager extends JPanel implements Runnable {
                 if (npc != null)
                     npc.update();
 
-            for (Entity animated : animatedTiles[currentMap])
-                if (animated != null)
-                    animated.update();
-
             //Mob loop
             for (int i = 0; i < mobs[1].length; i++) {
                 if (mobs[currentMap][i] != null) {
@@ -256,6 +252,10 @@ public class GameManager extends JPanel implements Runnable {
                     tile.update();
                 }
             }
+            for (Entity animated : animatedTiles[currentMap])
+                if (animated != null)
+                    animated.update();
+
             enManagement.update();
         }
         if (gameState == PAUSE_STATE) {
@@ -281,14 +281,11 @@ public class GameManager extends JPanel implements Runnable {
         else {
             //Draw Tiles
             tileManager.draw(g2d);
-            for (Entity element : interactTile[currentMap]) {
-                if (element != null)
-                    element.draw(g2d);
-            }
+            drawObjectsOnScreen(interactTile);
+            drawObjectsOnScreen(animatedTiles);
             entities.add(player);
             //Add and render npc, obj, mobs, projectiles to draw list
             drawMethodArray(npcList);
-            drawMethodArray(animatedTiles);
             drawMethodArray(object);
             drawMethodArray(mobs);
             //Interactive tiles
@@ -314,6 +311,13 @@ public class GameManager extends JPanel implements Runnable {
             ui.draw(g2d);
         }
         debugFunction(g2d, drawStart);
+    }
+
+    private void drawObjectsOnScreen(Entity[][] animatedTiles) {
+        for (Entity element : animatedTiles[currentMap]) {
+            if (element != null)
+                element.draw(g2d);
+        }
     }
 
     private void drawMethodList(List<Entity> list) {

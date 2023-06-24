@@ -1,4 +1,4 @@
-package com.khomsi.game.tilesanimated;
+package com.khomsi.game.tiles.animated;
 
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
@@ -9,8 +9,6 @@ public class AnimatedTile extends Entity {
     public AnimatedTile(GameManager gameManager) {
         super(gameManager);
         this.gameManager = gameManager;
-        direction = "down";
-        speed = 0;
     }
 
     @Override

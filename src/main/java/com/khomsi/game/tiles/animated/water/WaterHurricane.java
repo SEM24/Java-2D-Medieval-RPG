@@ -1,7 +1,7 @@
-package com.khomsi.game.tilesanimated.water;
+package com.khomsi.game.tiles.animated.water;
 
 import com.khomsi.game.main.GameManager;
-import com.khomsi.game.tilesanimated.AnimatedTile;
+import com.khomsi.game.tiles.animated.AnimatedTile;
 
 public class WaterHurricane extends AnimatedTile {
     public WaterHurricane(GameManager gameManager) {

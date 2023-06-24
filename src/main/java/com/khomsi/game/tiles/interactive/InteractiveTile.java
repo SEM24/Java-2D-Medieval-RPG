@@ -1,4 +1,4 @@
-package com.khomsi.game.tilesinteractive;
+package com.khomsi.game.tiles.interactive;
 
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.entity.Entity;

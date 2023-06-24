@@ -1,50 +1,40 @@
-package com.khomsi.game.tilesinteractive;
+package com.khomsi.game.tiles.interactive;
 
 import com.khomsi.game.main.GameManager;
+import com.khomsi.game.objects.interact.CoinBObject;
 import com.khomsi.game.entity.Entity;
 
 import java.awt.*;
+import java.util.Random;
 
-public class Bush extends InteractiveTile {
-    public Bush(GameManager gameManager, int col, int row) {
+public class DestructibleWall extends InteractiveTile {
+    public DestructibleWall(GameManager gameManager, int col, int row) {
         super(gameManager, col, row);
         this.worldX = GameManager.TILE_SIZE * col;
         this.worldY = GameManager.TILE_SIZE * row;
-
-        solidArea = new Rectangle();
-        solidArea.x = 6;
-        solidArea.y = 16;
-
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
-        solidArea.width = 32;
-        solidArea.height = 32;
-
-        down = setup("/tilesinteractive/bush");
+        down = setup("/tilesinteractive/dungeon/wall_missing_brick");
         destructible = true;
-        hp = 1;
+        hp = 3;
     }
 
     @Override
     public boolean isCorrectWeapon(Entity entity) {
-        return entity.currentWeapon.type == TYPE_AXE;
+        return entity.currentWeapon.type == TYPE_HOOK;
+    }
+
+    @Override
+    public Color getParticleColor() {
+        return new Color(66, 40, 53);
     }
 
     @Override
     public InteractiveTile getDestroyedForm() {
-//        return new BushIT(gameManager,
-//                worldX / GameManager.TILE_SIZE, worldY / GameManager.TILE_SIZE);
         return null;
     }
 
     @Override
     public void playSE() {
         gameManager.playSE(13);
-    }
-
-    @Override
-    public Color getParticleColor() {
-        return new Color(59, 125, 79);
     }
 
     @Override
@@ -64,7 +54,13 @@ public class Bush extends InteractiveTile {
         int maxHp = 20;
         return maxHp;
     }
+
     @Override
     public void checkDrop() {
+        int drop = new Random().nextInt(100) + 1;
+        //Set the 20% change of coin drop
+        if (drop <= 20) {
+            dropItem(new CoinBObject(gameManager));
+        }
     }
 }

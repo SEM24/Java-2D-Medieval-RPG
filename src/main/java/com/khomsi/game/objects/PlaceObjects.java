@@ -1,4 +1,4 @@
-package com.khomsi.game.main.tools;
+package com.khomsi.game.objects;
 
 import com.khomsi.game.data.GameProgress;
 import com.khomsi.game.entity.mobs.*;
@@ -15,11 +15,11 @@ import com.khomsi.game.objects.interact.KeyObject;
 import com.khomsi.game.objects.light.LanternObject;
 import com.khomsi.game.objects.outside.*;
 import com.khomsi.game.objects.spells.PotionObject;
-import com.khomsi.game.tilesinteractive.Bush;
-import com.khomsi.game.tilesinteractive.DestructibleWall;
-import com.khomsi.game.tilesinteractive.SwitchPress;
-import com.khomsi.game.tilesanimated.water.WaterBubbles;
-import com.khomsi.game.tilesanimated.water.WaterHurricane;
+import com.khomsi.game.tiles.interactive.Bush;
+import com.khomsi.game.tiles.interactive.DestructibleWall;
+import com.khomsi.game.tiles.interactive.SwitchPress;
+import com.khomsi.game.tiles.animated.water.WaterBubbles;
+import com.khomsi.game.tiles.animated.water.WaterHurricane;
 
 public class PlaceObjects {
     GameManager gameManager;

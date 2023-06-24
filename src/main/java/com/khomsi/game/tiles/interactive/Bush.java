@@ -1,30 +1,28 @@
-package com.khomsi.game.tilesinteractive;
+package com.khomsi.game.tiles.interactive;
 
-import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
+import com.khomsi.game.entity.Entity;
 
 import java.awt.*;
 
-public class DryTree extends InteractiveTile {
-    public DryTree(GameManager gameManager, int col, int row) {
+public class Bush extends InteractiveTile {
+    public Bush(GameManager gameManager, int col, int row) {
         super(gameManager, col, row);
         this.worldX = GameManager.TILE_SIZE * col;
         this.worldY = GameManager.TILE_SIZE * row;
 
         solidArea = new Rectangle();
-        solidArea.x = 10;
-        solidArea.y = 10;
+        solidArea.x = 6;
+        solidArea.y = 16;
 
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        //Boundaries of tree
-        solidArea.width = 70;
-        solidArea.height = 100;
+        solidArea.width = 32;
+        solidArea.height = 32;
 
-        down = setup("/tilesinteractive/pine_tree_dry",
-                (int) (GameManager.TILE_SIZE * 1.95), GameManager.TILE_SIZE * 2 + 30);
+        down = setup("/tilesinteractive/bush");
         destructible = true;
-        hp = 3;
+        hp = 1;
     }
 
     @Override
@@ -34,8 +32,9 @@ public class DryTree extends InteractiveTile {
 
     @Override
     public InteractiveTile getDestroyedForm() {
-        return new TrunkIT(gameManager,
-                worldX / GameManager.TILE_SIZE, worldY / GameManager.TILE_SIZE);
+//        return new BushIT(gameManager,
+//                worldX / GameManager.TILE_SIZE, worldY / GameManager.TILE_SIZE);
+        return null;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class DryTree extends InteractiveTile {
 
     @Override
     public Color getParticleColor() {
-        return new Color(124, 38, 53);
+        return new Color(59, 125, 79);
     }
 
     @Override
@@ -64,5 +63,8 @@ public class DryTree extends InteractiveTile {
     public int getParticleMaxHp() {
         int maxHp = 20;
         return maxHp;
+    }
+    @Override
+    public void checkDrop() {
     }
 }
