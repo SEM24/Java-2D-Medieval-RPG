@@ -53,7 +53,6 @@ public class EventHandler {
         if (distance > GameManager.TILE_SIZE) {
             canTouchEvent = true;
         }
-
         if (canTouchEvent) {
             if (interact(0, 27, 20, "any")) {
                 damagePit(GameManager.DIALOGUE_STATE);
@@ -174,7 +173,7 @@ public class EventHandler {
 //        gameManager.playSE(4);
     }
 
-    private void damagePit(int gameState) {
+    public void damagePit(int gameState) {
         //TODO gameManager.playerSE();
         gameManager.gameState = gameState;
         eventMaster.startDialogue(eventMaster, 0);

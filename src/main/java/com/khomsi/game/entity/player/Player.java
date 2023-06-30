@@ -210,7 +210,37 @@ public class Player extends Entity {
         down = setup(PLAYER_PATH[playerSkin] + "gameover/player_down");
         down1 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down");
         down2 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down");
+        down3 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down");
+    }
+
+    public void replaceDyingPlayerDownImage() {
+        down = setup(PLAYER_PATH[playerSkin] + "gameover/player_down_1");
+        down1 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down_1");
+        down2 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down_1");
         down3 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down_1");
+    }
+
+    public void getFallIntoPitImage() {
+        up = setup(PLAYER_PATH[playerSkin] + "pitfall/player_0");
+        up1 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_0");
+        up2 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_0");
+        up3 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_0");
+
+        left = setup(PLAYER_PATH[playerSkin] + "pitfall/player_1");
+        left1 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_1");
+        left2 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_1");
+        left3 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_1");
+
+
+        right = setup(PLAYER_PATH[playerSkin] + "pitfall/player_2");
+        right1 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_2");
+        right2 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_2");
+        right3 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_2");
+
+        down = setup(PLAYER_PATH[playerSkin] + "pitfall/player_3");
+        down1 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_3");
+        down2 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_3");
+        down3 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_3");
     }
 
     public void getAttackImage() {
@@ -440,7 +470,7 @@ public class Player extends Entity {
         }
         if (!keyHandler.godMode) {
             if (hp <= 0) {
-                gameManager.gameState = GameManager.GAME_OVER_STATE;
+                gameManager.gameState = GameManager.DYING_STATE;
                 //To prevent pressing immediate retry, while you was pressing enter(attack)
                 gameManager.ui.commandNum = -1;
                 gameManager.stopMusic();

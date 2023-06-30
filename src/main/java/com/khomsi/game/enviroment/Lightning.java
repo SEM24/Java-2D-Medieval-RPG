@@ -78,6 +78,7 @@ public class Lightning {
 
     public void resetDay() {
         dayState = DAY;
+        dayCounter = 0;
         filterAlfa = 0F;
     }
 

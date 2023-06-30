@@ -11,8 +11,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.khomsi.game.enviroment.Lightning.DAY;
-
 public class UI {
     GameManager gameManager;
     Graphics2D graphics2D;
@@ -318,19 +316,14 @@ public class UI {
 
     void drawSleepScreen() {
         counter++;
-
         if (counter < 120) {
-            gameManager.enManagement.lightning.filterAlfa += 0.01F;
-            if (gameManager.enManagement.lightning.filterAlfa > 1F)
-                gameManager.enManagement.lightning.filterAlfa = 1F;
+            updateFilterAlfa();
         }
         if (counter >= 120) {
             gameManager.enManagement.lightning.filterAlfa -= 0.01F;
             if (gameManager.enManagement.lightning.filterAlfa <= 0F) {
-                gameManager.enManagement.lightning.filterAlfa = 0F;
                 counter = 0;
-                gameManager.enManagement.lightning.dayState = DAY;
-                gameManager.enManagement.lightning.dayCounter = 0;
+                gameManager.enManagement.lightning.resetDay();
                 gameManager.gameState = GameManager.PLAY_STATE;
                 gameManager.player.getImage();
             }
@@ -338,12 +331,14 @@ public class UI {
     }
 
     private void drawGameOverScreen() {
-        graphics2D.setColor(new Color(0, 0, 0, 150));
+        gameManager.enManagement.lightning.resetDay();
+        graphics2D.setColor(new Color(0, 0, 0.1F));
         graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
         int x;
         int y;
         String text;
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 110F));
+        counter++;
         text = "Game Over";
         graphics2D.setColor(Color.BLACK);
         x = getXCenterText(text);
@@ -357,7 +352,6 @@ public class UI {
         drawShadowAndText(text, x, y, 3, 3);
         if (commandNum == 0) {
             showChooseCursor(x, y, 40);
-            gameManager.player.getImage();
         }
         //Back to title screen
         text = "Quit";
@@ -366,30 +360,37 @@ public class UI {
         drawShadowAndText(text, x, y, 3, 3);
         if (commandNum == 1) {
             showChooseCursor(x, y, 40);
-            gameManager.player.getImage();
         }
     }
 
     private void drawDyingState() {
         gameManager.player.getDyingImages();
         counter++;
+
         if (counter < 120) {
-            if (counter >= 20) {
-                gameManager.player.direction = "down";
-            }
-            if (counter >= 40) {
-                gameManager.player.direction = "right";
-            }
-            if (counter >= 60) {
-                gameManager.player.direction = "up";
+            int phase = (counter / 10) % 4;  // Calculate the phase based on counter
+            switch (phase) {
+                case 0 -> gameManager.player.direction = "down";
+                case 1 -> gameManager.player.direction = "right";
+                case 2 -> gameManager.player.direction = "up";
+                case 3 -> gameManager.player.direction = "left";
             }
             if (counter >= 80) {
-                gameManager.player.direction = "left";
+                gameManager.player.replaceDyingPlayerDownImage();
+                gameManager.player.direction = "down";
             }
-        }
-        if (counter >= 120) {
+            updateFilterAlfa();
+        } else {
             counter = 0;
             gameManager.gameState = GameManager.GAME_OVER_STATE;
+            gameManager.player.getImage();
+        }
+    }
+
+    private void updateFilterAlfa() {
+        gameManager.enManagement.lightning.filterAlfa += 0.01F;
+        if (gameManager.enManagement.lightning.filterAlfa > 1F) {
+            gameManager.enManagement.lightning.filterAlfa = 1F;
         }
     }
 
