@@ -75,7 +75,7 @@ public class GameManager extends JPanel implements Runnable {
     public Entity[][] object = new Entity[maxMap][30];
     public Entity[][] npcList = new Entity[maxMap][30];
     public Entity[][] mobs = new Entity[maxMap][30];
-    public Entity[][] animatedTiles = new Entity[maxMap][30];
+    public Entity[][] animatedTiles = new Entity[maxMap][100];
     List<Entity> entities = new ArrayList<>();
     public InteractiveTile[][] interactTile = new InteractiveTile[maxMap][50];
     public Entity[][] projectile = new Entity[maxMap][20];
@@ -100,6 +100,7 @@ public class GameManager extends JPanel implements Runnable {
     public static final int SLEEP_STATE = 9;
     public static final int MAP_STATE = 10;
     public static final int CUTSCENE_STATE = 11;
+    public static final int DYING_STATE = 12;
     //Area
     public int currentArea;
     public int nextArea;

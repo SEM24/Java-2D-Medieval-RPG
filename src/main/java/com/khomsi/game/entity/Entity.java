@@ -269,14 +269,12 @@ public class Entity extends Tools {
                 }
                 //Normal guard
                 else {
-                    System.out.println("before damage: " + damage);
                     // Normal guard
                     if (damage < 1) {
                         damage = 1;  // Make sure damage is non-negative
                     } else {
                         damage /= 3;  // Divide the damage by 3
                     }
-                    System.out.println("after damage: " + damage);
                     gameManager.playSE(17);
                 }
             }

@@ -17,6 +17,7 @@ public class Lightning {
     public static final int NIGHT = 2;
     public static final int DAWN = 3;
     public int dayState = DAY;
+
     public Lightning(GameManager gameManager) {
         this.gameManager = gameManager;
         setLightSource();
@@ -126,7 +127,9 @@ public class Lightning {
         }
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
         debugDayState(g2d);
-        gameManager.ui.hud.drawClock(dayState, filterAlfa);
+        if (gameManager.gameState == GameManager.PLAY_STATE
+                || gameManager.gameState == GameManager.PAUSE_STATE)
+            gameManager.ui.hud.drawClock(dayState, filterAlfa);
     }
 
     private void debugDayState(Graphics2D g2d) {

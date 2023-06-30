@@ -91,7 +91,11 @@ public class Player extends Entity {
         gameManager.currentMap = 0;
         worldX = GameManager.TILE_SIZE * 30;
         worldY = GameManager.TILE_SIZE * 21;
+        direction = "down";
         //TODO remove later
+//        gameManager.currentMap = 2;
+//        worldX = GameManager.TILE_SIZE * 21;
+//        worldY = GameManager.TILE_SIZE * 34;
 //        gameManager.currentMap = 3;
 //        worldX = GameManager.TILE_SIZE * 25;
 //        worldY = GameManager.TILE_SIZE * 1;
@@ -183,6 +187,30 @@ public class Player extends Entity {
         right1 = setup(PLAYER_PATH[playerSkin] + "player_right_1");
         right2 = setup(PLAYER_PATH[playerSkin] + "player_right_2");
         right3 = setup(PLAYER_PATH[playerSkin] + "player_right_3");
+    }
+
+    //TODO
+    public void getDyingImages() {
+        up = setup(PLAYER_PATH[playerSkin] + "gameover/player_up");
+        up1 = setup(PLAYER_PATH[playerSkin] + "gameover/player_up");
+        up2 = setup(PLAYER_PATH[playerSkin] + "gameover/player_up");
+        up3 = setup(PLAYER_PATH[playerSkin] + "gameover/player_up");
+
+        left = setup(PLAYER_PATH[playerSkin] + "gameover/player_left");
+        left1 = setup(PLAYER_PATH[playerSkin] + "gameover/player_left");
+        left2 = setup(PLAYER_PATH[playerSkin] + "gameover/player_left");
+        left3 = setup(PLAYER_PATH[playerSkin] + "gameover/player_left");
+
+
+        right = setup(PLAYER_PATH[playerSkin] + "gameover/player_right");
+        right1 = setup(PLAYER_PATH[playerSkin] + "gameover/player_right");
+        right2 = setup(PLAYER_PATH[playerSkin] + "gameover/player_right");
+        right3 = setup(PLAYER_PATH[playerSkin] + "gameover/player_right");
+
+        down = setup(PLAYER_PATH[playerSkin] + "gameover/player_down");
+        down1 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down");
+        down2 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down");
+        down3 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down_1");
     }
 
     public void getAttackImage() {
@@ -295,7 +323,6 @@ public class Player extends Entity {
         else if (keyHandler.isSpacePressed) {
             guarding = true;
             guardCounter++;
-
         }
         //to avoid moving the character without pressing buttons
         else if (keyHandler.isUpPressed || keyHandler.isDownPressed ||

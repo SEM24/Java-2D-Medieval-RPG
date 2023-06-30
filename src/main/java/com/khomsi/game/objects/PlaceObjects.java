@@ -15,11 +15,18 @@ import com.khomsi.game.objects.interact.KeyObject;
 import com.khomsi.game.objects.light.LanternObject;
 import com.khomsi.game.objects.outside.*;
 import com.khomsi.game.objects.spells.PotionObject;
+import com.khomsi.game.tiles.animated.water.WaterBubbles;
+import com.khomsi.game.tiles.animated.water.WaterHurricane;
+import com.khomsi.game.tiles.animated.water.dungeon.lava.LavaGreenDown;
+import com.khomsi.game.tiles.animated.water.dungeon.lava.LavaRedDown;
+import com.khomsi.game.tiles.animated.water.dungeon.lava.LavaRedUp;
+import com.khomsi.game.tiles.animated.water.pool.up.PoolUpCenter;
+import com.khomsi.game.tiles.animated.water.pool.up.PoolUpLeft;
+import com.khomsi.game.tiles.animated.water.pool.up.PoolUpRight;
+import com.khomsi.game.tiles.animated.water.wave.side.WaveRightSide;
 import com.khomsi.game.tiles.interactive.Bush;
 import com.khomsi.game.tiles.interactive.DestructibleWall;
 import com.khomsi.game.tiles.interactive.SwitchPress;
-import com.khomsi.game.tiles.animated.water.WaterBubbles;
-import com.khomsi.game.tiles.animated.water.WaterHurricane;
 
 public class PlaceObjects {
     GameManager gameManager;
@@ -144,6 +151,7 @@ public class PlaceObjects {
     public void setInteractiveTiles() {
         interactiveTilesOnMap0();
         interactiveTilesOnMap2();
+        setAnimatedTiles();
     }
 
     private void interactiveTilesOnMap0() {
@@ -195,7 +203,6 @@ public class PlaceObjects {
         npcOnMap0();
         npcOnMap1();
         npcOnMap2();
-        setAnimatedTiles();
     }
 
     private void npcOnMap0() {
@@ -210,6 +217,59 @@ public class PlaceObjects {
 
     public void setAnimatedTiles() {
         drawWaterAnimationOnMap0();
+        drawWaterAnimationOnMap2();
+    }
+
+    private void drawWaterAnimationOnMap2() {
+        int index = 0;
+        int mapNum = 2;
+        gameManager.animatedTiles[mapNum][index] = new LavaGreenDown(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 24;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 34;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new LavaRedUp(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 26;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 37;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new LavaRedDown(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 26;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 38;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new LavaRedUp(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 33;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 37;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new LavaRedDown(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 33;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 38;
+        index++;
+
+        gameManager.animatedTiles[mapNum][index] = new LavaRedUp(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 39;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 38;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new LavaRedDown(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 39;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 39;
+        index++;
+
+        gameManager.animatedTiles[mapNum][index] = new LavaRedUp(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 10;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 12;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new LavaRedDown(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 10;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 13;
+        index++;
+
+        gameManager.animatedTiles[mapNum][index] = new LavaRedUp(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 7;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 12;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new LavaRedDown(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 7;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 13;
+        index++;
     }
 
     private void drawWaterAnimationOnMap0() {
@@ -217,7 +277,7 @@ public class PlaceObjects {
         int mapNum = 0;
         gameManager.animatedTiles[mapNum][index] = new WaterBubbles(gameManager);
         gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 35;
-        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 18;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 20;
         index++;
         gameManager.animatedTiles[mapNum][index] = new WaterBubbles(gameManager);
         gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 38;
@@ -230,6 +290,44 @@ public class PlaceObjects {
         gameManager.animatedTiles[mapNum][index] = new WaterHurricane(gameManager);
         gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 37;
         gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 21;
+        index++;
+        drawWaterWavesAnimationOnMap0(index);
+    }
+
+    private void drawWaterWavesAnimationOnMap0(int index) {
+        int mapNum = 0;
+        gameManager.animatedTiles[mapNum][index] = new WaveRightSide(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 44;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 16;
+
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new PoolUpLeft(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 34;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 17;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new PoolUpCenter(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 35;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 17;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new PoolUpCenter(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 36;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 17;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new PoolUpCenter(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 37;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 17;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new PoolUpCenter(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 38;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 17;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new PoolUpCenter(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 39;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 17;
+        index++;
+        gameManager.animatedTiles[mapNum][index] = new PoolUpRight(gameManager);
+        gameManager.animatedTiles[mapNum][index].worldX = GameManager.TILE_SIZE * 40;
+        gameManager.animatedTiles[mapNum][index].worldY = GameManager.TILE_SIZE * 17;
     }
 
     private void npcOnMap1() {

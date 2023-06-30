@@ -82,6 +82,9 @@ public class UI {
         if (gameManager.gameState == GameManager.OPTION_STATE) {
             drawOptionScreen();
         }
+        if (gameManager.gameState == GameManager.DYING_STATE) {
+            drawDyingState();
+        }
         //Game Over state
         if (gameManager.gameState == GameManager.GAME_OVER_STATE) {
             drawGameOverScreen();
@@ -151,6 +154,7 @@ public class UI {
         }
         gameManager.keyHandler.isEnterPressed = false;
     }
+
     private void tradeSelect() {
         npc.dialogueSet = 0;
         showDialog();
@@ -353,6 +357,7 @@ public class UI {
         drawShadowAndText(text, x, y, 3, 3);
         if (commandNum == 0) {
             showChooseCursor(x, y, 40);
+            gameManager.player.getImage();
         }
         //Back to title screen
         text = "Quit";
@@ -361,6 +366,30 @@ public class UI {
         drawShadowAndText(text, x, y, 3, 3);
         if (commandNum == 1) {
             showChooseCursor(x, y, 40);
+            gameManager.player.getImage();
+        }
+    }
+
+    private void drawDyingState() {
+        gameManager.player.getDyingImages();
+        counter++;
+        if (counter < 120) {
+            if (counter >= 20) {
+                gameManager.player.direction = "down";
+            }
+            if (counter >= 40) {
+                gameManager.player.direction = "right";
+            }
+            if (counter >= 60) {
+                gameManager.player.direction = "up";
+            }
+            if (counter >= 80) {
+                gameManager.player.direction = "left";
+            }
+        }
+        if (counter >= 120) {
+            counter = 0;
+            gameManager.gameState = GameManager.GAME_OVER_STATE;
         }
     }
 
