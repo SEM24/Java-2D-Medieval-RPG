@@ -27,6 +27,9 @@ public class KeyHandler implements KeyListener {
         //returns int, associated with the key in this event
         //for example, 17-ctrl, 8-backspace, 10-enter
         int code = e.getKeyCode();
+        if (gameManager.gameState == GameManager.START_STATE) {
+            startState(code);
+        }
         //Title state
         if (gameManager.gameState == GameManager.TITLE_STATE) {
             titleState(code);
@@ -235,6 +238,14 @@ public class KeyHandler implements KeyListener {
         }
     }
 
+    private void startState(int code) {
+        if (code == KeyEvent.VK_ENTER) {
+            gameManager.gameState = GameManager.TITLE_STATE;
+            gameManager.ui.titleScreenState = 0;
+            isEnterPressed = true;
+        }
+    }
+
     private void titleState(int code) {
         if (gameManager.ui.titleScreenState == 0) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
@@ -245,7 +256,7 @@ public class KeyHandler implements KeyListener {
                 gameManager.ui.commandNum++;
                 if (gameManager.ui.commandNum > 2) gameManager.ui.commandNum = 0;
             }
-            if (code == KeyEvent.VK_ENTER) {
+            if (!isEnterPressed && code == KeyEvent.VK_ENTER) {
                 switch (gameManager.ui.commandNum) {
                     case 0 -> gameManager.ui.titleScreenState = 1;
                     case 1 -> {

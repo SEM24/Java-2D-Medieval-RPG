@@ -189,7 +189,6 @@ public class Player extends Entity {
         right3 = setup(PLAYER_PATH[playerSkin] + "player_right_3");
     }
 
-    //TODO
     public void getDyingImages() {
         up = setup(PLAYER_PATH[playerSkin] + "gameover/player_up");
         up1 = setup(PLAYER_PATH[playerSkin] + "gameover/player_up");
@@ -219,7 +218,7 @@ public class Player extends Entity {
         down2 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down_1");
         down3 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down_1");
     }
-
+    //TODO implement the logic
     public void getFallIntoPitImage() {
         up = setup(PLAYER_PATH[playerSkin] + "pitfall/player_0");
         up1 = setup(PLAYER_PATH[playerSkin] + "pitfall/player_0");

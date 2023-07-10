@@ -8,7 +8,8 @@ import java.util.Objects;
 
 public class GameApplication {
     public static JFrame window;
-    private String iconPath = "/player/male/mini_map.png";
+    private String iconMainPath = "/icons/icon.png";
+    private String iconTrayPath = "/icons/trayicon.png";
 
     public static void main(String[] args) {
         new GameApplication().startGame();
@@ -20,9 +21,9 @@ public class GameApplication {
 
         //can't resize window
         window.setResizable(false);
-        window.setTitle("My 2D Adventure Game");
+        window.setTitle("Tiny Legend Reborn");
         //Set icon for window
-        ImageIcon logo = new ImageIcon(Objects.requireNonNull(getClass().getResource(iconPath)));
+        ImageIcon logo = new ImageIcon(Objects.requireNonNull(getClass().getResource(iconMainPath)));
         window.setIconImage(logo.getImage());
         GameManager gameManager = new GameManager();
         window.add(gameManager);
@@ -44,12 +45,12 @@ public class GameApplication {
     private void setupSystemTray() {
         //let window game hide in tray, when use press close (x) button
         if (SystemTray.isSupported()) {
-            window.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+            window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         }
         SystemTray systemTray = SystemTray.getSystemTray();
 
         TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
-                getClass().getResource(iconPath)));
+                getClass().getResource(iconTrayPath)));
         PopupMenu popupMenu = new PopupMenu();
         MenuItem show = new MenuItem("Show");
 

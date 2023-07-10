@@ -1,7 +1,7 @@
 package com.khomsi.game.main.logic;
 
-import com.khomsi.game.entity.player.PlayerDummy;
 import com.khomsi.game.entity.mobs.MobDungeonBoss;
+import com.khomsi.game.entity.player.PlayerDummy;
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.objects.outside.DungeonDoorClosedObject;
 
@@ -11,7 +11,6 @@ import java.util.Objects;
 public class CutSceneManager {
     GameManager gameManager;
     Graphics2D g2d;
-//    CutScenes cutScenes;
     public int sceneNumber;
     public int scenePhase;
     //Scene number
@@ -29,7 +28,6 @@ public class CutSceneManager {
         }
     }
 
-    //TODO move to separate class
     public void sceneDungeonBoss() {
         switch (scenePhase) {
             case 0 -> {

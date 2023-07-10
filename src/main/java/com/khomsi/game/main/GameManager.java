@@ -87,20 +87,21 @@ public class GameManager extends JPanel implements Runnable {
     //GameState
     public int gameState;
 
-    public static final int TITLE_STATE = 0;
+    public static final int START_STATE = 0;
+    public static final int TITLE_STATE = 1;
+    public static final int PLAY_STATE = 2;
+    public static final int PAUSE_STATE = 3;
+    public static final int DIALOGUE_STATE = 4;
+    public static final int CHARACTER_STATE = 5;
+    public static final int OPTION_STATE = 6;
+    public static final int GAME_OVER_STATE = 7;
+    public static final int TRANSITION_STATE = 8;
+    public static final int TRADE_STATE = 9;
+    public static final int SLEEP_STATE = 10;
+    public static final int MAP_STATE = 11;
+    public static final int CUTSCENE_STATE = 12;
+    public static final int DYING_STATE = 13;
 
-    public static final int PLAY_STATE = 1;
-    public static final int PAUSE_STATE = 2;
-    public static final int DIALOGUE_STATE = 3;
-    public static final int CHARACTER_STATE = 4;
-    public static final int OPTION_STATE = 5;
-    public static final int GAME_OVER_STATE = 6;
-    public static final int TRANSITION_STATE = 7;
-    public static final int TRADE_STATE = 8;
-    public static final int SLEEP_STATE = 9;
-    public static final int MAP_STATE = 10;
-    public static final int CUTSCENE_STATE = 11;
-    public static final int DYING_STATE = 12;
     //Area
     public int currentArea;
     public int nextArea;
@@ -128,7 +129,7 @@ public class GameManager extends JPanel implements Runnable {
     public void setupGame() {
         setDefaultObjects();
         enManagement.setup();
-        gameState = TITLE_STATE;
+        gameState = START_STATE;
         currentArea = OUTSIDE;
         tempScreen = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         //Everything will be recorded in buff tempScreen
@@ -271,7 +272,7 @@ public class GameManager extends JPanel implements Runnable {
             drawStart = System.nanoTime();
 
         //Title screen
-        if (gameState == TITLE_STATE) {
+        if (gameState == START_STATE) {
             ui.draw(g2d);
         }
         //Map screen
@@ -397,9 +398,13 @@ public class GameManager extends JPanel implements Runnable {
     }
 
     public void drawToScreen() {
-        Graphics graphics = getGraphics();
-        graphics.drawImage(tempScreen, 0, 0, screenWidthFull, screenHeightFull, null);
-        graphics.dispose();
+        try {
+            Graphics graphics = getGraphics();
+            graphics.drawImage(tempScreen, 0, 0, screenWidthFull, screenHeightFull, null);
+            graphics.dispose();
+        } catch (Exception e) {
+            e.getLocalizedMessage();
+        }
     }
 
     //use method to loop the main music

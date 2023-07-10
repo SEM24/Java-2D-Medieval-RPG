@@ -6,7 +6,7 @@ import com.khomsi.game.entity.Entity;
 import java.awt.*;
 
 public class InteractiveTile extends Entity {
-    GameManager gameManager;
+    protected GameManager gameManager;
 
     public boolean destructible = false;
 

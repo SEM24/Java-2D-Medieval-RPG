@@ -99,6 +99,7 @@ public class PlaceObjects {
         gameManager.object[mapNum][index] = new PotionObject(gameManager);
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 16;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 11;
+
     }
 
     private void objectsOnMap1() {

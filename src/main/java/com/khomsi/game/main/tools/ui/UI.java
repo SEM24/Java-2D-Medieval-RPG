@@ -24,7 +24,7 @@ public class UI {
 
     public int commandNum = 0;
     //0: first screen, 1: second screen
-    public int titleScreenState = 0;
+    public int titleScreenState = -1;
     //Indicate current cursor position
     public int playerSlotCol = 0;
     public int playerSlotRow = 0;
@@ -52,6 +52,10 @@ public class UI {
         this.graphics2D = graphics2D;
         graphics2D.setFont(playMeGames);
         graphics2D.setColor(Color.WHITE);
+        //Start state
+        if (gameManager.gameState == GameManager.START_STATE) {
+            drawStartScreen();
+        }
         //Title state
         if (gameManager.gameState == GameManager.TITLE_STATE) {
             drawTitleScreen();
@@ -331,6 +335,7 @@ public class UI {
     }
 
     private void drawGameOverScreen() {
+        counter = 0;
         gameManager.enManagement.lightning.resetDay();
         graphics2D.setColor(new Color(0, 0, 0.1F));
         graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
@@ -716,6 +721,25 @@ public class UI {
 
     }
 
+    private void drawStartScreen() {
+        Color bgColor = new Color(31, 57, 75);
+        if (titleScreenState == -1) {
+            graphics2D.setColor(bgColor);
+            graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
+            //Title name
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 80F));
+            String text = "Tiny Legend Reborn";
+            int x = getXCenterText(text);
+            int y = GameManager.TILE_SIZE * 3;
+            drawShadowAndText(text, x, y, 5, 5);
+
+            x = getXCenterText(text);
+            y += GameManager.TILE_SIZE * 2;
+            text = "Medieval Adventure";
+            drawShadowAndText(text, x, y, 5, 5);
+        }
+    }
+
     public void drawTitleScreen() {
         Color bgColor = new Color(31, 57, 75);
         if (titleScreenState == 0) {
@@ -723,24 +747,14 @@ public class UI {
             graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
             //Title name
             graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 80F));
-            String text = "2D Game Adventure";
-
-            int x = getXCenterText(text);
-            int y = GameManager.TILE_SIZE * 3;
-            drawShadowAndText(text, x, y, 5, 5);
-
-            //FIXME remove this lines and use the logo of game instead
-            //Image of player, center it
-            x = GameManager.SCREEN_WIDTH / 2 - (GameManager.TILE_SIZE * 2) / 2;
-            y += GameManager.TILE_SIZE * 2;
-            graphics2D.drawImage(gameManager.player.down, x, y,
-                    GameManager.TILE_SIZE * 2, GameManager.TILE_SIZE * 2, null);
-
+            String text;
             //Menu
             graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 40F));
             text = "NEW GAME";
-            x = getXCenterText(text);
-            y += GameManager.TILE_SIZE * 3.5;
+            int x = getXCenterText(text);
+            int y = GameManager.TILE_SIZE * 3;
+
+            y += GameManager.TILE_SIZE * 3;
             drawShadowAndText(text, x, y, 3, 3);
             if (commandNum == 0) {
                 drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
