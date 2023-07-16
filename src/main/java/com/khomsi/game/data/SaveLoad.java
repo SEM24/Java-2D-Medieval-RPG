@@ -3,6 +3,7 @@ package com.khomsi.game.data;
 import com.khomsi.game.main.GameManager;
 
 import java.io.*;
+import java.time.Duration;
 
 public class SaveLoad {
     GameManager gameManager;
@@ -29,6 +30,9 @@ public class SaveLoad {
             initializer.nextLevelXp = gameManager.player.nextLevelXp;
             initializer.coin = gameManager.player.coin;
             initializer.playerSkin = gameManager.player.playerSkin;
+            //TODO currently doesn't work
+            //Save play time
+            initializer.savedPlayTime = gameManager.startTime;
 
             //Player's inventory
             for (int i = 0; i < gameManager.player.inventory.size(); i++) {
@@ -88,6 +92,8 @@ public class SaveLoad {
             gameManager.player.nextLevelXp = initializer.nextLevelXp;
             gameManager.player.coin = initializer.coin;
             gameManager.player.playerSkin = initializer.playerSkin;
+            // Load play time
+            gameManager.startTime = initializer.savedPlayTime;
             //Load skin of player
             gameManager.player.loadImages();
 
@@ -130,5 +136,14 @@ public class SaveLoad {
             return false;
         }
         return true;
+    }
+
+    public Duration parseDuration(String durationString) {
+        String[] parts = durationString.split(":");
+        long hours = Long.parseLong(parts[0]);
+        long minutes = Long.parseLong(parts[1]);
+        long seconds = Long.parseLong(parts[2]);
+
+        return Duration.ofHours(hours).plusMinutes(minutes).plusSeconds(seconds);
     }
 }

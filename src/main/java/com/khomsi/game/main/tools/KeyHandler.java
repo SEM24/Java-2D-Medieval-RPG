@@ -4,6 +4,7 @@ import com.khomsi.game.main.GameManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 public class KeyHandler implements KeyListener {
     GameManager gameManager;
@@ -12,6 +13,10 @@ public class KeyHandler implements KeyListener {
     //Debug
     public boolean debugMode = false;
     public boolean godMode = false;
+    // Path to save.dat file to check the statement
+    private final String filePath = "save.dat";
+
+    public File file = new File(filePath);
 
     public KeyHandler(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -29,6 +34,9 @@ public class KeyHandler implements KeyListener {
         int code = e.getKeyCode();
         if (gameManager.gameState == GameManager.START_STATE) {
             startState(code);
+        }
+        if (gameManager.gameState == GameManager.TUTORIAL_STATE) {
+            tutorialState(code);
         }
         //Title state
         if (gameManager.gameState == GameManager.TITLE_STATE) {
@@ -240,36 +248,50 @@ public class KeyHandler implements KeyListener {
 
     private void startState(int code) {
         if (code == KeyEvent.VK_ENTER) {
-            gameManager.gameState = GameManager.TITLE_STATE;
-            gameManager.ui.titleScreenState = 0;
+            if (!file.exists()) {
+                gameManager.ui.titleScreenState = 0;
+                gameManager.gameState = GameManager.TUTORIAL_STATE;
+            } else {
+                gameManager.ui.titleScreenState = 1;
+                gameManager.gameState = GameManager.TITLE_STATE;
+            }
             isEnterPressed = true;
         }
     }
 
-    private void titleState(int code) {
+    private void tutorialState(int code) {
         if (gameManager.ui.titleScreenState == 0) {
-            if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-                gameManager.ui.commandNum--;
-                if (gameManager.ui.commandNum < 0) gameManager.ui.commandNum = 2;
+            if (!isEnterPressed && code == KeyEvent.VK_ENTER) {
+                gameManager.ui.titleScreenState = 2;
+                gameManager.gameState = GameManager.TITLE_STATE;
+                isEnterPressed = true;
             }
-            if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-                gameManager.ui.commandNum++;
-                if (gameManager.ui.commandNum > 2) gameManager.ui.commandNum = 0;
+        }
+    }
+
+    private void titleState(int code) {
+        if (gameManager.ui.titleScreenState == 1) {
+            if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+                gameManager.ui.commandNum = 2; // Move cursor to "EXIT GAME" (commandNum = 2)
+            } else if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
+                gameManager.ui.commandNum = 0; // Move cursor to "NEW GAME" (commandNum = 0)
+            } else if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) {
+                gameManager.ui.commandNum = 1; // Move cursor to "LOAD GAME" (commandNum = 1)
             }
             if (!isEnterPressed && code == KeyEvent.VK_ENTER) {
                 switch (gameManager.ui.commandNum) {
-                    case 0 -> gameManager.ui.titleScreenState = 1;
+                    case 0 -> gameManager.ui.titleScreenState = 2;
+                    case 2 -> System.exit(0);
                     case 1 -> {
                         if (gameManager.saveLoad.load()) {
                             gameManager.saveLoad.load();
                             gameManager.gameState = GameManager.PLAY_STATE;
                             gameManager.playMusic(0);
-                        } else gameManager.ui.titleScreenState = 1;
+                        } else gameManager.ui.titleScreenState = 2;
                     }
-                    case 2 -> System.exit(0);
                 }
             }
-        } else if (gameManager.ui.titleScreenState == 1) {
+        } else if (gameManager.ui.titleScreenState == 2) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 gameManager.ui.commandNum--;
                 if (gameManager.ui.commandNum < 0) gameManager.ui.commandNum = 2;
@@ -279,12 +301,16 @@ public class KeyHandler implements KeyListener {
                 if (gameManager.ui.commandNum > 2) gameManager.ui.commandNum = 0;
             }
 
-            if (code == KeyEvent.VK_ENTER) {
+            if (!isEnterPressed && code == KeyEvent.VK_ENTER) {
                 //Set character's stats and skin, depends on chose
                 switch (gameManager.ui.commandNum) {
                     case 0 -> gameManager.player.createNewPlayer(0, 0, 3);
                     case 1 -> gameManager.player.createNewPlayer(1, 0, 4);
-                    case 2 -> gameManager.ui.titleScreenState = 0;
+                    case 2 -> {
+                        if (file.exists()) {
+                            gameManager.ui.titleScreenState = 1;
+                        } else System.exit(0);
+                    }
                 }
             }
         }

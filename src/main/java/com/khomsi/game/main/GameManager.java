@@ -23,6 +23,8 @@ import com.khomsi.game.tiles.interactive.InteractiveTile;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,19 +90,21 @@ public class GameManager extends JPanel implements Runnable {
     public int gameState;
 
     public static final int START_STATE = 0;
-    public static final int TITLE_STATE = 1;
-    public static final int PLAY_STATE = 2;
-    public static final int PAUSE_STATE = 3;
-    public static final int DIALOGUE_STATE = 4;
-    public static final int CHARACTER_STATE = 5;
-    public static final int OPTION_STATE = 6;
-    public static final int GAME_OVER_STATE = 7;
-    public static final int TRANSITION_STATE = 8;
-    public static final int TRADE_STATE = 9;
-    public static final int SLEEP_STATE = 10;
-    public static final int MAP_STATE = 11;
-    public static final int CUTSCENE_STATE = 12;
-    public static final int DYING_STATE = 13;
+    public static final int TUTORIAL_STATE = 1;
+    public static final int TITLE_STATE = 2;
+    public static final int PLAY_STATE = 3;
+    public static final int PAUSE_STATE = 4;
+    public static final int DIALOGUE_STATE = 5;
+    public static final int CHARACTER_STATE = 6;
+    public static final int OPTION_STATE = 7;
+    public static final int GAME_OVER_STATE = 8;
+    public static final int TRANSITION_STATE = 9;
+    public static final int TRADE_STATE = 10;
+    public static final int SLEEP_STATE = 11;
+    public static final int MAP_STATE = 12;
+    public static final int CUTSCENE_STATE = 13;
+    public static final int DYING_STATE = 14;
+
 
     //Area
     public int currentArea;
@@ -113,6 +117,8 @@ public class GameManager extends JPanel implements Runnable {
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
     public boolean bossBattleOn = false;
+    public Instant startTime;
+    public Duration playTime;
 
     public GameManager() {
         //set size of this class
@@ -136,6 +142,8 @@ public class GameManager extends JPanel implements Runnable {
         g2d = (Graphics2D) tempScreen.getGraphics();
         if (fullScreenOn)
             setFullScreen();
+        startTime = Instant.now();
+        playTime = Duration.ZERO;
     }
 
     public void resetGame(boolean restart) {
@@ -259,10 +267,23 @@ public class GameManager extends JPanel implements Runnable {
                     animated.update();
 
             enManagement.update();
+
+            // Calculate play time
+            Instant currentTime = Instant.now();
+            playTime = Duration.between(startTime, currentTime);
         }
         if (gameState == PAUSE_STATE) {
             //Stop game
         }
+    }
+
+    public String formatDuration(Duration duration) {
+        long seconds = duration.getSeconds();
+        long minutes = seconds / 60;
+        seconds %= 60;
+        long hours = minutes / 60;
+        minutes %= 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     //method to draw the components on screen
@@ -344,8 +365,10 @@ public class GameManager extends JPanel implements Runnable {
             graphics2D.setFont(new Font("Arial", Font.PLAIN, 20));
             graphics2D.setColor(Color.WHITE);
             int x = 10;
-            int y = 390;
+            int y = 370;
             int lineHeight = 20;
+            g2d.drawString("Play Time: " + formatDuration(playTime), x, y);
+            y += lineHeight;
             graphics2D.drawString("World_X: " + player.worldX, x, y);
             y += lineHeight;
             graphics2D.drawString("World_Y: " + player.worldY, x, y);

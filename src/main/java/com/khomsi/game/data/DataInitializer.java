@@ -1,6 +1,8 @@
 package com.khomsi.game.data;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class DataInitializer implements Serializable {
@@ -30,4 +32,6 @@ public class DataInitializer implements Serializable {
     int mapObjectWorldY[][];
     String mapObjectLootNames[][];
     boolean mapObjectOpened[][];
+
+    public Instant savedPlayTime;
 }

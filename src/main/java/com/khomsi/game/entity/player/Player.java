@@ -41,10 +41,6 @@ public class Player extends Entity {
         solidArea.height = 32;
 
         setDefaultValues();
-        //FIXME remove this line and use the logo of game instead in ui method!!!
-        //To draw the preview image on the screen, can be removed
-//        getPlayerImage();
-//        getPlayerAttackImage();
     }
 
     public void setDefaultValues() {
@@ -218,6 +214,7 @@ public class Player extends Entity {
         down2 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down_1");
         down3 = setup(PLAYER_PATH[playerSkin] + "gameover/player_down_1");
     }
+
     //TODO implement the logic
     public void getFallIntoPitImage() {
         up = setup(PLAYER_PATH[playerSkin] + "pitfall/player_0");

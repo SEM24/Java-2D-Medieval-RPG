@@ -57,6 +57,10 @@ public class UI {
             drawStartScreen();
         }
         //Title state
+        if (gameManager.gameState == GameManager.TUTORIAL_STATE) {
+            drawTutorialScreen();
+        }
+        //Title state
         if (gameManager.gameState == GameManager.TITLE_STATE) {
             drawTitleScreen();
         }
@@ -721,6 +725,69 @@ public class UI {
 
     }
 
+    public void drawTutorialScreen() {
+        Color bgColor = new Color(31, 57, 75);
+        if (titleScreenState == 0) {
+            graphics2D.setColor(bgColor);
+            graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
+//           Sub Window on center of screen
+            int frameX = GameManager.TILE_SIZE * 4;
+            int frameY = GameManager.TILE_SIZE;
+            int textX;
+            int textY;
+            graphics2D.setColor(Color.WHITE);
+            graphics2D.setFont(graphics2D.getFont().deriveFont(52F));
+            String text = "Control";
+            textX = getXCenterText(text);
+            textY = frameY + GameManager.TILE_SIZE;
+            drawShadowAndText(text, textX, textY, 3, 3);
+
+            graphics2D.setFont(graphics2D.getFont().deriveFont(38F));
+            textX = frameX + GameManager.TILE_SIZE;
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("Move", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("Confirm/Attack", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("Shoot/Cast", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("Inventory", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("Pause", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("Settings", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("Map/MiniMap", textX, textY, 3, 3);
+
+            textX = frameX + GameManager.TILE_SIZE * 8;
+            textY = frameY + GameManager.TILE_SIZE * 2;
+            drawShadowAndText("WASD", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("ENTER", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("CTRL", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("E", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("P", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("ESC", textX, textY, 3, 3);
+            textY += GameManager.TILE_SIZE;
+            drawShadowAndText("M/X", textX, textY, 3, 3);
+
+            //Back button
+            textX = frameX - GameManager.TILE_SIZE;
+            textY = frameY + GameManager.TILE_SIZE * 10;
+            text = "Press Enter to continue.";
+            //Shadow
+            graphics2D.setColor(new Color(0, 0, 0, 150));
+            graphics2D.drawString(text, textX + 3, textY + 3);
+            //Main text
+            graphics2D.setColor(new Color(255, 255, 255, 150));
+            graphics2D.drawString(text, textX, textY);
+        }
+    }
+
     private void drawStartScreen() {
         Color bgColor = new Color(31, 57, 75);
         if (titleScreenState == -1) {
@@ -730,7 +797,7 @@ public class UI {
             graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 80F));
             String text = "Tiny Legend Reborn";
             int x = getXCenterText(text);
-            int y = GameManager.TILE_SIZE * 3;
+            int y = GameManager.TILE_SIZE * 5;
             drawShadowAndText(text, x, y, 5, 5);
 
             x = getXCenterText(text);
@@ -742,7 +809,7 @@ public class UI {
 
     public void drawTitleScreen() {
         Color bgColor = new Color(31, 57, 75);
-        if (titleScreenState == 0) {
+        if (titleScreenState == 1) {
             graphics2D.setColor(bgColor);
             graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
             //Title name
@@ -751,7 +818,7 @@ public class UI {
             //Menu
             graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 40F));
             text = "NEW GAME";
-            int x = getXCenterText(text);
+            int x = (int) (getXCenterText(text) / 1.6);
             int y = GameManager.TILE_SIZE * 3;
 
             y += GameManager.TILE_SIZE * 3;
@@ -760,20 +827,29 @@ public class UI {
                 drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
             }
             text = "LOAD GAME";
-            x = getXCenterText(text);
-            y += GameManager.TILE_SIZE;
+            x = (int) (getXCenterText(text) * 1.4);
             drawShadowAndText(text, x, y, 3, 3);
             if (commandNum == 1) {
                 drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
             }
-            text = "EXIT";
+            text = "EXIT GAME";
             x = getXCenterText(text);
             y += GameManager.TILE_SIZE;
             drawShadowAndText(text, x, y, 3, 3);
             if (commandNum == 2) {
                 drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
             }
-        } else if (titleScreenState == 1) {
+
+            text = "LV " + gameManager.player.level;
+            x = getXCenterText(text);
+            y = GameManager.TILE_SIZE * 4;
+            drawShadowAndText(text, x, y, 3, 3);
+
+            text = "Coins " + gameManager.player.coin;
+            x = (int) (getXCenterText(text) / 1.6);
+            drawShadowAndText(text, x, y, 3, 3);
+
+        } else if (titleScreenState == 2) {
             //Class selection screen
             graphics2D.setColor(bgColor);
             graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
@@ -798,18 +874,25 @@ public class UI {
             if (commandNum == 1) {
                 drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
             }
-
-            text = "Back";
-            x = getXCenterText(text);
-            y += GameManager.TILE_SIZE * 3;
-            drawShadowAndText(text, x, y, 3, 3);
-            if (commandNum == 2) {
-                drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
+            //Draw back button
+            if (gameManager.keyHandler.file.exists()) {
+                drawMenuItem("Back", y, commandNum == 2);
+            } else {
+                drawMenuItem("Exit", y, commandNum == 2);
             }
         }
     }
 
-    void drawShadowAndText(String text, int x, int y, int sx, int sy) {
+    private void drawMenuItem(String text, int y, boolean isSelected) {
+        int x = getXCenterText(text);
+        y += GameManager.TILE_SIZE * 3;
+        drawShadowAndText(text, x, y, 3, 3);
+        if (isSelected) {
+            drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
+        }
+    }
+
+    private void drawShadowAndText(String text, int x, int y, int sx, int sy) {
         //Shadow
         graphics2D.setColor(Color.BLACK);
         graphics2D.drawString(text, x + sx, y + sy);
@@ -900,7 +983,7 @@ public class UI {
             if (gameManager.keyHandler.isEnterPressed) {
                 //Quit the game
                 subState = 0;
-                gameManager.ui.titleScreenState = 0;
+                gameManager.ui.titleScreenState = 1;
                 gameManager.gameState = GameManager.TITLE_STATE;
                 gameManager.resetGame(true);
                 gameManager.stopMusic();
