@@ -39,6 +39,7 @@ build/
 /out/
 /.idea/
 /src/main/resources/META-INF/
+/META-INF/
 /src/test/
 /save.dat
 /src/main/resources/tiles/

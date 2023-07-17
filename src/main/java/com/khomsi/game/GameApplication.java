@@ -1,5 +1,6 @@
 package com.khomsi.game;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import com.khomsi.game.main.GameManager;
 
 import javax.swing.*;
@@ -12,13 +13,14 @@ public class GameApplication {
     private String iconTrayPath = "/icons/trayicon.png";
 
     public static void main(String[] args) {
-        new GameApplication().startGame();
+        GameApplication application = new GameApplication();
+        application.setupFrameColor();
+        application.startGame();
     }
 
     private void startGame() {
         window = new JFrame();
         System.setProperty("sun.java2d.opengl", "true");
-
         //can't resize window
         window.setResizable(false);
         window.setTitle("Tiny Legend Reborn");
@@ -40,6 +42,20 @@ public class GameApplication {
         setupSystemTray();
         gameManager.setupGame();
         gameManager.startGameThread();
+    }
+
+    private void setupFrameColor() {
+        // Setting that must be called before the whole application code
+        try {
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
+        }
+        // Setup the Look and Feel before creating the JFrame
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        UIManager.put("RootPane.background", Color.BLACK); // Set the bar background color
+        UIManager.put("TitlePane.background", Color.GRAY); // Set the title bar background color
+        UIManager.put("TitlePane.foreground", Color.WHITE); // Set the text bar color
     }
 
     private void setupSystemTray() {

@@ -39,7 +39,7 @@ public class UI {
     public UI(GameManager gameManager) {
         this.gameManager = gameManager;
         this.hud = new HUD(this, gameManager);
-        try (InputStream input = getClass().getResourceAsStream("/font/PlaymegamesReguler-2OOee.ttf")) {
+        try (InputStream input = getClass().getResourceAsStream("/styles/PlaymegamesReguler-2OOee.ttf")) {
             playMeGames = Font.createFont(Font.TRUETYPE_FONT, input);
         } catch (FontFormatException | IOException e) {
             System.err.println("Error in importing fonts in " + getClass().getSimpleName());
@@ -726,7 +726,7 @@ public class UI {
     }
 
     public void drawTutorialScreen() {
-        Color bgColor = new Color(31, 57, 75);
+        Color bgColor = new Color(0, 0, 0);
         if (titleScreenState == 0) {
             graphics2D.setColor(bgColor);
             graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
@@ -789,7 +789,7 @@ public class UI {
     }
 
     private void drawStartScreen() {
-        Color bgColor = new Color(31, 57, 75);
+        Color bgColor = new Color(0, 0, 0);
         if (titleScreenState == -1) {
             graphics2D.setColor(bgColor);
             graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
@@ -808,7 +808,7 @@ public class UI {
     }
 
     public void drawTitleScreen() {
-        Color bgColor = new Color(31, 57, 75);
+        Color bgColor = new Color(0, 0, 0);
         if (titleScreenState == 1) {
             graphics2D.setColor(bgColor);
             graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
@@ -822,24 +822,15 @@ public class UI {
             int y = GameManager.TILE_SIZE * 3;
 
             y += GameManager.TILE_SIZE * 3;
-            drawShadowAndText(text, x, y, 3, 3);
-            if (commandNum == 0) {
-                drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
-            }
+            drawMenuItem(text, x, y, commandNum == 0);
             text = "LOAD GAME";
             x = (int) (getXCenterText(text) * 1.4);
-            drawShadowAndText(text, x, y, 3, 3);
-            if (commandNum == 1) {
-                drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
-            }
+            drawMenuItem(text, x, y, commandNum == 1);
+
             text = "EXIT GAME";
             x = getXCenterText(text);
             y += GameManager.TILE_SIZE;
-            drawShadowAndText(text, x, y, 3, 3);
-            if (commandNum == 2) {
-                drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
-            }
-
+            drawMenuItem(text, x, y, commandNum == 2);
             text = "LV " + gameManager.player.level;
             x = getXCenterText(text);
             y = GameManager.TILE_SIZE * 4;
@@ -862,42 +853,46 @@ public class UI {
             text = "Male";
             x = getXCenterText(text);
             y += GameManager.TILE_SIZE * 3;
-            drawShadowAndText(text, x, y, 3, 3);
-            if (commandNum == 0) {
-                drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
-            }
-
+            drawMenuItem(text, x, y, commandNum == 0);
             text = "Female";
             x = getXCenterText(text);
             y += GameManager.TILE_SIZE;
-            drawShadowAndText(text, x, y, 3, 3);
-            if (commandNum == 1) {
-                drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
-            }
+            drawMenuItem(text, x, y, commandNum == 1);
+
+            x = getXCenterText(text) + 15;
+            y += GameManager.TILE_SIZE * 3;
             //Draw back button
             if (gameManager.keyHandler.file.exists()) {
-                drawMenuItem("Back", y, commandNum == 2);
+                drawMenuItem("Back", x, y, commandNum == 2);
             } else {
-                drawMenuItem("Exit", y, commandNum == 2);
+                drawMenuItem("Exit", x, y, commandNum == 2);
             }
         }
     }
 
-    private void drawMenuItem(String text, int y, boolean isSelected) {
-        int x = getXCenterText(text);
-        y += GameManager.TILE_SIZE * 3;
-        drawShadowAndText(text, x, y, 3, 3);
+    private void drawMenuItem(String text, int x, int y, boolean isSelected) {
+        drawShadowAndText(text, x, y, 3, 3, isSelected); // Pass the isSelected flag
         if (isSelected) {
             drawShadowAndText(">", x - GameManager.TILE_SIZE, y, 3, 3);
         }
     }
 
     private void drawShadowAndText(String text, int x, int y, int sx, int sy) {
-        //Shadow
+        drawShadowAndText(text, x, y, sx, sy, false);
+    }
+
+    private void drawShadowAndText(String text, int x, int y, int sx, int sy, boolean isSelected) {
+        Color color = new Color(255, 255, 0); // RGB values for yellow
+        // Shadow
         graphics2D.setColor(Color.BLACK);
         graphics2D.drawString(text, x + sx, y + sy);
-        //Main text
-        graphics2D.setColor(Color.WHITE);
+
+        // Main text color based on selection state
+        if (isSelected) {
+            graphics2D.setColor(color);
+        } else {
+            graphics2D.setColor(Color.WHITE);
+        }
         graphics2D.drawString(text, x, y);
     }
 
