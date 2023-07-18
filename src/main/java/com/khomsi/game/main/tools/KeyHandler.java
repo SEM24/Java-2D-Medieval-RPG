@@ -4,7 +4,6 @@ import com.khomsi.game.main.GameManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
 
 public class KeyHandler implements KeyListener {
     GameManager gameManager;
@@ -13,10 +12,6 @@ public class KeyHandler implements KeyListener {
     //Debug
     public boolean debugMode = false;
     public boolean godMode = false;
-    // Path to save.dat file to check the statement
-    private final String filePath = "save.dat";
-
-    public File file = new File(filePath);
 
     public KeyHandler(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -156,8 +151,8 @@ public class KeyHandler implements KeyListener {
                 //fixme check the se
                 gameManager.playMusic(0);
             } else if (gameManager.ui.commandNum == 1) {
-                gameManager.ui.titleScreenState = 0;
-                gameManager.gameState = GameManager.TITLE_STATE;
+                gameManager.ui.titleScreenState = -1;
+                gameManager.gameState = GameManager.START_STATE;
                 gameManager.resetGame(true);
             }
         }
@@ -235,6 +230,7 @@ public class KeyHandler implements KeyListener {
             gameManager.player.speed += 1;
         }
         //Debug menu
+
         //TODO disable on production
         if (code == KeyEvent.VK_F9) debugMode = !debugMode;
         if (code == KeyEvent.VK_F8) godMode = !godMode;
@@ -247,8 +243,9 @@ public class KeyHandler implements KeyListener {
     }
 
     private void startState(int code) {
+        gameManager.saveLoad.loadTitleData();
         if (code == KeyEvent.VK_ENTER) {
-            if (!file.exists()) {
+            if (!gameManager.saveLoad.hasFile) {
                 gameManager.ui.titleScreenState = 0;
                 gameManager.gameState = GameManager.TUTORIAL_STATE;
             } else {
@@ -268,6 +265,7 @@ public class KeyHandler implements KeyListener {
             }
         }
     }
+
 
     private void titleState(int code) {
         if (gameManager.ui.titleScreenState == 1) {
@@ -302,15 +300,15 @@ public class KeyHandler implements KeyListener {
             }
 
             if (!isEnterPressed && code == KeyEvent.VK_ENTER) {
+                if (gameManager.saveLoad.hasFile) {
+                    gameManager.saveLoad.file.delete();
+                    gameManager.resetTimer();
+                }
                 //Set character's stats and skin, depends on chose
                 switch (gameManager.ui.commandNum) {
                     case 0 -> gameManager.player.createNewPlayer(0, 0, 3);
                     case 1 -> gameManager.player.createNewPlayer(1, 0, 4);
-                    case 2 -> {
-                        if (file.exists()) {
-                            gameManager.ui.titleScreenState = 1;
-                        } else System.exit(0);
-                    }
+                    case 2 -> System.exit(0);
                 }
             }
         }

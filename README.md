@@ -1,4 +1,4 @@
-# Tiny Legend Reborn(Java-2D-RPG)
+# Tiny Adventure(Java 2D RPG)
 <img width="718" alt="image" src="https://github.com/SEM24/Java-2D-Medieval-RPG/assets/71443826/0c8d83b8-bcec-4b8d-b0fc-329e2f4d16a3">
 <img width="716" alt="image" src="https://github.com/SEM24/Java-2D-Medieval-RPG/assets/71443826/b9a1d38a-2ffb-4d5c-8718-15fc938eb6fb">
 

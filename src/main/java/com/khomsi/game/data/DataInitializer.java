@@ -33,5 +33,6 @@ public class DataInitializer implements Serializable {
     String mapObjectLootNames[][];
     boolean mapObjectOpened[][];
 
-    public Instant savedPlayTime;
+    public Duration savedPlayTime;
+    public Duration savedGameTimer;
 }

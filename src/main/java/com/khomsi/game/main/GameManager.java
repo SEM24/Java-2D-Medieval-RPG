@@ -112,13 +112,20 @@ public class GameManager extends JPanel implements Runnable {
     public static final int OUTSIDE = 11;
     public static final int INDOOR = 12;
     public static final int DUNGEON = 13;
-    public static final int BOSS_DUNGEON = 13;
+    public static final int BOSS_DUNGEON = 14;
     //Until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
     public boolean bossBattleOn = false;
     public Instant startTime;
     public Duration playTime;
+    // Add a timer variable to keep track of the game time
+    public Duration gameTimer = Duration.ZERO;
+    // Add a variable to keep track of the last update time
+    private Instant lastUpdateTime = Instant.now();
+    public int coinAmount;
+    public int levelForTitle;
+
 
     public GameManager() {
         //set size of this class
@@ -143,6 +150,7 @@ public class GameManager extends JPanel implements Runnable {
         if (fullScreenOn)
             setFullScreen();
         startTime = Instant.now();
+        gameTimer = Duration.ZERO;
         playTime = Duration.ZERO;
     }
 
@@ -267,23 +275,29 @@ public class GameManager extends JPanel implements Runnable {
                     animated.update();
 
             enManagement.update();
-
-            // Calculate play time
-            Instant currentTime = Instant.now();
-            playTime = Duration.between(startTime, currentTime);
+            calculateInGameTime();
         }
         if (gameState == PAUSE_STATE) {
             //Stop game
         }
     }
 
+    private void calculateInGameTime() {
+        // Calculate time elapsed since the last update
+        Instant currentTime = Instant.now();
+        Duration elapsedTime = Duration.between(lastUpdateTime, currentTime);
+        lastUpdateTime = currentTime;
+        // Update game timer and play time
+        playTime = playTime.plus(elapsedTime);
+        gameTimer = gameTimer.plus(elapsedTime);
+    }
+
     public String formatDuration(Duration duration) {
         long seconds = duration.getSeconds();
-        long minutes = seconds / 60;
-        seconds %= 60;
-        long hours = minutes / 60;
-        minutes %= 60;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        long absSeconds = Math.abs(seconds);
+        String formattedDuration = String.format("%02d:%02d:%02d",
+                absSeconds / 3600, (absSeconds % 3600) / 60, absSeconds % 60);
+        return seconds < 0 ? "-" + formattedDuration : formattedDuration;
     }
 
     //method to draw the components on screen
@@ -375,9 +389,9 @@ public class GameManager extends JPanel implements Runnable {
             y += lineHeight;
             graphics2D.drawString("Col: " + (player.worldX + player.solidArea.x) / TILE_SIZE, x, y);
             y += lineHeight;
-            graphics2D.drawString("Row: : " + (player.worldY + player.solidArea.y) / TILE_SIZE, x, y);
+            graphics2D.drawString("Row: " + (player.worldY + player.solidArea.y) / TILE_SIZE, x, y);
             y += lineHeight;
-            graphics2D.drawString("Invincible: : " + player.invincibleCounter, x, y);
+            graphics2D.drawString("Invincible: " + player.invincibleCounter, x, y);
             y += lineHeight;
             graphics2D.drawString("Draw Time: " + passed, x, y);
             y += lineHeight;
@@ -387,7 +401,7 @@ public class GameManager extends JPanel implements Runnable {
             y += lineHeight;
             graphics2D.drawString("Press F8 to reload tiles", x, y);
             y += lineHeight;
-            graphics2D.drawString("God mode:" + keyHandler.godMode, x, y);
+            graphics2D.drawString("God mode: " + keyHandler.godMode, x, y);
             //Show player bounds
             graphics2D.setColor(Color.RED);
             graphics2D.setStroke(new BasicStroke(2));
@@ -471,5 +485,14 @@ public class GameManager extends JPanel implements Runnable {
         //FIXME cause the micro lag when called
         placeObjects.setMobs();
         currentArea = nextArea;
+    }
+
+    public void resetTimer() {
+        playTime = Duration.ZERO;
+        gameTimer = Duration.ZERO;
+    }
+
+    public Duration getGameTimer() {
+        return gameTimer;
     }
 }

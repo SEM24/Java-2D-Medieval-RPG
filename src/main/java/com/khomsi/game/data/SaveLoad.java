@@ -3,10 +3,13 @@ package com.khomsi.game.data;
 import com.khomsi.game.main.GameManager;
 
 import java.io.*;
-import java.time.Duration;
 
 public class SaveLoad {
     GameManager gameManager;
+    // Path to save.dat file to check the statement
+    private static final String FILE_PATH = "save.dat";
+    public final File file = new File(FILE_PATH);
+    public final boolean hasFile = file.exists();
 
     public SaveLoad(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -16,7 +19,7 @@ public class SaveLoad {
      * Save method to save data info about player
      */
     public void save() {
-        try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("save.dat"))) {
+        try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
             DataInitializer initializer = new DataInitializer();
             initializer.level = gameManager.player.level;
             initializer.maxHp = gameManager.player.maxHp;
@@ -31,8 +34,9 @@ public class SaveLoad {
             initializer.coin = gameManager.player.coin;
             initializer.playerSkin = gameManager.player.playerSkin;
             //TODO currently doesn't work
-            //Save play time
-            initializer.savedPlayTime = gameManager.startTime;
+            // Save play time and game timer
+            initializer.savedPlayTime = gameManager.playTime;
+            initializer.savedGameTimer = gameManager.getGameTimer();
 
             //Player's inventory
             for (int i = 0; i < gameManager.player.inventory.size(); i++) {
@@ -77,7 +81,7 @@ public class SaveLoad {
      * Load method to get data info about player
      */
     public boolean load() {
-        try (ObjectInputStream is = new ObjectInputStream(new FileInputStream("save.dat"))) {
+        try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
             //Read object from file
             DataInitializer initializer = (DataInitializer) is.readObject();
             gameManager.player.level = initializer.level;
@@ -92,8 +96,10 @@ public class SaveLoad {
             gameManager.player.nextLevelXp = initializer.nextLevelXp;
             gameManager.player.coin = initializer.coin;
             gameManager.player.playerSkin = initializer.playerSkin;
-            // Load play time
-            gameManager.startTime = initializer.savedPlayTime;
+
+            // Load play time and game timer
+            gameManager.playTime = initializer.savedPlayTime;
+            gameManager.gameTimer = initializer.savedGameTimer;
             //Load skin of player
             gameManager.player.loadImages();
 
@@ -138,12 +144,22 @@ public class SaveLoad {
         return true;
     }
 
-    public Duration parseDuration(String durationString) {
-        String[] parts = durationString.split(":");
-        long hours = Long.parseLong(parts[0]);
-        long minutes = Long.parseLong(parts[1]);
-        long seconds = Long.parseLong(parts[2]);
-
-        return Duration.ofHours(hours).plusMinutes(minutes).plusSeconds(seconds);
+    public void loadTitleData() {
+        if (!hasFile) {
+            // Set to default values or fallback values
+            gameManager.levelForTitle = gameManager.player.level;
+            gameManager.coinAmount = gameManager.player.coin;
+            gameManager.playTime = gameManager.getGameTimer();
+        } else {
+            try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
+                // Read object from file
+                DataInitializer initializer = (DataInitializer) is.readObject();
+                gameManager.levelForTitle = initializer.level;
+                gameManager.coinAmount = initializer.coin;
+                gameManager.playTime = initializer.savedPlayTime;
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Exception " + e.getMessage() + " in " + getClass().getSimpleName());
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@ import java.net.URL;
 
 
 public class Sound {
-    Clip clip;
+    public Clip clip;
     private final String resourcePath = "/sounds/";
     FloatControl fc;
     public int volumeScale = 3;
@@ -15,7 +15,7 @@ public class Sound {
 
     public Sound() {
         //TODO make it automatic in future
-        soundURL[0] = getResource("Main-Theme.wav");
+        soundURL[0] = getResource("main-theme.wav");
         soundURL[1] = getResource("snd_pombark.wav");
         soundURL[2] = getResource("mus_sfx_a_grab.wav");
         soundURL[3] = getResource("mus_dununnn.wav");
@@ -38,6 +38,7 @@ public class Sound {
         soundURL[20] = getResource("Dungeon.wav");
         soundURL[21] = getResource("snd_switchpull_n.wav");
         soundURL[22] = getResource("boss_music.wav");
+        soundURL[23] = getResource("fight-theme.wav");
     }
 
     private URL getResource(String path) {

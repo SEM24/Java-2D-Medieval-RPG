@@ -23,7 +23,7 @@ public class GameApplication {
         System.setProperty("sun.java2d.opengl", "true");
         //can't resize window
         window.setResizable(false);
-        window.setTitle("Tiny Legend Reborn");
+        window.setTitle("Tiny Adventure");
         //Set icon for window
         ImageIcon logo = new ImageIcon(Objects.requireNonNull(getClass().getResource(iconMainPath)));
         window.setIconImage(logo.getImage());

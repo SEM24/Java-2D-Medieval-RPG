@@ -142,7 +142,7 @@ public class PathFinder {
                 }
             }
             //if there is no node in the openList, end the loop
-            if (openList.size() == 0) {
+            if (openList.isEmpty()) {
                 break;
             }
             //After the loop, we get the best node which is our next step

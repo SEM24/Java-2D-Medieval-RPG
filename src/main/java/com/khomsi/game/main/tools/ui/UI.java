@@ -15,7 +15,6 @@ public class UI {
     GameManager gameManager;
     Graphics2D graphics2D;
     public HUD hud;
-    Settings settings;
     BufferedImage coin;
     public Font playMeGames;
     List<String> message = new ArrayList<>();
@@ -414,11 +413,78 @@ public class UI {
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
         switch (subState) {
             case 0 -> optionTop(frameX, frameY);
-            case 1 -> settings.fullScreenNotification(frameX, frameY);
-            case 2 -> settings.showControl(frameX, frameY);
+            case 1 -> fullScreenNotification(frameX, frameY);
+            case 2 -> showControl(frameX, frameY);
             case 3 -> endGameConfirm(frameX, frameY);
         }
         gameManager.keyHandler.isEnterPressed = false;
+    }
+
+    void fullScreenNotification(int frameX, int frameY) {
+        int textX = frameX + GameManager.TILE_SIZE;
+        int textY = frameY + GameManager.TILE_SIZE * 3;
+        currentDialog = "The changes will be \napplied after restarting \nthe game.";
+        splitTextInDialog(currentDialog, textX, textY);
+        //Back text
+        textY = frameY + GameManager.TILE_SIZE * 9;
+        graphics2D.drawString("Back", textX, textY);
+        //Draw cursor
+        if (commandNum == 0) {
+            showChooseCursor(textX, textY, 25);
+            if (gameManager.keyHandler.isEnterPressed) subState = 0;
+        }
+    }
+
+    void showControl(int frameX, int frameY) {
+        int textX;
+        int textY;
+        String text = "Control";
+        textX = getXCenterText(text);
+        textY = frameY + GameManager.TILE_SIZE;
+        graphics2D.drawString(text, textX, textY);
+        textX = frameX + GameManager.TILE_SIZE;
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("Move", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("Confirm/Attack", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("Shoot/Cast", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("Inventory", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("Pause", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("Settings", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("Map/MiniMap", textX, textY);
+        textX = frameX + GameManager.TILE_SIZE * 6;
+        textY = frameY + GameManager.TILE_SIZE * 2;
+
+        graphics2D.drawString("WASD", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("ENTER", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("CTRL", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("E", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("P", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("ESC", textX, textY);
+        textY += GameManager.TILE_SIZE;
+        graphics2D.drawString("M/X", textX, textY);
+
+        //Back button
+        textX = frameX + GameManager.TILE_SIZE;
+        textY = frameY + GameManager.TILE_SIZE * 9;
+        graphics2D.drawString("Back", textX, textY);
+        if (commandNum == 0) {
+            showChooseCursor(textX, textY, 25);
+            if (gameManager.keyHandler.isEnterPressed) {
+                subState = 0;
+                commandNum = 3;
+            }
+        }
     }
 
     public void optionTop(int frameX, int frameY) {
@@ -795,14 +861,9 @@ public class UI {
             graphics2D.fillRect(0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
             //Title name
             graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 80F));
-            String text = "Tiny Legend Reborn";
+            String text = "Tiny Adventure";
             int x = getXCenterText(text);
-            int y = GameManager.TILE_SIZE * 5;
-            drawShadowAndText(text, x, y, 5, 5);
-
-            x = getXCenterText(text);
-            y += GameManager.TILE_SIZE * 2;
-            text = "Medieval Adventure";
+            int y = GameManager.TILE_SIZE * 6;
             drawShadowAndText(text, x, y, 5, 5);
         }
     }
@@ -831,12 +892,16 @@ public class UI {
             x = getXCenterText(text);
             y += GameManager.TILE_SIZE;
             drawMenuItem(text, x, y, commandNum == 2);
-            text = "LV " + gameManager.player.level;
+            text = "LV " + gameManager.levelForTitle;
             x = getXCenterText(text);
             y = GameManager.TILE_SIZE * 4;
             drawShadowAndText(text, x, y, 3, 3);
 
-            text = "Coins " + gameManager.player.coin;
+            text = gameManager.formatDuration(gameManager.playTime);
+            x = (int) (getXCenterText(text) * 1.4);
+            drawShadowAndText(text, x, y, 3, 3);
+
+            text = "Coins " + gameManager.coinAmount;
             x = (int) (getXCenterText(text) / 1.6);
             drawShadowAndText(text, x, y, 3, 3);
 
@@ -859,10 +924,10 @@ public class UI {
             y += GameManager.TILE_SIZE;
             drawMenuItem(text, x, y, commandNum == 1);
 
-            x = getXCenterText(text) + 15;
+            x = getXCenterText(text) + 20;
             y += GameManager.TILE_SIZE * 3;
             //Draw back button
-            if (gameManager.keyHandler.file.exists()) {
+            if (gameManager.saveLoad.hasFile) {
                 drawMenuItem("Back", x, y, commandNum == 2);
             } else {
                 drawMenuItem("Exit", x, y, commandNum == 2);
@@ -966,9 +1031,8 @@ public class UI {
     private void endGameConfirm(int frameX, int frameY) {
         int textX = frameX + GameManager.TILE_SIZE;
         int textY = frameY + GameManager.TILE_SIZE * 3;
-        currentDialog = "Quit the game and \nreturn to title screen?";
+        currentDialog = "Quit the game?";
         splitTextInDialog(currentDialog, textX, textY);
-        //Yes
         String text = "YES, YES ,YES!";
         textX = getXCenterText(text);
         textY += GameManager.TILE_SIZE * 3;
@@ -976,15 +1040,9 @@ public class UI {
         if (commandNum == 0) {
             showChooseCursor(textX, textY, 25);
             if (gameManager.keyHandler.isEnterPressed) {
-                //Quit the game
-                subState = 0;
-                gameManager.ui.titleScreenState = 1;
-                gameManager.gameState = GameManager.TITLE_STATE;
-                gameManager.resetGame(true);
-                gameManager.stopMusic();
+                System.exit(0);
             }
         }
-        //No
         text = "NO, NO ,NO!";
         textX = getXCenterText(text);
         textY += GameManager.TILE_SIZE;

@@ -62,6 +62,7 @@ public class MobSlime extends Entity {
 
     @Override
     public void setAction() {
+        super.setAction();
         if (onPath) {
             //Check if it stops chasing
             checkStopChasing(gameManager.player, 10, 100);
