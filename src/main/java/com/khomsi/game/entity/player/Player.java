@@ -88,10 +88,11 @@ public class Player extends Entity {
         worldX = GameManager.TILE_SIZE * 30;
         worldY = GameManager.TILE_SIZE * 21;
         direction = "down";
-        //TODO remove later
+        //TODO remove later(after finishing debugging)
 //        gameManager.currentMap = 2;
 //        worldX = GameManager.TILE_SIZE * 21;
 //        worldY = GameManager.TILE_SIZE * 34;
+
 //        gameManager.currentMap = 3;
 //        worldX = GameManager.TILE_SIZE * 25;
 //        worldY = GameManager.TILE_SIZE * 1;

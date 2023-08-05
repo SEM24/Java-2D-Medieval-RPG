@@ -28,7 +28,7 @@ public class PotionObject extends Entity {
     public boolean use(Entity entity) {
         startDialogue(this, 0);
         entity.hp += value;
-        gameManager.playSE(6);
+        gameManager.playSE(26);
         return true;
     }
 }

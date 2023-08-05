@@ -14,24 +14,23 @@ public class Sound {
     URL[] soundURL = new URL[30];
 
     public Sound() {
-        //TODO make it automatic in future
         soundURL[0] = getResource("main-theme.wav");
-        soundURL[1] = getResource("snd_pombark.wav");
-        soundURL[2] = getResource("mus_sfx_a_grab.wav");
+        soundURL[1] = getResource("snd_fireball_cast.wav");
+        soundURL[2] = getResource("snd_pick_up.wav");
         soundURL[3] = getResource("mus_dununnn.wav");
         soundURL[4] = getResource("mus_dooropen.wav");
         soundURL[5] = getResource("mus_doorclose.wav");
-        soundURL[6] = getResource("snd_power.wav");
+        soundURL[6] = getResource("snd_pickup_coin.wav");
         soundURL[7] = getResource("snd_victory.wav");
-        soundURL[8] = getResource("hitmonster.wav");
+        soundURL[8] = getResource("snd_damage_monster.wav");
         soundURL[9] = getResource("receivedamage.wav");
         soundURL[10] = getResource("sword-swipes.wav");
-        soundURL[11] = getResource("level_up.wav");
+        soundURL[11] = getResource("snd_level_up.wav");
         soundURL[12] = getResource("cursor.wav");
         soundURL[13] = getResource("cuttree.wav");
         soundURL[14] = getResource("game_over.wav");
         soundURL[15] = getResource("sleep.wav");
-        soundURL[16] = getResource("parry.wav");
+        soundURL[16] = getResource("snd_parry.wav");
         soundURL[17] = getResource("blocked.wav");
         soundURL[18] = getResource("snd_text_2.wav");
         soundURL[19] = getResource("Merchant.wav");
@@ -39,6 +38,9 @@ public class Sound {
         soundURL[21] = getResource("snd_switchpull_n.wav");
         soundURL[22] = getResource("boss_music.wav");
         soundURL[23] = getResource("fight-theme.wav");
+        soundURL[24] = getResource("snd_startscreen.wav");
+        soundURL[25] = getResource("title-theme.wav");
+        soundURL[26] = getResource("mus_sfx_a_grab.wav");
     }
 
     private URL getResource(String path) {

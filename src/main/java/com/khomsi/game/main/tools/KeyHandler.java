@@ -151,9 +151,8 @@ public class KeyHandler implements KeyListener {
                 //fixme check the se
                 gameManager.playMusic(0);
             } else if (gameManager.ui.commandNum == 1) {
-                gameManager.ui.titleScreenState = -1;
-                gameManager.gameState = GameManager.START_STATE;
                 gameManager.resetGame(true);
+                System.exit(0);
             }
         }
     }
@@ -257,6 +256,11 @@ public class KeyHandler implements KeyListener {
     }
 
     private void tutorialState(int code) {
+        // Play music only once in tutorial screen
+        if (!gameManager.isMusicPlaying) {
+            gameManager.playMusic(25);
+            gameManager.isMusicPlaying = true;
+        }
         if (gameManager.ui.titleScreenState == 0) {
             if (!isEnterPressed && code == KeyEvent.VK_ENTER) {
                 gameManager.ui.titleScreenState = 2;
@@ -268,6 +272,11 @@ public class KeyHandler implements KeyListener {
 
 
     private void titleState(int code) {
+        // Play music only once in title screen
+        if (!gameManager.isMusicPlaying) {
+            gameManager.playMusic(25);
+            gameManager.isMusicPlaying = true;
+        }
         if (gameManager.ui.titleScreenState == 1) {
             if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
                 gameManager.ui.commandNum = 2; // Move cursor to "EXIT GAME" (commandNum = 2)
@@ -282,6 +291,7 @@ public class KeyHandler implements KeyListener {
                     case 2 -> System.exit(0);
                     case 1 -> {
                         if (gameManager.saveLoad.load()) {
+                            gameManager.stopTitleMusic();
                             gameManager.saveLoad.load();
                             gameManager.gameState = GameManager.PLAY_STATE;
                             gameManager.playMusic(0);
@@ -300,6 +310,7 @@ public class KeyHandler implements KeyListener {
             }
 
             if (!isEnterPressed && code == KeyEvent.VK_ENTER) {
+                gameManager.stopTitleMusic();
                 if (gameManager.saveLoad.hasFile) {
                     gameManager.saveLoad.file.delete();
                     gameManager.resetTimer();

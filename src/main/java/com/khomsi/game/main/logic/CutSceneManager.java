@@ -36,9 +36,13 @@ public class CutSceneManager {
                 for (int i = 0; i < gameManager.object[1].length; i++) {
                     if (gameManager.object[gameManager.currentMap][i] == null) {
                         gameManager.object[gameManager.currentMap][i] = new DungeonDoorClosedObject(gameManager);
-                        //TODO change the location of door and the map of dungeon 2
                         gameManager.object[gameManager.currentMap][i].worldX = GameManager.TILE_SIZE * 25;
                         gameManager.object[gameManager.currentMap][i].worldY = GameManager.TILE_SIZE * 8;
+                        gameManager.object[gameManager.currentMap][i].markered = true;
+                        i++;
+                        gameManager.object[gameManager.currentMap][i] = new DungeonDoorClosedObject(gameManager);
+                        gameManager.object[gameManager.currentMap][i].worldX = GameManager.TILE_SIZE * 25;
+                        gameManager.object[gameManager.currentMap][i].worldY = GameManager.TILE_SIZE * 33;
                         gameManager.object[gameManager.currentMap][i].markered = true;
                         gameManager.playSE(5);
                         break;

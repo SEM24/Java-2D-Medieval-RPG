@@ -855,6 +855,10 @@ public class UI {
     }
 
     private void drawStartScreen() {
+        if (!gameManager.isSEPlaying) {
+            gameManager.playSE(24);
+            gameManager.isSEPlaying = true;
+        }
         Color bgColor = new Color(0, 0, 0);
         if (titleScreenState == -1) {
             graphics2D.setColor(bgColor);
@@ -926,12 +930,7 @@ public class UI {
 
             x = getXCenterText(text) + 20;
             y += GameManager.TILE_SIZE * 3;
-            //Draw back button
-            if (gameManager.saveLoad.hasFile) {
-                drawMenuItem("Back", x, y, commandNum == 2);
-            } else {
-                drawMenuItem("Exit", x, y, commandNum == 2);
-            }
+            drawMenuItem("Exit", x, y, commandNum == 2);
         }
     }
 

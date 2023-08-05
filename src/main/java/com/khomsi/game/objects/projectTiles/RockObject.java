@@ -13,7 +13,6 @@ public class RockObject extends ProjectTile {
         speed = 8;
         maxHp = 80;
         hp = maxHp;
-        //TODO bug when attack gives not 2 damage, but 0, so need to multiply the num to 2
         attack = 2 * 3;
         useCost = 1;
         // if the previous tile is still on the screen,

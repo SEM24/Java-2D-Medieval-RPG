@@ -147,6 +147,11 @@ public class PlaceObjects {
         gameManager.object[mapNum][index] = new DungeonDoorOpenedObject(gameManager);
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 25;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 8;
+        index++;
+
+        gameManager.object[mapNum][index] = new DungeonDoorOpenedObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 25;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 33;
     }
 
     public void setInteractiveTiles() {

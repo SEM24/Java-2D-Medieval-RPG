@@ -117,6 +117,9 @@ public class GameManager extends JPanel implements Runnable {
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
     public boolean bossBattleOn = false;
+    public boolean isSEPlaying = false;
+    public boolean isMusicPlaying = false;
+
     public Instant startTime;
     public Duration playTime;
     // Add a timer variable to keep track of the game time
@@ -466,6 +469,11 @@ public class GameManager extends JPanel implements Runnable {
     public void playSE(int i) {
         se.setFile(i);
         se.play();
+    }
+
+    public void stopTitleMusic() {
+        music.stop();
+        isMusicPlaying = false;
     }
 
     public void changeArea() {
