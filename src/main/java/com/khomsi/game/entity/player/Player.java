@@ -85,8 +85,8 @@ public class Player extends Entity {
     public void setDefaultPosition() {
         //player position of player
         gameManager.currentMap = 0;
-        worldX = GameManager.TILE_SIZE * 30;
-        worldY = GameManager.TILE_SIZE * 21;
+        worldX = GameManager.TILE_SIZE * 29;
+        worldY = GameManager.TILE_SIZE * 92;
         direction = "down";
         //TODO remove later(after finishing debugging)
 //        gameManager.currentMap = 2;

@@ -18,8 +18,8 @@ public class Sound {
         soundURL[1] = getResource("snd_fireball_cast.wav");
         soundURL[2] = getResource("snd_pick_up.wav");
         soundURL[3] = getResource("mus_dununnn.wav");
-        soundURL[4] = getResource("mus_dooropen.wav");
-        soundURL[5] = getResource("mus_doorclose.wav");
+        soundURL[4] = getResource("sfx_open_door.wav");
+        soundURL[5] = getResource("sfx_close_door.wav");
         soundURL[6] = getResource("snd_pickup_coin.wav");
         soundURL[7] = getResource("snd_victory.wav");
         soundURL[8] = getResource("snd_damage_monster.wav");
@@ -28,7 +28,7 @@ public class Sound {
         soundURL[11] = getResource("snd_level_up.wav");
         soundURL[12] = getResource("cursor.wav");
         soundURL[13] = getResource("cuttree.wav");
-        soundURL[14] = getResource("game_over.wav");
+        soundURL[14] = getResource("sfx_game_over.wav");
         soundURL[15] = getResource("sleep.wav");
         soundURL[16] = getResource("snd_parry.wav");
         soundURL[17] = getResource("blocked.wav");
@@ -41,6 +41,8 @@ public class Sound {
         soundURL[24] = getResource("snd_startscreen.wav");
         soundURL[25] = getResource("title-theme.wav");
         soundURL[26] = getResource("mus_sfx_a_grab.wav");
+        soundURL[27] = getResource("sfx_key_open_door.wav");
+        soundURL[28] = getResource("sfx_open_shop_door.wav");
     }
 
     private URL getResource(String path) {

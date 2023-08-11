@@ -1,7 +1,7 @@
 package com.khomsi.game.tiles.interactive;
 
-import com.khomsi.game.main.GameManager;
 import com.khomsi.game.entity.Entity;
+import com.khomsi.game.main.GameManager;
 
 import java.awt.*;
 
@@ -27,7 +27,7 @@ public class Bush extends InteractiveTile {
 
     @Override
     public boolean isCorrectWeapon(Entity entity) {
-        return entity.currentWeapon.type == TYPE_AXE;
+        return entity.currentWeapon.type == TYPE_AXE || entity.currentWeapon.type == TYPE_SWORD;
     }
 
     @Override
@@ -64,6 +64,7 @@ public class Bush extends InteractiveTile {
         int maxHp = 20;
         return maxHp;
     }
+
     @Override
     public void checkDrop() {
     }

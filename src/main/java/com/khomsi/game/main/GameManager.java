@@ -273,10 +273,10 @@ public class GameManager extends JPanel implements Runnable {
                     tile.update();
                 }
             }
-            for (Entity animated : animatedTiles[currentMap])
+            for (Entity animated : animatedTiles[currentMap]) {
                 if (animated != null)
                     animated.update();
-
+            }
             enManagement.update();
             calculateInGameTime();
         }
@@ -402,7 +402,7 @@ public class GameManager extends JPanel implements Runnable {
             y += lineHeight;
             graphics2D.drawString("Press Ctrl+F9 after ed map", x, y);
             y += lineHeight;
-            graphics2D.drawString("Press F8 to reload tiles", x, y);
+            graphics2D.drawString("Press F7 to reload tiles", x, y);
             y += lineHeight;
             graphics2D.drawString("God mode: " + keyHandler.godMode, x, y);
             //Show player bounds

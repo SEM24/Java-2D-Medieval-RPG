@@ -42,6 +42,7 @@ public class EventHandler {
         eventMaster.dialogues[0][0] = "You felt into a pit!";
         eventMaster.dialogues[1][0] = "You thrown the coin!\nYour Hp and Mana were recovered!\nFile saved.";
         eventMaster.dialogues[2][0] = "You need coins to interact!\nCome again later!";
+        eventMaster.dialogues[3][0] = "Ouch! That hurt!";
     }
 
     public void checkEvent() {
@@ -54,7 +55,8 @@ public class EventHandler {
             canTouchEvent = true;
         }
         if (canTouchEvent) {
-            if (interact(0, 27, 20, "any")) {
+            if (interact(0, 25, 65, "any")) {
+                //TODO change the event
                 damagePit(GameManager.DIALOGUE_STATE);
             } else {
                 handleInteractions();
@@ -66,19 +68,22 @@ public class EventHandler {
         int currentMap = gameManager.currentMap;
         switch (currentMap) {
             case 0 -> { // Main Map
-                if (interact(0, 18, 35, "down") || interact(0, 19, 35, "down")
-                        || interact(0, 20, 35, "down")) {
-                    healingPool(GameManager.DIALOGUE_STATE);
-                } else if (interact(0, 18, 25, "any")) {
+                if (interact(0, 18, 25, "any")) {
                     changeLocation(1, 20, 22, GameManager.INDOOR);
-                    gameManager.playSE(4);
+                    gameManager.playSE(28);
+                }
+                //Sea urchin interact
+                else if (shouldInteractSeaUrchin(0)) {
+                    damageAnyThing(GameManager.DIALOGUE_STATE);
+                } else if (shouldInteractHealingPool(0)) {
+                    healingPool(GameManager.DIALOGUE_STATE);
                 }
             }
             case 1 -> { // Seller House
                 //back to main map from seller
                 if (interact(1, 20, 23, "any")) {
                     changeLocation(0, 18, 26, GameManager.OUTSIDE);
-                    gameManager.playSE(5);
+                    gameManager.playSE(28);
                 }
                 //Enter Dungeon in seller house
                 else if (interact(1, 25, 15, "up", 15)) {
@@ -115,6 +120,55 @@ public class EventHandler {
                 }
             }
         }
+    }
+
+    private boolean shouldInteractHealingPool(int currentMap) {
+        // Initialize with an empty array
+        int[][] interactRanges = new int[][]{};
+        if (currentMap == 0) {
+            interactRanges = new int[][]{
+                    {0, 21, 85}
+            };
+        } else if (currentMap == 1) {
+            //TODO Add items to map 1
+//            interactRanges = new int[][]{
+//                    {1, 33, 91},
+//                    {1, 36, 90},
+//                    {1, 38, 82}
+//            };
+        }
+        for (int[] range : interactRanges) {
+            if (interact(currentMap, range[1], range[2], "any")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean shouldInteractSeaUrchin(int currentMap) {
+        // Initialize with an empty array
+        int[][] interactRanges = new int[][]{};
+        if (currentMap == 0) {
+            interactRanges = new int[][]{
+                    //Sea urchin locations
+                    {0, 33, 91},
+                    {0, 36, 90},
+                    {0, 38, 82},
+            };
+        } else if (currentMap == 1) {
+            //TODO Add items to map 1
+//            interactRanges = new int[][]{
+//                    {1, 33, 91},
+//                    {1, 36, 90},
+//                    {1, 38, 82}
+//            };
+        }
+        for (int[] range : interactRanges) {
+            if (interact(currentMap, range[1], range[2], "any")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean interact(int map, int col, int row, String direction) {
@@ -170,7 +224,7 @@ public class EventHandler {
         tempCol = col;
         tempRow = row;
         canTouchEvent = false;
-//        gameManager.playSE(4);
+//      TODO  gameManager.playSE(4);
     }
 
     public void damagePit(int gameState) {
@@ -180,6 +234,14 @@ public class EventHandler {
         //TODO draw different sprites from character char_one char_pit_fall
         gameManager.player.hp -= 1;
         teleport(gameState);
+        canTouchEvent = false;
+    }
+
+    public void damageAnyThing(int gameState) {
+//       TODO  gameManager.playSE();
+        gameManager.gameState = gameState;
+        eventMaster.startDialogue(eventMaster, 3);
+        gameManager.player.hp -= 1;
         canTouchEvent = false;
     }
 
@@ -206,8 +268,8 @@ public class EventHandler {
     private void teleport(int gameState) {
         gameManager.gameState = gameState;
         eventMaster.startDialogue(eventMaster, 0);
-        gameManager.player.worldX = GameManager.TILE_SIZE * 24;
-        gameManager.player.worldY = GameManager.TILE_SIZE * 11;
+        gameManager.player.worldX = GameManager.TILE_SIZE * 13;
+        gameManager.player.worldY = GameManager.TILE_SIZE * 71;
         gameManager.player.fallIntoPit = false;
     }
 

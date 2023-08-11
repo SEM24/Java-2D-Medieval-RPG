@@ -2,7 +2,11 @@ package com.khomsi.game.main.logic;
 
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
+import com.khomsi.game.objects.dungeon.DungeonDoorClosedObject;
+import com.khomsi.game.objects.dungeon.DungeonDoorOpenedObject;
 import com.khomsi.game.objects.equipment.*;
+import com.khomsi.game.objects.inside.BedObject;
+import com.khomsi.game.objects.inside.StairsDownObject;
 import com.khomsi.game.objects.interact.ChestObject;
 import com.khomsi.game.objects.interact.CoinBObject;
 import com.khomsi.game.objects.interact.KeyObject;
@@ -46,6 +50,7 @@ public class EntityGenerator {
             case HookObject.OBJ_NAME -> object = new HookObject(gameManager);
             case DungeonDoorClosedObject.OBJ_NAME -> object = new DungeonDoorClosedObject(gameManager);
             case DungeonDoorOpenedObject.OBJ_NAME -> object = new DungeonDoorOpenedObject(gameManager);
+            case RoundTreeObject.OBJ_NAME -> object = new RoundTreeObject(gameManager);
         }
         return object;
     }

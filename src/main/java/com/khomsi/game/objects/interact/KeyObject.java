@@ -26,7 +26,7 @@ public class KeyObject extends Entity {
         int objIndex = getDetected(entity, gameManager.object, "Door");
         if (objIndex != 999) {
             startDialogue(this, 0);
-            gameManager.playSE(4);
+            gameManager.playSE(27);
             gameManager.object[gameManager.currentMap][objIndex] = null;
             return true;
         } else {

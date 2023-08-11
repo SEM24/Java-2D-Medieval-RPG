@@ -3,7 +3,7 @@ package com.khomsi.game.main.logic;
 import com.khomsi.game.entity.mobs.MobDungeonBoss;
 import com.khomsi.game.entity.player.PlayerDummy;
 import com.khomsi.game.main.GameManager;
-import com.khomsi.game.objects.outside.DungeonDoorClosedObject;
+import com.khomsi.game.objects.dungeon.DungeonDoorClosedObject;
 
 import java.awt.*;
 import java.util.Objects;

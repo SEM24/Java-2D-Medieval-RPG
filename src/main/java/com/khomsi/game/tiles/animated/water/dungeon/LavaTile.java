@@ -11,11 +11,14 @@ public class LavaTile extends AnimatedTile {
         solidArea = new Rectangle();
         solidArea.x = 6;
         solidArea.y = 16;
+        //TODO
+//        type = TYPE_LIGHT;
 
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         solidArea.width = 32;
         solidArea.height = 32;
+//        lightRadius = 150;
     }
     @Override
     public void update() {

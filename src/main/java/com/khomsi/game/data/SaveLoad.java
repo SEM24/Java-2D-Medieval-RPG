@@ -21,6 +21,9 @@ public class SaveLoad {
     public void save() {
         try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
             DataInitializer initializer = new DataInitializer();
+            initializer.playerX = gameManager.player.worldX;
+            initializer.playerY = gameManager.player.worldY;
+
             initializer.level = gameManager.player.level;
             initializer.maxHp = gameManager.player.maxHp;
             initializer.hp = gameManager.player.hp;
@@ -33,7 +36,6 @@ public class SaveLoad {
             initializer.nextLevelXp = gameManager.player.nextLevelXp;
             initializer.coin = gameManager.player.coin;
             initializer.playerSkin = gameManager.player.playerSkin;
-            //TODO currently doesn't work
             // Save play time and game timer
             initializer.savedPlayTime = gameManager.playTime;
             initializer.savedGameTimer = gameManager.getGameTimer();
@@ -84,6 +86,9 @@ public class SaveLoad {
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
             //Read object from file
             DataInitializer initializer = (DataInitializer) is.readObject();
+            gameManager.player.worldX = initializer.playerX;
+            gameManager.player.worldY = initializer.playerY;
+
             gameManager.player.level = initializer.level;
             gameManager.player.maxHp = initializer.maxHp;
             gameManager.player.hp = initializer.hp;
@@ -137,6 +142,7 @@ public class SaveLoad {
                     }
                 }
             }
+            gameManager.placeObjects.setInteractiveTiles();
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Exception " + e.getMessage() + " in " + getClass().getSimpleName());
             return false;

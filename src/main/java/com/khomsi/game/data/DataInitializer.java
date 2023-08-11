@@ -6,6 +6,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 public class DataInitializer implements Serializable {
+    //Player Coord
+    int playerX;
+    int playerY;
     //Player stats
     int level;
     int maxHp;
