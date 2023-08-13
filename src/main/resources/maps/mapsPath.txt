@@ -1,2 +1,3 @@
-world02.txt
 world01.txt
+dungeon_beach_01.txt
+world00.txt

@@ -114,7 +114,6 @@ public class Entity extends Tools {
     public static final int TYPE_OBSTACLE = 8;
     public static final int TYPE_LIGHT = 9;
     public static final int TYPE_HOOK = 10;
-
     //TOOLS
     public int dialogueIndex = 0;
     public int dialogueSet = 0;
@@ -409,7 +408,6 @@ public class Entity extends Tools {
                     }
                 }
             }
-
 
             if (invincible) {
                 hpBarOn = true;

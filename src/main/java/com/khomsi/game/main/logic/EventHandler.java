@@ -55,12 +55,7 @@ public class EventHandler {
             canTouchEvent = true;
         }
         if (canTouchEvent) {
-            if (interact(0, 25, 65, "any")) {
-                //TODO change the event
-                damagePit(GameManager.DIALOGUE_STATE);
-            } else {
-                handleInteractions();
-            }
+            handleInteractions();
         }
     }
 
@@ -68,8 +63,8 @@ public class EventHandler {
         int currentMap = gameManager.currentMap;
         switch (currentMap) {
             case 0 -> { // Main Map
-                if (interact(0, 18, 25, "any")) {
-                    changeLocation(1, 20, 22, GameManager.INDOOR);
+                if (interact(0, 13, 91, "any")) {
+                    changeLocation(1, 17, 30, GameManager.INDOOR);
                     gameManager.playSE(28);
                 }
                 //Sea urchin interact
@@ -79,46 +74,53 @@ public class EventHandler {
                     healingPool(GameManager.DIALOGUE_STATE);
                 }
             }
-            case 1 -> { // Seller House
+            case 1 -> { // Dungeon
                 //back to main map from seller
-                if (interact(1, 20, 23, "any")) {
-                    changeLocation(0, 18, 26, GameManager.OUTSIDE);
+                if (interact(1, 18, 30, "any")) {
+                    changeLocation(0, 13, 90, GameManager.OUTSIDE);
                     gameManager.playSE(28);
                 }
-                //Enter Dungeon in seller house
-                else if (interact(1, 25, 15, "up", 15)) {
-                    changeLocation(2, 16, 39, GameManager.DUNGEON);
-                    gameManager.playSE(4);
-                }
-                //Talk to seller in house
-                else if (interact(1, 20, 18, "up")) {
-                    speak(gameManager.npcList[1][0]);
-                }
             }
-            case 2 -> { // Dungeon
-                //Back to seller house from dungeon
-                if (interact(2, 15, 39, "any")) {
-                    changeLocation(1, 25, 15, GameManager.INDOOR);
-                    gameManager.playSE(5);
-                }
-                //Enter the boss dungeon
-                else if (interact(2, 9, 14, "any")) {
-                    changeLocation(3, 25, 1, GameManager.BOSS_DUNGEON);
-                    gameManager.playSE(4);
-                }
-            }
-            case 3 -> { // Boss Dungeon
-                //Exit the boss dungeon
-                if (interact(3, 26, 1, "any")) {
-                    changeLocation(2, 9, 15, GameManager.BOSS_DUNGEON);
-                    gameManager.playSE(4);
-                }
-                //Start cutscene with the boss
-                if (interact(3, 25, 10, "any") ||
-                        interact(3, 26, 10, "any", 10)) {
-                    dungeonBoss();
-                }
-            }
+//            case 1 -> { // Seller House
+//                //back to main map from seller
+//                if (interact(1, 20, 23, "any")) {
+//                    changeLocation(0, 18, 26, GameManager.OUTSIDE);
+//                    gameManager.playSE(28);
+//                }
+//                //Enter Dungeon in seller house
+//                else if (interact(1, 25, 15, "up", 15)) {
+//                    changeLocation(2, 16, 39, GameManager.DUNGEON);
+//                    gameManager.playSE(4);
+//                }
+//                //Talk to seller in house
+//                else if (interact(1, 20, 18, "up")) {
+//                    speak(gameManager.npcList[1][0]);
+//                }
+//            }
+//            case 2 -> { // Dungeon
+//                //Back to seller house from dungeon
+//                if (interact(2, 15, 39, "any")) {
+//                    changeLocation(1, 25, 15, GameManager.INDOOR);
+//                    gameManager.playSE(5);
+//                }
+//                //Enter the boss dungeon
+//                else if (interact(2, 9, 14, "any")) {
+//                    changeLocation(3, 25, 1, GameManager.BOSS_DUNGEON);
+//                    gameManager.playSE(4);
+//                }
+//            }
+//            case 3 -> { // Boss Dungeon
+//                //Exit the boss dungeon
+//                if (interact(3, 26, 1, "any")) {
+//                    changeLocation(2, 9, 15, GameManager.BOSS_DUNGEON);
+//                    gameManager.playSE(4);
+//                }
+//                //Start cutscene with the boss
+//                if (interact(3, 25, 10, "any") ||
+//                        interact(3, 26, 10, "any", 10)) {
+//                    dungeonBoss();
+//                }
+//            }
         }
     }
 

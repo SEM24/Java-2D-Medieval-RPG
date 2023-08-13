@@ -1064,7 +1064,7 @@ public class UI {
         graphics2D.drawString(pauseText, x, y);
     }
 
-    int getXCenterText(String text) {
+    public int getXCenterText(String text) {
         int length = (int) graphics2D.getFontMetrics().getStringBounds(text, graphics2D).getWidth();
         return GameManager.SCREEN_WIDTH / 2 - length / 2;
     }

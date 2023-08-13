@@ -90,7 +90,7 @@ public class Lightning {
         //Check the state of the day
         if (dayState == DAY) {
             dayCounter++;
-            if (dayCounter > 2200) {
+            if (dayCounter > 3200) {
                 dayState = NIGHTFALL;
                 dayCounter = 0;
             }
@@ -104,7 +104,7 @@ public class Lightning {
         }
         if (dayState == NIGHT) {
             dayCounter++;
-            if (dayCounter > 2200) {
+            if (dayCounter > 3200) {
                 dayState = DAWN;
                 dayCounter = 0;
             }

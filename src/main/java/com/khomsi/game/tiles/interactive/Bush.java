@@ -2,8 +2,11 @@ package com.khomsi.game.tiles.interactive;
 
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
+import com.khomsi.game.objects.interact.CoinBObject;
+import com.khomsi.game.objects.spells.HeartObject;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Bush extends InteractiveTile {
     public Bush(GameManager gameManager, int col, int row) {
@@ -67,5 +70,11 @@ public class Bush extends InteractiveTile {
 
     @Override
     public void checkDrop() {
+        int drop = new Random().nextInt(100) + 1;
+        if (drop <= 30) {  // 30% chance for coin
+            dropItem(new CoinBObject(gameManager));
+        } else if (drop > 30 && drop <= 45) {  // 15% chance for heart
+            dropItem(new HeartObject(gameManager));
+        }
     }
 }

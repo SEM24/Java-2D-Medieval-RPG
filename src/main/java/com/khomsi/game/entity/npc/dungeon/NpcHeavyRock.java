@@ -1,4 +1,4 @@
-package com.khomsi.game.entity.npc.object;
+package com.khomsi.game.entity.npc.dungeon;
 
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.entity.Entity;
@@ -12,10 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class NpcRock extends Entity {
+public class NpcHeavyRock extends Entity {
     public static final String NPC_NAME = "Rock";
 
-    public NpcRock(GameManager gameManager) {
+    public NpcHeavyRock(GameManager gameManager) {
         super(gameManager);
         direction = "down";
         speed = 4;
@@ -85,6 +85,7 @@ public class NpcRock extends Entity {
     public void moveObj(String direction) {
         this.direction = direction;
         changeDirection(direction);
+
         detectPlate();
     }
 
@@ -96,7 +97,7 @@ public class NpcRock extends Entity {
                 .toList();
 
         List<Entity> rocks = Arrays.stream(gameManager.npcList[currentMap])
-                .filter(NpcRock.class::isInstance)
+                .filter(NpcHeavyRock.class::isInstance)
                 .toList();
 
         //Scan the plates

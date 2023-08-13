@@ -6,6 +6,7 @@ import com.khomsi.game.main.tools.KeyHandler;
 import com.khomsi.game.objects.equipment.MetalShieldObject;
 import com.khomsi.game.objects.equipment.MetalSwordObject;
 import com.khomsi.game.objects.interact.KeyObject;
+import com.khomsi.game.objects.interact.MagicNecklaceObject;
 import com.khomsi.game.objects.projectTiles.FireBallObject;
 
 import java.awt.*;
@@ -116,6 +117,7 @@ public class Player extends Entity {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new KeyObject(gameManager));
+        inventory.add(new MagicNecklaceObject(gameManager));
     }
 
     public int getCurrentWeaponSlot() {
