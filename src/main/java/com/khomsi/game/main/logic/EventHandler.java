@@ -64,8 +64,9 @@ public class EventHandler {
         switch (currentMap) {
             case 0 -> { // Main Map
                 if (interact(0, 13, 91, "any")) {
-                    changeLocation(1, 17, 30, GameManager.INDOOR);
-                    gameManager.playSE(28);
+                    changeLocation(3, 54, 86, GameManager.LIGHT_DUNGEON);
+                    gameManager.playSE(4);
+//                    gameManager.playSE(28);
                 }
                 //Sea urchin interact
                 else if (shouldInteractSeaUrchin(0)) {
@@ -73,30 +74,39 @@ public class EventHandler {
                 } else if (shouldInteractHealingPool(0)) {
                     healingPool(GameManager.DIALOGUE_STATE);
                 }
-            }
-            case 1 -> { // Dungeon
-                //back to main map from seller
-                if (interact(1, 18, 30, "any")) {
-                    changeLocation(0, 13, 90, GameManager.OUTSIDE);
+                //Seller house on beach
+                else if (interact(0, 35, 84, "any")) {
+                    changeLocation(2, 47, 71, GameManager.INDOOR);
                     gameManager.playSE(28);
                 }
             }
-//            case 1 -> { // Seller House
-//                //back to main map from seller
-//                if (interact(1, 20, 23, "any")) {
-//                    changeLocation(0, 18, 26, GameManager.OUTSIDE);
-//                    gameManager.playSE(28);
+            case 1 -> { // Dungeon
+                //back to main map from Dungeon
+                if (interact(3, 57, 72, "any")
+                        || interact(3, 53, 86, "any")) {
+                    changeLocation(0, 13, 90, GameManager.OUTSIDE);
+                    gameManager.playSE(5);
+                }
+            }
+
+            //Seller house on beach
+            case 2 -> {
+//                back to main map from seller
+                if (interact(2, 47, 72, "any")) {
+                    changeLocation(0, 35, 85, GameManager.OUTSIDE);
+                    gameManager.playSE(28);
+                }
+                //                //Talk to seller in house
+//                else if (interact(1, 20, 18, "up")) {
+//                    speak(gameManager.npcList[1][0]);
 //                }
-//                //Enter Dungeon in seller house
+//                                //Enter Dungeon in seller house
 //                else if (interact(1, 25, 15, "up", 15)) {
 //                    changeLocation(2, 16, 39, GameManager.DUNGEON);
 //                    gameManager.playSE(4);
 //                }
-//                //Talk to seller in house
-//                else if (interact(1, 20, 18, "up")) {
-//                    speak(gameManager.npcList[1][0]);
-//                }
-//            }
+            }
+
 //            case 2 -> { // Dungeon
 //                //Back to seller house from dungeon
 //                if (interact(2, 15, 39, "any")) {
@@ -156,14 +166,10 @@ public class EventHandler {
                     {0, 33, 91},
                     {0, 36, 90},
                     {0, 38, 82},
+                    {0, 54, 85},
+                    {0, 60, 82},
+                    {0, 59, 92},
             };
-        } else if (currentMap == 1) {
-            //TODO Add items to map 1
-//            interactRanges = new int[][]{
-//                    {1, 33, 91},
-//                    {1, 36, 90},
-//                    {1, 38, 82}
-//            };
         }
         for (int[] range : interactRanges) {
             if (interact(currentMap, range[1], range[2], "any")) {

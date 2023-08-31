@@ -7,6 +7,8 @@ import com.khomsi.game.objects.equipment.MetalShieldObject;
 import com.khomsi.game.objects.equipment.MetalSwordObject;
 import com.khomsi.game.objects.interact.KeyObject;
 import com.khomsi.game.objects.interact.MagicNecklaceObject;
+import com.khomsi.game.objects.light.LanternObject;
+import com.khomsi.game.objects.outside.TentObject;
 import com.khomsi.game.objects.projectTiles.FireBallObject;
 
 import java.awt.*;
@@ -47,7 +49,7 @@ public class Player extends Entity {
     public void setDefaultValues() {
         //player position of player
         setDefaultPosition();
-        defaultSpeed = 3;
+        defaultSpeed = 2;
         speed = defaultSpeed;
         invincible = false;
 
@@ -64,7 +66,7 @@ public class Player extends Entity {
         //more agility = less received damage
         agility = 1;
         xp = 0;
-        nextLevelXp = 5;
+        nextLevelXp = 20;
         coin = 10;
         currentWeapon = new MetalSwordObject(gameManager);
         currentShield = new MetalShieldObject(gameManager);
@@ -89,15 +91,6 @@ public class Player extends Entity {
         worldX = GameManager.TILE_SIZE * 29;
         worldY = GameManager.TILE_SIZE * 92;
         direction = "down";
-        //TODO remove later(after finishing debugging)
-//        gameManager.currentMap = 2;
-//        worldX = GameManager.TILE_SIZE * 21;
-//        worldY = GameManager.TILE_SIZE * 34;
-
-//        gameManager.currentMap = 3;
-//        worldX = GameManager.TILE_SIZE * 25;
-//        worldY = GameManager.TILE_SIZE * 1;
-//        direction = "down";
     }
 
     public void restoreStatus() {
@@ -118,6 +111,8 @@ public class Player extends Entity {
         inventory.add(currentShield);
         inventory.add(new KeyObject(gameManager));
         inventory.add(new MagicNecklaceObject(gameManager));
+        inventory.add(new LanternObject(gameManager));
+        inventory.add(new TentObject(gameManager));
     }
 
     public int getCurrentWeaponSlot() {
@@ -148,12 +143,11 @@ public class Player extends Entity {
     }
 
     //Change the skin of character and stats
-    public void createNewPlayer(int skinType, int maxHp, int buffSpeed) {
+    public void createNewPlayer(int skinType, int maxPlayerHp, int buffSpeed) {
         playerSkin = skinType;
         defaultSpeed = buffSpeed;
         speed = defaultSpeed;
-//      gameManager.player.maxHp = 8;
-//        gameManager.player.hp = gameManager.player.maxHp;
+        maxHp = maxPlayerHp;
         loadImages();
         gameManager.gameState = GameManager.PLAY_STATE;
         gameManager.playMusic(0);

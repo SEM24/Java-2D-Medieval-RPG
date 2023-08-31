@@ -59,6 +59,7 @@ public class Entity extends Tools {
     public boolean opened = false;
     public boolean bossSleep = false;
     public boolean drawing = true;
+    public boolean hasSpoken = false;
     public Entity loot;
 
 

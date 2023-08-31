@@ -1,6 +1,7 @@
 package com.khomsi.game.main.logic;
 
 import com.khomsi.game.entity.Entity;
+import com.khomsi.game.entity.npc.dungeon.NpcRockMovable;
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.objects.dungeon.DungeonDoorClosedObject;
 import com.khomsi.game.objects.dungeon.DungeonDoorOpenedObject;
@@ -10,6 +11,7 @@ import com.khomsi.game.objects.inside.StairsDownObject;
 import com.khomsi.game.objects.interact.ChestObject;
 import com.khomsi.game.objects.interact.CoinBObject;
 import com.khomsi.game.objects.interact.KeyObject;
+import com.khomsi.game.objects.interact.MagicNecklaceObject;
 import com.khomsi.game.objects.light.LanternObject;
 import com.khomsi.game.objects.outside.*;
 import com.khomsi.game.objects.projectTiles.FireBallObject;
@@ -51,6 +53,7 @@ public class EntityGenerator {
             case DungeonDoorClosedObject.OBJ_NAME -> object = new DungeonDoorClosedObject(gameManager);
             case DungeonDoorOpenedObject.OBJ_NAME -> object = new DungeonDoorOpenedObject(gameManager);
             case RoundTreeObject.OBJ_NAME -> object = new RoundTreeObject(gameManager);
+            case MagicNecklaceObject.OBJ_NAME -> object = new MagicNecklaceObject(gameManager);
         }
         return object;
     }

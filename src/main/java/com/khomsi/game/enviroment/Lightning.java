@@ -119,15 +119,25 @@ public class Lightning {
     }
 
     public void draw(Graphics2D g2d) {
-        if (gameManager.currentArea == GameManager.OUTSIDE) {
+        if (gameManager.currentArea == GameManager.OUTSIDE
+                || gameManager.currentArea == GameManager.LIGHT_DUNGEON
+                || gameManager.gameState == GameManager.SLEEP_STATE) {
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlfa));
         }
+
         if (gameManager.currentArea == GameManager.OUTSIDE || gameManager.currentArea == GameManager.DUNGEON
                 || gameManager.currentArea == GameManager.BOSS_DUNGEON) {
             g2d.drawImage(darknessFilter, 0, 0, null);
         }
+
+        if (gameManager.gameState == GameManager.DYING_STATE
+                && gameManager.currentArea == GameManager.LIGHT_DUNGEON
+                || gameManager.gameState == GameManager.SLEEP_STATE)
+            g2d.drawImage(darknessFilter, 0, 0, null);
+
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F));
         debugDayState(g2d);
+
         if (gameManager.gameState == GameManager.PLAY_STATE
                 || gameManager.gameState == GameManager.PAUSE_STATE)
             gameManager.ui.hud.drawClock(dayState, filterAlfa);

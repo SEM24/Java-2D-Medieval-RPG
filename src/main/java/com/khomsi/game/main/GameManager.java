@@ -3,6 +3,7 @@ package com.khomsi.game.main;
 import com.khomsi.game.GameApplication;
 import com.khomsi.game.ai.PathFinder;
 import com.khomsi.game.data.Config;
+import com.khomsi.game.data.DataInitializer;
 import com.khomsi.game.data.SaveLoad;
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.entity.player.Player;
@@ -23,10 +24,16 @@ import com.khomsi.game.tiles.interactive.InteractiveTile;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.khomsi.game.data.SaveLoad.FILE_PATH;
 
 public class GameManager extends JPanel implements Runnable {
     //Screen settings
@@ -113,6 +120,7 @@ public class GameManager extends JPanel implements Runnable {
     public static final int INDOOR = 12;
     public static final int DUNGEON = 13;
     public static final int BOSS_DUNGEON = 14;
+    public static final int LIGHT_DUNGEON = 15;
     //Until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
@@ -162,22 +170,38 @@ public class GameManager extends JPanel implements Runnable {
         currentArea = OUTSIDE;
         removeMarkedEntity();
         bossBattleOn = false;
-        player.setDefaultPosition();
+        player.hp = player.maxHp;
+
+        File file = new File(FILE_PATH);
+        if (file.exists()) {
+            restoreGameFromFile(file);
+        } else {
+            player.setDefaultPosition();
+        }
+
         player.restoreStatus();
         player.resetCounters();
-        placeObjects.setNpc();
-        placeObjects.setMobs();
+        placeObjects.setObjects();
 
         if (restart) {
             player.setDefaultValues();
-            placeObjects.setObject();
             placeObjects.setInteractiveTiles();
             enManagement.lightning.resetDay();
         }
     }
 
+    private void restoreGameFromFile(File file) {
+        try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(file))) {
+            DataInitializer initializer = (DataInitializer) is.readObject();
+            saveLoad.getPlayerCoordinates(initializer);
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Exception " + e.getMessage() + " in " + getClass().getSimpleName());
+        }
+    }
+
+
     private void setDefaultObjects() {
-        placeObjects.setObject();
+        placeObjects.setObjects();
         placeObjects.setNpc();
         placeObjects.setMobs();
         placeObjects.setInteractiveTiles();
@@ -485,9 +509,17 @@ public class GameManager extends JPanel implements Runnable {
             if (nextArea == INDOOR) {
                 playMusic(19);
             }
-            if (nextArea == DUNGEON || nextArea == BOSS_DUNGEON) {
+            if (nextArea == LIGHT_DUNGEON) {
                 playMusic(20);
-                placeObjects.npcOnMap2();
+                placeObjects.trapsOnDungeonMap1();
+            }
+            if (nextArea == DUNGEON) {
+                playMusic(20);
+            }
+            if (nextArea == BOSS_DUNGEON) {
+                playMusic(20);
+                //TODO change for mobs in dungeon
+//                placeObjects.npcOnMap2();
             }
         }
         //FIXME cause the micro lag when called

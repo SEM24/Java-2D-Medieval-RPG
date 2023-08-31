@@ -6,13 +6,14 @@ import com.khomsi.game.main.GameManager;
 import java.awt.*;
 import java.util.Random;
 
-public class CrabEntity extends Entity {
+public class NpcCrabs extends Entity {
+    private final Random random = new Random();
+    private final String[] directions = {"up", "down", "left", "right"};
 
-    public CrabEntity(GameManager gameManager) {
+    public NpcCrabs(GameManager gameManager, Color color) {
         super(gameManager);
-        direction = "up";
+        direction = getRandomDirection();
         speed = 1;
-
         solidArea = new Rectangle();
         solidArea.x = 8;
         solidArea.y = 16;
@@ -24,6 +25,7 @@ public class CrabEntity extends Entity {
         solidArea.height = 32;
         dialogueSet = -1;
         setDialog();
+        getImage(color);
     }
 
     @Override
@@ -31,7 +33,14 @@ public class CrabEntity extends Entity {
         super.update();
     }
 
-    public void getImage(String basePath) {
+    public void getImage(Color color) {
+        String basePath = "/npc/beach/crab/";
+        switch (color) {
+            case RED -> basePath += "red/crab_red_";
+            case YELLOW -> basePath += "yellow/crab_yellow_";
+            case BLUE -> basePath += "blue/crab_blue_";
+            default -> throw new IllegalArgumentException("Invalid color: " + color);
+        }
         // Loop from 0 to 15 to set up the images
         for (int i = 0; i < 16; i++) {
             String filename = basePath + String.format("%02d", i);
@@ -65,26 +74,22 @@ public class CrabEntity extends Entity {
         dialogues[1][0] = "(Don't touch me, little human!)";
     }
 
-    //set npc movement
+    //Set random npc movement
     public void setAction() {
         lockCounter++;
         if (lockCounter == 120) {
-            Random random = new Random();
             int i = random.nextInt(100) + 1;
             if (i <= 30) {
-                direction = "up";
-            }
-            if (i <= 30) {
-                direction = "up";
+                direction = directions[0];
             }
             if (i > 30 && i <= 50) {
-                direction = "down";
+                direction = directions[1];
             }
             if (i > 50 && i <= 75) {
-                direction = "left";
+                direction = directions[2];
             }
             if (i > 75) {
-                direction = "right";
+                direction = directions[3];
             }
             lockCounter = 0;
         }
@@ -99,5 +104,9 @@ public class CrabEntity extends Entity {
         if (dialogues[dialogueSet][0] == null) {
             dialogueSet = 0;
         }
+    }
+
+    private String getRandomDirection() {
+        return directions[random.nextInt(directions.length)];
     }
 }

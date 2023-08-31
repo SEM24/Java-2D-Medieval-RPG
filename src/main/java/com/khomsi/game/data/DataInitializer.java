@@ -7,8 +7,9 @@ import java.util.ArrayList;
 
 public class DataInitializer implements Serializable {
     //Player Coord
-    int playerX;
-    int playerY;
+    public int playerX;
+    public int playerY;
+    public int currentMap;
     //Player stats
     int level;
     int maxHp;

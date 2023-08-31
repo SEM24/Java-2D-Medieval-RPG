@@ -317,8 +317,8 @@ public class KeyHandler implements KeyListener {
                 }
                 //Set character's stats and skin, depends on chose
                 switch (gameManager.ui.commandNum) {
-                    case 0 -> gameManager.player.createNewPlayer(0, 0, 3);
-                    case 1 -> gameManager.player.createNewPlayer(1, 0, 4);
+                    case 0 -> gameManager.player.createNewPlayer(0, 6, 2);
+                    case 1 -> gameManager.player.createNewPlayer(1, 5, 3);
                     case 2 -> System.exit(0);
                 }
             }

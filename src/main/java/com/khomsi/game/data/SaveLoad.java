@@ -1,5 +1,6 @@
 package com.khomsi.game.data;
 
+import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
 
 import java.io.*;
@@ -7,7 +8,7 @@ import java.io.*;
 public class SaveLoad {
     GameManager gameManager;
     // Path to save.dat file to check the statement
-    private static final String FILE_PATH = "save.dat";
+    public static final String FILE_PATH = "save.dat";
     public final File file = new File(FILE_PATH);
     public final boolean hasFile = file.exists();
 
@@ -21,6 +22,7 @@ public class SaveLoad {
     public void save() {
         try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
             DataInitializer initializer = new DataInitializer();
+            initializer.currentMap = gameManager.currentMap;
             initializer.playerX = gameManager.player.worldX;
             initializer.playerY = gameManager.player.worldY;
 
@@ -86,8 +88,7 @@ public class SaveLoad {
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
             //Read object from file
             DataInitializer initializer = (DataInitializer) is.readObject();
-            gameManager.player.worldX = initializer.playerX;
-            gameManager.player.worldY = initializer.playerY;
+            getPlayerCoordinates(initializer);
 
             gameManager.player.level = initializer.level;
             gameManager.player.maxHp = initializer.maxHp;
@@ -111,8 +112,11 @@ public class SaveLoad {
             //Player inventory
             gameManager.player.inventory.clear();
             for (int i = 0; i < initializer.itemNames.size(); i++) {
-                gameManager.player.inventory.add(gameManager.entityGenerator.getObject(initializer.itemNames.get(i)));
-                gameManager.player.inventory.get(i).amount = initializer.itemAmounts.get(i);
+                Entity item = gameManager.entityGenerator.getObject(initializer.itemNames.get(i));
+                if (item != null) {
+                    item.amount = initializer.itemAmounts.get(i);
+                    gameManager.player.inventory.add(item);
+                }
             }
             //Player equipment
             gameManager.player.currentWeapon = gameManager.player.inventory.get(initializer.currentWeaponSlot);
@@ -148,6 +152,12 @@ public class SaveLoad {
             return false;
         }
         return true;
+    }
+
+    public void getPlayerCoordinates(DataInitializer initializer) {
+        gameManager.currentMap = initializer.currentMap;
+        gameManager.player.worldX = initializer.playerX;
+        gameManager.player.worldY = initializer.playerY;
     }
 
     public void loadTitleData() {

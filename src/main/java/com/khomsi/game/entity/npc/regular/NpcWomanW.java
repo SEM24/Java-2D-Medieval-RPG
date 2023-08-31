@@ -82,9 +82,6 @@ public class NpcWomanW extends Entity {
                 if (i <= 30) {
                     direction = "up";
                 }
-                if (i <= 30) {
-                    direction = "up";
-                }
                 if (i > 30 && i <= 50) {
                     direction = "down";
                 }
