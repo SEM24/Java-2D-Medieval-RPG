@@ -1,19 +1,19 @@
 package com.khomsi.game.main.logic;
 
 import com.khomsi.game.entity.Entity;
-import com.khomsi.game.entity.npc.dungeon.NpcRockMovable;
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.objects.dungeon.DungeonDoorClosedObject;
 import com.khomsi.game.objects.dungeon.DungeonDoorOpenedObject;
 import com.khomsi.game.objects.equipment.*;
-import com.khomsi.game.objects.inside.BedObject;
-import com.khomsi.game.objects.inside.StairsDownObject;
+import com.khomsi.game.objects.inside.*;
 import com.khomsi.game.objects.interact.ChestObject;
 import com.khomsi.game.objects.interact.CoinBObject;
 import com.khomsi.game.objects.interact.KeyObject;
 import com.khomsi.game.objects.interact.MagicNecklaceObject;
 import com.khomsi.game.objects.light.LanternObject;
-import com.khomsi.game.objects.outside.*;
+import com.khomsi.game.objects.outside.DoorObject;
+import com.khomsi.game.objects.outside.RoundTreeObject;
+import com.khomsi.game.objects.outside.TentObject;
 import com.khomsi.game.objects.projectTiles.FireBallObject;
 import com.khomsi.game.objects.projectTiles.MagicArrowObject;
 import com.khomsi.game.objects.projectTiles.RockObject;
@@ -22,6 +22,8 @@ import com.khomsi.game.objects.spells.ManaObject;
 import com.khomsi.game.objects.spells.PotionObject;
 
 public class EntityGenerator {
+    //TODO refactor this code since it's uncomfortable to use it (always needs to update switch)
+    //Since it's not in one package(it's in subpackages, it has problems to implement)
     GameManager gameManager;
 
     public EntityGenerator(GameManager gameManager) {
@@ -54,6 +56,9 @@ public class EntityGenerator {
             case DungeonDoorOpenedObject.OBJ_NAME -> object = new DungeonDoorOpenedObject(gameManager);
             case RoundTreeObject.OBJ_NAME -> object = new RoundTreeObject(gameManager);
             case MagicNecklaceObject.OBJ_NAME -> object = new MagicNecklaceObject(gameManager);
+            case MapObject.OBJ_NAME -> object = new MapObject(gameManager);
+            case WindowObject.OBJ_NAME -> object = new WindowObject(gameManager);
+            case PictureObject.OBJ_NAME -> object = new PictureObject(gameManager);
         }
         return object;
     }

@@ -147,6 +147,7 @@ public class SaveLoad {
                 }
             }
             gameManager.placeObjects.setInteractiveTiles();
+            gameManager.placeObjects.setAnimatedTiles();
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Exception " + e.getMessage() + " in " + getClass().getSimpleName());
             return false;

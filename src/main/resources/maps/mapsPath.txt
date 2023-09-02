@@ -1,3 +1,3 @@
-world01.txt
-dungeon_beach_02.txt
+world00.txt
+dungeon_beach_01.txt
 house_beach_01.txt

@@ -16,7 +16,7 @@ import com.khomsi.game.main.tools.EntityComparator;
 import com.khomsi.game.main.tools.KeyHandler;
 import com.khomsi.game.main.tools.Sound;
 import com.khomsi.game.main.tools.ui.UI;
-import com.khomsi.game.objects.PlaceObjects;
+import com.khomsi.game.objects.editor.PlaceObjects;
 import com.khomsi.game.tiles.Map;
 import com.khomsi.game.tiles.TileManager;
 import com.khomsi.game.tiles.interactive.InteractiveTile;
@@ -205,6 +205,7 @@ public class GameManager extends JPanel implements Runnable {
         placeObjects.setNpc();
         placeObjects.setMobs();
         placeObjects.setInteractiveTiles();
+        placeObjects.setAnimatedTiles();
     }
 
     public void setFullScreen() {

@@ -112,7 +112,6 @@ public class Player extends Entity {
         inventory.add(new KeyObject(gameManager));
         inventory.add(new MagicNecklaceObject(gameManager));
         inventory.add(new LanternObject(gameManager));
-        inventory.add(new TentObject(gameManager));
     }
 
     public int getCurrentWeaponSlot() {

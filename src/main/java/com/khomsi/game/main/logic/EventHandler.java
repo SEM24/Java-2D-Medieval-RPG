@@ -64,7 +64,7 @@ public class EventHandler {
         switch (currentMap) {
             case 0 -> { // Main Map
                 if (interact(0, 13, 91, "any")) {
-                    changeLocation(3, 54, 86, GameManager.LIGHT_DUNGEON);
+                    changeLocation(1, 54, 86, GameManager.LIGHT_DUNGEON);
                     gameManager.playSE(4);
 //                    gameManager.playSE(28);
                 }
@@ -82,8 +82,8 @@ public class EventHandler {
             }
             case 1 -> { // Dungeon
                 //back to main map from Dungeon
-                if (interact(3, 57, 72, "any")
-                        || interact(3, 53, 86, "any")) {
+                if (interact(1, 57, 72, "any")
+                        || interact(1, 53, 86, "any")) {
                     changeLocation(0, 13, 90, GameManager.OUTSIDE);
                     gameManager.playSE(5);
                 }

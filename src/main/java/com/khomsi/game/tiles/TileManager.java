@@ -48,7 +48,7 @@ public class TileManager {
         getTileImage();
 
         //here change the path to map
-        input = getClass().getResourceAsStream(resourcePath[1] + "world01.txt");
+        input = getClass().getResourceAsStream(resourcePath[1] + "world00.txt");
         reader = new BufferedReader(new InputStreamReader(
                 Objects.requireNonNull(input)));
         try {
