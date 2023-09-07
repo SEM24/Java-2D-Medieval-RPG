@@ -16,6 +16,7 @@ public class EventHandler {
     public int tempMap;
     public int tempCol;
     public int tempRow;
+    private boolean inForest = false; // Flag to track the player location
 
     public EventHandler(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -79,6 +80,16 @@ public class EventHandler {
                     changeLocation(2, 47, 71, GameManager.INDOOR);
                     gameManager.playSE(28);
                 }
+
+                //Enter the forest
+                if (interact(0, 15, 24, "any") && inForest) {
+                    changeLocation(0, 15, 24, GameManager.OUTSIDE);
+                    inForest = false; // restore the flag after the exit of forest
+                } else if (interact(0, 15, 23, "any") && !inForest) {
+                    changeLocation(0, 15, 23, GameManager.FOREST, GameManager.TRANSITION_STATE);
+                    inForest = true; // install the flag that we're in forest
+                }
+
             }
             case 1 -> { // Dungeon
                 //back to main map from Dungeon
@@ -226,7 +237,11 @@ public class EventHandler {
     }
 
     private void changeLocation(int map, int col, int row, int area) {
-        gameManager.gameState = GameManager.TRANSITION_STATE;
+        changeLocation(map, col, row, area, GameManager.TRANSITION_STATE);
+    }
+
+    private void changeLocation(int map, int col, int row, int area, int gameState) {
+        gameManager.gameState = gameState;
         gameManager.nextArea = area;
         tempMap = map;
         tempCol = col;

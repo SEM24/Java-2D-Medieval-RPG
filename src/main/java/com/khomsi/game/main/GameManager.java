@@ -112,7 +112,6 @@ public class GameManager extends JPanel implements Runnable {
     public static final int CUTSCENE_STATE = 13;
     public static final int DYING_STATE = 14;
 
-
     //Area
     public int currentArea;
     public int nextArea;
@@ -121,6 +120,7 @@ public class GameManager extends JPanel implements Runnable {
     public static final int DUNGEON = 13;
     public static final int BOSS_DUNGEON = 14;
     public static final int LIGHT_DUNGEON = 15;
+    public static final int FOREST = 16;
     //Until player doesn't press shift, he doesn't run
     public boolean playerRun = false;
     public boolean fullScreenOn = false;
@@ -512,7 +512,7 @@ public class GameManager extends JPanel implements Runnable {
             }
             if (nextArea == LIGHT_DUNGEON) {
                 playMusic(20);
-                placeObjects.trapsOnDungeonMap1();
+                placeObjects.setTrapsOnDungeonMap1();
             }
             if (nextArea == DUNGEON) {
                 playMusic(20);

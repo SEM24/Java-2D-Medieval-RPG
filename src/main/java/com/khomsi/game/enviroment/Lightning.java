@@ -28,8 +28,9 @@ public class Lightning {
         darknessFilter = new BufferedImage(GameManager.SCREEN_WIDTH,
                 GameManager.SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) darknessFilter.getGraphics();
+
         if (gameManager.player.currentLight == null) {
-            g2d.setColor(new Color(0, 0, 0.1F, 0.98F));
+            g2d.setColor(new Color(0, 0, 0.1F, 0.94F));
         } else {
             //Get the center x and y of the light circle
             int centerX = gameManager.player.screenX + (GameManager.TILE_SIZE) / 2;
@@ -125,7 +126,14 @@ public class Lightning {
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlfa));
         }
 
-        if (gameManager.currentArea == GameManager.OUTSIDE || gameManager.currentArea == GameManager.DUNGEON
+        if (gameManager.currentArea == GameManager.OUTSIDE
+               /* || gameManager.currentArea == GameManager.DUNGEON
+                || gameManager.currentArea == GameManager.BOSS_DUNGEON*/
+                || gameManager.currentArea == GameManager.FOREST) {
+            g2d.drawImage(darknessFilter, 0, 0, null);
+        }
+
+        if (gameManager.currentArea == GameManager.DUNGEON
                 || gameManager.currentArea == GameManager.BOSS_DUNGEON) {
             g2d.drawImage(darknessFilter, 0, 0, null);
         }

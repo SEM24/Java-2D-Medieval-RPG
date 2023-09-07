@@ -1,12 +1,14 @@
 package com.khomsi.game.data;
 
 import com.khomsi.game.entity.Entity;
+import com.khomsi.game.entity.npc.dungeon.NpcTutorialMan;
 import com.khomsi.game.main.GameManager;
 
 import java.io.*;
 
 public class SaveLoad {
-    GameManager gameManager;
+    private GameManager gameManager;
+
     // Path to save.dat file to check the statement
     public static final String FILE_PATH = "save.dat";
     public final File file = new File(FILE_PATH);
@@ -30,6 +32,7 @@ public class SaveLoad {
             initializer.maxHp = gameManager.player.maxHp;
             initializer.hp = gameManager.player.hp;
             initializer.maxMana = gameManager.player.maxMana;
+            //FIXME if player press shift while saving, he will gain the speed higher that he supposed to.
             initializer.speed = gameManager.player.speed;
             initializer.mana = gameManager.player.mana;
             initializer.strength = gameManager.player.strength;

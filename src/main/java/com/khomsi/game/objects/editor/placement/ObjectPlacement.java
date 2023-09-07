@@ -44,11 +44,6 @@ public class ObjectPlacement {
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 72;
         index++;
 
-        gameManager.object[mapNum][index] = new WindowObject(gameManager);
-        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 45;
-        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 72;
-        index++;
-
         gameManager.object[mapNum][index] = new PictureObject(gameManager);
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 50;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 66;

@@ -94,7 +94,7 @@ public class UI {
         if (gameManager.gameState == GameManager.GAME_OVER_STATE) {
             drawGameOverScreen();
         }
-        //Transition Over state
+        //Transition state
         if (gameManager.gameState == GameManager.TRANSITION_STATE) {
             drawTransitionScreen();
         }
@@ -320,6 +320,7 @@ public class UI {
             gameManager.changeArea();
         }
     }
+
 
     void drawSleepScreen() {
         counter++;

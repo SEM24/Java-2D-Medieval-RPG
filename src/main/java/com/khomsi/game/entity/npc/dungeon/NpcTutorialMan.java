@@ -69,18 +69,20 @@ public class NpcTutorialMan extends Entity {
         dialogues[1][0] = "Are you still here?\n There's nothing to do here, go outside!";
     }
 
+    //TODO the npc doesn't save the position on which he moved after loading the game + the text appears again.
+    // Somehow needs to be fixed or just not to move the npc
+
+    //TODO maybe it's better to remove the npc when player speaks to him by moving him to exit and use flag to indicate
+    // in NpcPlacement with that flag that the player had already spoken to him (and store the flag in SaveLoad class)
     //set npc movement
     public void setAction() {
         if (onPath) {
             int goalCol = 60;
             int goalRow = 73;
-//            int goalCol = (gameManager.player.worldX + gameManager.player.solidArea.x) / GameManager.TILE_SIZE;
-//            int goalRow = (gameManager.player.worldY + gameManager.player.solidArea.y) / GameManager.TILE_SIZE;
             searchPath(goalCol, goalRow, true);
         }
     }
 
-    //Maybe add special stuff, different custom text for this character
     public void speak() {
         facePlayer();
         startDialogue(this, dialogueSet);

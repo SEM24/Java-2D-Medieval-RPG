@@ -6,8 +6,8 @@ import com.khomsi.game.objects.editor.placement.*;
 public class PlaceObjects {
     private final GameManager gameManager;
     public static final int MAP_MAIN = 0;
-    public static final int MAP_HOUSE_BEACH = 2;
     public static final int MAP_DUNGEON = 1;
+    public static final int MAP_HOUSE_BEACH = 2;
 
     public PlaceObjects(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -42,7 +42,7 @@ public class PlaceObjects {
         mobPlacement.setMobsOnDungeonMap1();
     }
 
-    public void trapsOnDungeonMap1() {
+    public void setTrapsOnDungeonMap1() {
         DungeonTrapsPlacement trapsPlacement = new DungeonTrapsPlacement(gameManager);
         trapsPlacement.trapsOnDungeonMap1();
     }
