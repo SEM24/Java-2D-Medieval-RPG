@@ -81,7 +81,7 @@ public class GameManager extends JPanel implements Runnable {
     public Map map = new Map(this);
     //ENTITY AND OBJECTS
     //TODO extend the massive, when you'll have more objects
-    public Entity[][] object = new Entity[maxMap][30];
+    public Entity[][] object = new Entity[maxMap][40];
     public Entity[][] npcList = new Entity[maxMap][30];
     public Entity[][] mobs = new Entity[maxMap][30];
     public Entity[][] animatedTiles = new Entity[maxMap][100];

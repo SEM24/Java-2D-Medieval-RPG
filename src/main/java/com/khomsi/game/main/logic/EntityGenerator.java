@@ -6,6 +6,8 @@ import com.khomsi.game.objects.dungeon.DungeonDoorClosedObject;
 import com.khomsi.game.objects.dungeon.DungeonDoorOpenedObject;
 import com.khomsi.game.objects.equipment.*;
 import com.khomsi.game.objects.inside.*;
+import com.khomsi.game.objects.inside.castle.BigDoorClosedObject;
+import com.khomsi.game.objects.inside.castle.TreasureChestObject;
 import com.khomsi.game.objects.interact.ChestObject;
 import com.khomsi.game.objects.interact.CoinBObject;
 import com.khomsi.game.objects.interact.KeyObject;
@@ -59,6 +61,8 @@ public class EntityGenerator {
             case MapObject.OBJ_NAME -> object = new MapObject(gameManager);
             case WindowObject.OBJ_NAME -> object = new WindowObject(gameManager);
             case PictureObject.OBJ_NAME -> object = new PictureObject(gameManager);
+            case TreasureChestObject.OBJ_NAME -> object = new TreasureChestObject(gameManager);
+            case BigDoorClosedObject.OBJ_NAME -> object = new BigDoorClosedObject(gameManager);
         }
         return object;
     }

@@ -150,7 +150,11 @@ public class EventHandler {
         int[][] interactRanges = new int[][]{};
         if (currentMap == 0) {
             interactRanges = new int[][]{
-                    {0, 21, 85}
+                    {0, 25, 82},
+                    {0, 46, 75},
+                    {0, 16, 39},
+                    {0, 36, 30},
+                    {0, 18, 25}
             };
         } else if (currentMap == 1) {
             //TODO Add items to map 1
@@ -189,7 +193,26 @@ public class EventHandler {
         }
         return false;
     }
-
+    private boolean shouldInteractPit(int currentMap) {
+        // Initialize with an empty array
+        int[][] interactRanges = new int[][]{};
+        if (currentMap == 0) {
+            interactRanges = new int[][]{
+                    //Sea urchin locations
+                    {0, 35, 66},
+                    {0, 35, 67},
+                    {0, 36, 67},
+                    {0, 37, 67},
+                    {0, 38, 67}
+            };
+        }
+        for (int[] range : interactRanges) {
+            if (interact(currentMap, range[1], range[2], "any")) {
+                return true;
+            }
+        }
+        return false;
+    }
     public boolean interact(int map, int col, int row, String direction) {
         return interact(map, col, row, direction, 0);
     }

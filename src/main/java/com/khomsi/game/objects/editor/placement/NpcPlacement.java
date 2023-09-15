@@ -2,6 +2,7 @@ package com.khomsi.game.objects.editor.placement;
 
 import com.khomsi.game.entity.npc.beach.NpcCrabs;
 import com.khomsi.game.entity.npc.beach.NpcRock;
+import com.khomsi.game.entity.npc.castle.NpcHeavyCastleRock;
 import com.khomsi.game.entity.npc.dungeon.NpcTutorialMan;
 import com.khomsi.game.main.GameManager;
 
@@ -19,8 +20,8 @@ public class NpcPlacement {
     public void placeNpcOnMap0() {
         int index = 0;
         int mapNum = MAP_MAIN;
-        //Map 0
         npcOnBeachMap1(index, mapNum);
+        rocksOnMap1(index, mapNum);
     }
 
     private void npcOnBeachMap1(int index, int mapNum) {
@@ -53,6 +54,13 @@ public class NpcPlacement {
         gameManager.npcList[mapNum][index] = new NpcRock(gameManager);
         gameManager.npcList[mapNum][index].worldX = GameManager.TILE_SIZE * 63;
         gameManager.npcList[mapNum][index].worldY = GameManager.TILE_SIZE * 83;
+        index++;
+    }
+
+    private void rocksOnMap1(int index, int mapNum) {
+        gameManager.npcList[mapNum][index] = new NpcHeavyCastleRock(gameManager);
+        gameManager.npcList[mapNum][index].worldX = GameManager.TILE_SIZE * 78;
+        gameManager.npcList[mapNum][index].worldY = GameManager.TILE_SIZE * 56;
         index++;
     }
 

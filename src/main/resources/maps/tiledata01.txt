@@ -1008,3 +1008,7 @@ true
 false
 504.png
 true
+505.png
+true
+506.png
+false

@@ -4,18 +4,16 @@ import com.khomsi.game.main.GameManager;
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.objects.dungeon.DungeonDoorClosedObject;
 import com.khomsi.game.objects.dungeon.DungeonDoorOpenedObject;
-import com.khomsi.game.tiles.interactive.InteractiveTile;
-import com.khomsi.game.tiles.interactive.dungeon.SwitchPress;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class NpcHeavyRock extends Entity {
+public class NpcHeavyDungeonRock extends Entity {
     public static final String NPC_NAME = "Rock";
 
-    public NpcHeavyRock(GameManager gameManager) {
+    public NpcHeavyDungeonRock(GameManager gameManager) {
         super(gameManager);
         direction = "down";
         speed = 4;
@@ -90,31 +88,7 @@ public class NpcHeavyRock extends Entity {
     }
 
     public void detectPlate() {
-        int currentMap = gameManager.currentMap;
-
-        List<InteractiveTile> plates = Arrays.stream(gameManager.interactTile[currentMap])
-                .filter(SwitchPress.class::isInstance)
-                .toList();
-
-        List<Entity> rocks = Arrays.stream(gameManager.npcList[currentMap])
-                .filter(NpcHeavyRock.class::isInstance)
-                .toList();
-
-        //Scan the plates
-        for (InteractiveTile plate : plates) {
-            int xDistance = Math.abs(worldX - plate.worldX);
-            int yDistance = Math.abs(worldY - plate.worldY);
-            int distance = Math.max(xDistance, yDistance);
-            if (distance < 8) {
-                if (linkedEntity == null) {
-                    linkedEntity = plate;
-                    gameManager.playSE(21);
-                }
-            } else {
-                if (linkedEntity == plate)
-                    linkedEntity = null;
-            }
-        }
+        List<Entity> rocks = getEntitiesForPlates();
         // Count the rocks on plates
         long count = rocks.stream()
                 .filter(rock -> rock.linkedEntity != null)

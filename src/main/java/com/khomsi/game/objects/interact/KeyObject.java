@@ -21,9 +21,12 @@ public class KeyObject extends Entity {
         dialogues[1][0] = "Uhh, where do I need to use it?";
     }
 
-    @Override
     public boolean use(Entity entity) {
-        int objIndex = getDetected(entity, gameManager.object, "Door");
+        return checkKeyUsage(entity, "Door");
+    }
+
+    protected boolean checkKeyUsage(Entity entity, String targetName) {
+        int objIndex = getDetected(entity, gameManager.object, targetName);
         if (objIndex != 999) {
             startDialogue(this, 0);
             gameManager.playSE(27);
@@ -34,5 +37,4 @@ public class KeyObject extends Entity {
             return false;
         }
     }
-
 }

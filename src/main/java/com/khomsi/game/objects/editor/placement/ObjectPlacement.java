@@ -3,12 +3,17 @@ package com.khomsi.game.objects.editor.placement;
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.objects.equipment.MetalSwordObject;
 import com.khomsi.game.objects.inside.*;
+import com.khomsi.game.objects.inside.castle.BigDoorClosedObject;
+import com.khomsi.game.objects.inside.castle.ThroneObject;
+import com.khomsi.game.objects.inside.castle.TreasureChestObject;
+import com.khomsi.game.objects.inside.castle.WindowBigObject;
 import com.khomsi.game.objects.interact.ChestObject;
 import com.khomsi.game.objects.outside.DoorObject;
 import com.khomsi.game.objects.outside.RoundTreeObject;
 import com.khomsi.game.objects.spells.PotionObject;
 
 import static com.khomsi.game.objects.editor.PlaceObjects.*;
+import static com.khomsi.game.objects.inside.castle.DoorType.SPECIAL_KEY_CLOSED;
 
 public class ObjectPlacement {
     private GameManager gameManager;
@@ -31,8 +36,37 @@ public class ObjectPlacement {
         gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 62;
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 83;
         index++;
+        gameManager.object[mapNum][index] = new RoundTreeObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 36;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 76;
+        index++;
+        setCastleObjects(mapNum, index);
+    }
 
-        placeTreeObjectOnMap1(index, mapNum);
+    private void setCastleObjects(int mapNum, int index) {
+        gameManager.object[mapNum][index] = new TreasureChestObject(gameManager);
+        gameManager.object[mapNum][index].setLoot(new PotionObject(gameManager));
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 80;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 39;
+        index++;
+
+        gameManager.object[mapNum][index] = new ThroneObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 75;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 39;
+        index++;
+
+        gameManager.object[mapNum][index] = new WindowBigObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 79;
+        gameManager.object[mapNum][index].worldY = (int) (GameManager.TILE_SIZE * 53.3);
+        index++;
+
+        gameManager.object[mapNum][index] = new WindowBigObject(gameManager);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 71;
+        gameManager.object[mapNum][index].worldY = (int) (GameManager.TILE_SIZE * 53.3);
+        index++;
+        gameManager.object[mapNum][index] = new BigDoorClosedObject(gameManager, SPECIAL_KEY_CLOSED);
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 74;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 52;
     }
 
     public void placeObjectsOnMapHouseBeach1() {
@@ -62,13 +96,6 @@ public class ObjectPlacement {
         gameManager.object[mapNum][index] = new BedObject(gameManager);
         gameManager.object[mapNum][index].worldX = (int) (GameManager.TILE_SIZE * 60.5);
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 59;
-    }
-
-    private void placeTreeObjectOnMap1(int index, int mapNum) {
-        gameManager.object[mapNum][index] = new RoundTreeObject(gameManager);
-        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 36;
-        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 76;
-        index++;
     }
 
     public void objectsOnDungeonMap1() {

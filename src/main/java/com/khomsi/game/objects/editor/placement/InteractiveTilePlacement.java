@@ -2,6 +2,7 @@ package com.khomsi.game.objects.editor.placement;
 
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.tiles.interactive.Bush;
+import com.khomsi.game.tiles.interactive.dungeon.SwitchPress;
 
 import static com.khomsi.game.objects.editor.PlaceObjects.MAP_MAIN;
 
@@ -49,5 +50,13 @@ public class InteractiveTilePlacement {
         gameManager.interactTile[mapNum][index] = new Bush(gameManager, 51, 68);
         index++;
         gameManager.interactTile[mapNum][index] = new Bush(gameManager, 52, 66);
+
+
+        setCastleSwitches(index, mapNum);
+    }
+
+    private void setCastleSwitches(int index, int mapNum) {
+        index++;
+        gameManager.interactTile[mapNum][index] = new SwitchPress(gameManager, 80, 58);
     }
 }

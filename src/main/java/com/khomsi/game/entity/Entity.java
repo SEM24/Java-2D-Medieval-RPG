@@ -1,15 +1,19 @@
 package com.khomsi.game.entity;
 
+import com.khomsi.game.entity.npc.dungeon.NpcHeavyDungeonRock;
 import com.khomsi.game.entity.player.Player;
 import com.khomsi.game.main.GameManager;
 import com.khomsi.game.main.tools.Tools;
 import com.khomsi.game.objects.interact.CoinBObject;
 import com.khomsi.game.objects.spells.HeartObject;
 import com.khomsi.game.objects.spells.ManaObject;
+import com.khomsi.game.tiles.interactive.InteractiveTile;
+import com.khomsi.game.tiles.interactive.dungeon.SwitchPress;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -685,6 +689,35 @@ public class Entity extends Tools {
 
             lockCounter = 0;
         }
+    }
+
+    public List<Entity> getEntitiesForPlates() {
+        int currentMap = gameManager.currentMap;
+
+        List<InteractiveTile> plates = Arrays.stream(gameManager.interactTile[currentMap])
+                .filter(SwitchPress.class::isInstance)
+                .toList();
+
+        List<Entity> rocks = Arrays.stream(gameManager.npcList[currentMap])
+                .filter(NpcHeavyDungeonRock.class::isInstance)
+                .toList();
+
+        //Scan the plates
+        for (InteractiveTile plate : plates) {
+            int xDistance = Math.abs(worldX - plate.worldX);
+            int yDistance = Math.abs(worldY - plate.worldY);
+            int distance = Math.max(xDistance, yDistance);
+            if (distance < 15) {
+                if (linkedEntity == null) {
+                    linkedEntity = plate;
+                    gameManager.playSE(21);
+                }
+            } else {
+                if (linkedEntity == plate)
+                    linkedEntity = null;
+            }
+        }
+        return rocks;
     }
 
     public int getDetected(Entity entity, Entity[][] target, String targetName) {
