@@ -136,6 +136,9 @@ public class Entity extends Tools {
     public String knockBackDirection;
     public Entity linkedEntity;
 
+    public final Random random = new Random();
+    public final String[] directions = {"up", "down", "left", "right"};
+
     public Entity(GameManager gameManager) {
         this.gameManager = gameManager;
     }
@@ -343,6 +346,10 @@ public class Entity extends Tools {
     }
 
     public void draw(Graphics2D graphics2D) {
+        draw(graphics2D, true);
+    }
+
+    public void draw(Graphics2D graphics2D, boolean bigImage) {
         //actual coords to draw the stuff on game screen
         int screenX = getScreenX();
         int screenY = getScreenY();
@@ -362,7 +369,8 @@ public class Entity extends Tools {
                         if (spriteNum == 3) image = up3;
                     }
                     if (attacking) {
-                        tempScreenY = screenY - up.getHeight();
+                        if (bigImage)
+                            tempScreenY = screenY - up.getHeight();
                         if (spriteNum == 0) image = attackUp;
                         if (spriteNum == 1) image = attackUp1;
                         if (spriteNum == 2) image = attackUp2;
@@ -391,7 +399,8 @@ public class Entity extends Tools {
                         if (spriteNum == 3) image = left3;
                     }
                     if (attacking) {
-                        tempScreenX = screenX - left.getWidth();
+                        if (bigImage)
+                            tempScreenX = screenX - left.getWidth();
                         if (spriteNum == 0) image = attackLeft;
                         if (spriteNum == 1) image = attackLeft1;
                         if (spriteNum == 2) image = attackLeft2;
@@ -429,7 +438,7 @@ public class Entity extends Tools {
         }
     }
 
-    private void dieAnimation(Graphics2D graphics2D) {
+    protected void dieAnimation(Graphics2D graphics2D) {
         dieCounter++;
 
         int sec = 5;
@@ -451,7 +460,7 @@ public class Entity extends Tools {
     }
 
 
-    private void changeAlfa(Graphics2D graphics2D, float alfaValue) {
+    protected void changeAlfa(Graphics2D graphics2D, float alfaValue) {
         graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alfaValue));
     }
 
@@ -758,6 +767,10 @@ public class Entity extends Tools {
         knockBackCounter = 0;
         guardCounter = 0;
         offBalanceCounter = 0;
+    }
+
+    public String getRandomDirection() {
+        return directions[random.nextInt(directions.length)];
     }
 
     public int getScreenX() {

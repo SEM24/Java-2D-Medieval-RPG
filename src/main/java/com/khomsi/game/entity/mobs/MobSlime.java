@@ -21,7 +21,7 @@ public class MobSlime extends Entity {
         type = TYPE_MOB;
         defaultSpeed = 1;
         speed = defaultSpeed;
-        direction = "down";
+        direction = getRandomDirection();
         //4 = 2 hearts
         maxHp = 4;
         hp = maxHp;
@@ -88,7 +88,7 @@ public class MobSlime extends Entity {
 
     @Override
     public void checkDrop() {
-        int drop = new Random().nextInt(100) + 1;
+        int drop = random.nextInt(100) + 1;
 
         //Set the mob's drop, 50% chance of coin, 30 of heart and mana
         if (drop < 50) dropItem(new CoinBObject(gameManager));

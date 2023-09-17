@@ -50,8 +50,12 @@ public class InteractiveTilePlacement {
         gameManager.interactTile[mapNum][index] = new Bush(gameManager, 51, 68);
         index++;
         gameManager.interactTile[mapNum][index] = new Bush(gameManager, 52, 66);
-
-
+        index++;
+        gameManager.interactTile[mapNum][index] = new Bush(gameManager, 35, 87);
+        index++;
+        gameManager.interactTile[mapNum][index] = new Bush(gameManager, 45, 84);
+        index++;
+        gameManager.interactTile[mapNum][index] = new Bush(gameManager, 45, 85);
         setCastleSwitches(index, mapNum);
     }
 

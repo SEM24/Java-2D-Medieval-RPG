@@ -4,11 +4,8 @@ import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
 
 import java.awt.*;
-import java.util.Random;
 
 public class NpcCrabs extends Entity {
-    private final Random random = new Random();
-    private final String[] directions = {"up", "down", "left", "right"};
 
     public NpcCrabs(GameManager gameManager, Color color) {
         super(gameManager);
@@ -104,9 +101,5 @@ public class NpcCrabs extends Entity {
         if (dialogues[dialogueSet][0] == null) {
             dialogueSet = 0;
         }
-    }
-
-    private String getRandomDirection() {
-        return directions[random.nextInt(directions.length)];
     }
 }

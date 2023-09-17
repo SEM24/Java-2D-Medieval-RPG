@@ -3,6 +3,8 @@ package com.khomsi.game.entity.mobs;
 import com.khomsi.game.entity.Entity;
 import com.khomsi.game.main.GameManager;
 
+import java.awt.*;
+
 public class MobChestMimic extends Entity {
     public MobChestMimic(GameManager gameManager) {
         super(gameManager);
@@ -30,12 +32,15 @@ public class MobChestMimic extends Entity {
         solidArea.height = 20;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        attackArea.width = 40;
+        attackArea.width = 0;
         attackArea.height = 40;
         motion1Duration = 15;
         motion2Duration = 20;
     }
-
+    @Override
+    public void draw(Graphics2D graphics2D) {
+        draw(graphics2D, false);
+    }
     private void getImage() {
         up = setup("/mobs/mimics/mimic_chest_down");
         up1 = setup("/mobs/mimics/mimic_chest_down");
