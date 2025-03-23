@@ -235,8 +235,7 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_F8) godMode = !godMode;
         if (code == KeyEvent.VK_F7) {
             switch (gameManager.currentMap) {
-                case 0 -> gameManager.tileManager.loadMap("/maps/world01.txt", 0);
-                case 1 -> gameManager.tileManager.loadMap("/maps/interior01.txt", 1);
+                case 0 -> gameManager.tileManager.loadMap("/maps/world00.txt", 0);
             }
         }
     }

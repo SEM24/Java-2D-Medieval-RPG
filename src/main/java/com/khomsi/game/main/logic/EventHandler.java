@@ -39,11 +39,51 @@ public class EventHandler {
         setDialogue();
     }
 
+    public boolean interact(int map, int col, int row, String direction) {
+        return interact(map, col, row, direction, 0);
+    }
+
+    public boolean interact(int map, int col, int row, String direction, int tolerance) {
+        boolean interact = false;
+
+        if (map == gameManager.currentMap) {
+            gameManager.player.solidArea.x = gameManager.player.worldX + gameManager.player.solidArea.x;
+            gameManager.player.solidArea.y = gameManager.player.worldY + gameManager.player.solidArea.y;
+
+            eventRect[map][col][row].x = col * GameManager.TILE_SIZE + eventRect[map][col][row].x;
+            eventRect[map][col][row].y = row * GameManager.TILE_SIZE + eventRect[map][col][row].y;
+            // Define a smaller rectangle for player's collision area with tolerance
+            //This way we can adjust the solid area of interaction, so if player collide on solid area, it will interact
+            //any way
+            Rectangle playerCollisionArea = new Rectangle(
+                    gameManager.player.solidArea.x,
+                    gameManager.player.solidArea.y,
+                    gameManager.player.solidArea.width + tolerance,
+                    gameManager.player.solidArea.height
+            );
+            // If player's collision area intersects with event's solidArea, event can be played only 1 time
+            if (playerCollisionArea.intersects(eventRect[map][col][row]) && !eventRect[map][col][row].eventDone) {
+                if (gameManager.player.direction.contentEquals(direction) || direction.contentEquals("any")) {
+                    interact = true;
+                    previousEventX = gameManager.player.worldX;
+                    previousEventY = gameManager.player.worldY;
+                }
+            }
+            gameManager.player.solidArea.x = gameManager.player.solidAreaDefaultX;
+            gameManager.player.solidArea.y = gameManager.player.solidAreaDefaultY;
+            eventRect[map][col][row].x = eventRect[map][col][row].eventRectDefaultX;
+            eventRect[map][col][row].y = eventRect[map][col][row].eventRectDefaultY;
+        }
+        return interact;
+    }
+
     public void setDialogue() {
         eventMaster.dialogues[0][0] = "You felt into a pit!";
         eventMaster.dialogues[1][0] = "You thrown the coin!\nYour Hp and Mana were recovered!\nFile saved.";
         eventMaster.dialogues[2][0] = "You need coins to interact!\nCome again later!";
         eventMaster.dialogues[3][0] = "Ouch! That hurt!";
+
+        eventMaster.dialogues[4][0] = "Labe Village";
     }
 
     public void checkEvent() {
@@ -89,7 +129,21 @@ public class EventHandler {
                     changeLocation(0, 15, 23, GameManager.FOREST, GameManager.TRANSITION_STATE);
                     inForest = true; // install the flag that we're in forest
                 }
-
+                //Labe Village sign
+                else if (interact(0, 13, 79, "up")) {
+                    readSign(4);
+                }
+                //Pit interactions
+                else if (interact(0, 25, 65, "any")) {
+                    damagePit(GameManager.DIALOGUE_STATE, 13, 17);
+                } else if (interact(0, 35, 66, "any")
+                        || interact(0, 35, 67, "any")
+                        || interact(0, 36, 67, "any")
+                        || interact(0, 37, 67, "any")
+                        || interact(0, 38, 67, "any")
+                ) {
+                    damagePit(GameManager.DIALOGUE_STATE, 26, 74);
+                }
             }
             case 1 -> { // Dungeon
                 //back to main map from Dungeon
@@ -106,6 +160,9 @@ public class EventHandler {
                 if (interact(2, 47, 72, "any")) {
                     changeLocation(0, 35, 85, GameManager.OUTSIDE);
                     gameManager.playSE(28);
+                } else if (interact(2, 57, 59, "up")) {
+                    changeLocation(3, 47, 68, GameManager.INDOOR);
+                    gameManager.playSE(28);
                 }
                 //                //Talk to seller in house
 //                else if (interact(1, 20, 18, "up")) {
@@ -116,6 +173,12 @@ public class EventHandler {
 //                    changeLocation(2, 16, 39, GameManager.DUNGEON);
 //                    gameManager.playSE(4);
 //                }
+            }
+            case 3 -> {
+                if (interact(3, 47, 67, "up")) {
+                    changeLocation(2, 57, 60, GameManager.INDOOR);
+                    gameManager.playSE(28);
+                }
             }
 
 //            case 2 -> { // Dungeon
@@ -154,7 +217,7 @@ public class EventHandler {
                     {0, 46, 75},
                     {0, 16, 39},
                     {0, 36, 30},
-                    {0, 18, 25}
+                    {0, 18, 26}
             };
         } else if (currentMap == 1) {
             //TODO Add items to map 1
@@ -193,69 +256,20 @@ public class EventHandler {
         }
         return false;
     }
-    private boolean shouldInteractPit(int currentMap) {
-        // Initialize with an empty array
-        int[][] interactRanges = new int[][]{};
-        if (currentMap == 0) {
-            interactRanges = new int[][]{
-                    //Sea urchin locations
-                    {0, 35, 66},
-                    {0, 35, 67},
-                    {0, 36, 67},
-                    {0, 37, 67},
-                    {0, 38, 67}
-            };
-        }
-        for (int[] range : interactRanges) {
-            if (interact(currentMap, range[1], range[2], "any")) {
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean interact(int map, int col, int row, String direction) {
-        return interact(map, col, row, direction, 0);
-    }
-
-    public boolean interact(int map, int col, int row, String direction, int tolerance) {
-        boolean interact = false;
-
-        if (map == gameManager.currentMap) {
-            gameManager.player.solidArea.x = gameManager.player.worldX + gameManager.player.solidArea.x;
-            gameManager.player.solidArea.y = gameManager.player.worldY + gameManager.player.solidArea.y;
-
-            eventRect[map][col][row].x = col * GameManager.TILE_SIZE + eventRect[map][col][row].x;
-            eventRect[map][col][row].y = row * GameManager.TILE_SIZE + eventRect[map][col][row].y;
-            // Define a smaller rectangle for player's collision area with tolerance
-            //This way we can adjust the solid area of interaction, so if player collide on solid area, it will interact
-            //any way
-            Rectangle playerCollisionArea = new Rectangle(
-                    gameManager.player.solidArea.x,
-                    gameManager.player.solidArea.y,
-                    gameManager.player.solidArea.width + tolerance,
-                    gameManager.player.solidArea.height
-            );
-            // If player's collision area intersects with event's solidArea, event can be played only 1 time
-            if (playerCollisionArea.intersects(eventRect[map][col][row]) && !eventRect[map][col][row].eventDone) {
-                if (gameManager.player.direction.contentEquals(direction) || direction.contentEquals("any")) {
-                    interact = true;
-                    previousEventX = gameManager.player.worldX;
-                    previousEventY = gameManager.player.worldY;
-                }
-            }
-            gameManager.player.solidArea.x = gameManager.player.solidAreaDefaultX;
-            gameManager.player.solidArea.y = gameManager.player.solidAreaDefaultY;
-            eventRect[map][col][row].x = eventRect[map][col][row].eventRectDefaultX;
-            eventRect[map][col][row].y = eventRect[map][col][row].eventRectDefaultY;
-        }
-        return interact;
-    }
 
     private void speak(Entity entity) {
         if (gameManager.keyHandler.isEnterPressed) {
             gameManager.gameState = GameManager.DIALOGUE_STATE;
             gameManager.player.attackCanceled = true;
             entity.speak();
+        }
+    }
+
+    private void readSign(int signNum) {
+        if (gameManager.keyHandler.isEnterPressed) {
+            gameManager.gameState = GameManager.DIALOGUE_STATE;
+            gameManager.player.attackCanceled = true;
+            eventMaster.startDialogue(eventMaster, signNum);
         }
     }
 
@@ -273,13 +287,13 @@ public class EventHandler {
 //      TODO  gameManager.playSE(4);
     }
 
-    public void damagePit(int gameState) {
+    public void damagePit(int gameState, int x, int y) {
         //TODO gameManager.playerSE();
         gameManager.gameState = gameState;
         eventMaster.startDialogue(eventMaster, 0);
         //TODO draw different sprites from character char_one char_pit_fall
         gameManager.player.hp -= 1;
-        teleport(gameState);
+        teleport(gameState, x, y);
         canTouchEvent = false;
     }
 
@@ -311,11 +325,11 @@ public class EventHandler {
         }
     }
 
-    private void teleport(int gameState) {
+    private void teleport(int gameState, int x, int y) {
         gameManager.gameState = gameState;
         eventMaster.startDialogue(eventMaster, 0);
-        gameManager.player.worldX = GameManager.TILE_SIZE * 13;
-        gameManager.player.worldY = GameManager.TILE_SIZE * 71;
+        gameManager.player.worldX = GameManager.TILE_SIZE * x;
+        gameManager.player.worldY = GameManager.TILE_SIZE * y;
         gameManager.player.fallIntoPit = false;
     }
 

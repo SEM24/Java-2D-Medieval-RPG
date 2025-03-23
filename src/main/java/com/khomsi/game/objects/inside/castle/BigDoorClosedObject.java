@@ -14,7 +14,7 @@ public class BigDoorClosedObject extends DoorObject {
         super(gameManager);
         name = OBJ_NAME;
         type = TYPE_OBSTACLE;
-        collision = false;
+        collision = true;
         solidArea.x = 0;
         solidArea.y = 32;
         solidArea.width = 140;

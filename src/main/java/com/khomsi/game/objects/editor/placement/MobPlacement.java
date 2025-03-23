@@ -1,7 +1,6 @@
 package com.khomsi.game.objects.editor.placement;
 
 import com.khomsi.game.entity.mobs.MobChestMimic;
-import com.khomsi.game.entity.mobs.MobDungeonBoss;
 import com.khomsi.game.entity.mobs.MobMushroom;
 import com.khomsi.game.main.GameManager;
 
@@ -43,6 +42,11 @@ public class MobPlacement {
         gameManager.mobs[mapNum][index] = new MobMushroom(gameManager, BROWN);
         gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 40;
         gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 84;
+        index++;
+
+        gameManager.mobs[mapNum][index] = new MobMushroom(gameManager, BROWN);
+        gameManager.mobs[mapNum][index].worldX = GameManager.TILE_SIZE * 12;
+        gameManager.mobs[mapNum][index].worldY = GameManager.TILE_SIZE * 86;
         index++;
     }
 

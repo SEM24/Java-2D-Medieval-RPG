@@ -29,7 +29,122 @@ public class CutSceneManager {
         }
     }
 
+ /*  public void scene_opening() {
+        int pressEnterY = 520;
+        String text;
+        if (this.scenePhase == 0) {
+            this.drawBlackBackground(1.0F);
+            this.alpha += 0.005F;
+            if (this.alpha > 1.0F) {
+                this.alpha = 1.0F;
+            }
 
+            text = "This is an island somewhere far away.\n\nBlue Boy, an aspiring adventurer, \ncomes to this island because he hears \nthat it holds a legendary treasure.\n\n\n\n\n";
+            this.drawString(this.alpha, 35.0F, 170, text, 40);
+            this.drawString(this.alpha, 35.0F, pressEnterY, "(Press Enter to continue)", 40);
+            if (this.gameManager.keyHandler.isEnterPressed) {
+                this.gameManager.keyHandler.isEnterPressed = false;
+                ++this.scenePhase;
+            }
+        }
+
+        if (this.scenePhase == 1) {
+            this.drawBlackBackground(1.0F);
+            this.alpha -= 0.02F;
+            if (this.alpha < 0.0F) {
+                this.alpha = 0.0F;
+                ++this.scenePhase;
+            }
+
+            text = "This is an island somewhere far away.\n\nBlue Boy, an aspiring adventurer, \ncomes to this island because he hears \nthat it holds a legendary treasure.\n\n\n\n\n";
+            this.drawString(this.alpha, 35.0F, 170, text, 40);
+            this.drawString(this.alpha, 35.0F, pressEnterY, "(Press Enter to continue)", 40);
+        }
+
+        if (this.scenePhase == 2) {
+            this.drawBlackBackground(1.0F);
+            this.alpha += 0.01F;
+            if (this.alpha > 1.0F) {
+                this.alpha = 1.0F;
+            }
+
+            text = "Can he safely find the treasure on this island,\nwhere dangerous monsters roam?\n\nIt all depends on you.\n\n\n\n\n\n";
+            this.drawString(this.alpha, 35.0F, 200, text, 40);
+            this.drawString(this.alpha, 35.0F, pressEnterY, "(Press Enter to continue)", 40);
+            if (this.gameManager.keyHandler.isEnterPressed) {
+                this.gameManager.keyHandler.isEnterPressed = false;
+                ++this.scenePhase;
+            }
+        }
+
+        if (this.scenePhase == 3) {
+            this.drawBlackBackground(1.0F);
+            this.alpha -= 0.02F;
+            if (this.alpha < 0.0F) {
+                this.alpha = 0.0F;
+                ++this.scenePhase;
+            }
+
+            text = "Can he safely find the treasure on this island,\nwhere dangerous monsters roam?\n\nIt all depends on you.\n\n\n\n\n";
+            this.drawString(this.alpha, 35.0F, 200, text, 40);
+            this.drawString(this.alpha, 35.0F, pressEnterY, "(Press Enter to continue)", 40);
+        }
+
+        if (this.scenePhase == 4) {
+            this.drawBlackBackground(1.0F);
+            this.alpha += 0.005F;
+            if (this.alpha > 1.0F) {
+                this.alpha = 1.0F;
+            }
+
+            this.drawString(this.alpha, 35.0F, 50, "<How to Play>", 40);
+            text = "Move: [W/A/S/D]\nAttack/Interact/Confirm: [ENTER]\nMagic: [F]\nGuard/Parry: [SPACE]\nInventory/Status: [C]\nMap: [M]   Mini Map: [X]\nPause: [P]\nOptions: [ESC]\n\n";
+            this.drawString(this.alpha, 35.0F, 120, text, 45);
+            this.drawString(this.alpha, 35.0F, pressEnterY, "(Press Enter to start the adventure)", 40);
+            if (this.gameManager.keyHandler.isEnterPressed) {
+                this.gameManager.keyHandler.isEnterPressed = false;
+                ++this.scenePhase;
+            }
+        }
+
+        if (this.scenePhase == 5) {
+            this.gameManager.keyHandler.isEnterPressed = false;
+            this.sceneNumber = 0;
+            this.scenePhase = 0;
+            GameManager var10000 = this.gameManager;
+            this.gameManager.getClass();
+            var10000.gameState = 1;
+            this.gameManager.playMusic(0);
+        }
+
+    }
+
+    public void drawBlackBackground(float alpha) {
+        this.g2d.setComposite(AlphaComposite.getInstance(3, alpha));
+        this.g2d.setColor(Color.black);
+        Graphics2D var10000 = this.g2d;
+        this.gameManager.getClass();
+        this.gameManager.getClass();
+        var10000.fillRect(0, 0, 960, 576);
+        this.g2d.setComposite(AlphaComposite.getInstance(3, 1.0F));
+    }
+
+    public void drawString(float alpha, float fontSize, int y, String text, int lineHeight) {
+        this.g2d.setComposite(AlphaComposite.getInstance(3, alpha));
+        this.g2d.setColor(Color.white);
+        this.g2d.setFont(this.g2d.getFont().deriveFont(fontSize));
+        String[] var9;
+        int var8 = (var9 = text.split("\n")).length;
+
+        for (int var7 = 0; var7 < var8; ++var7) {
+            String line = var9[var7];
+            int x = this.gameManager.ui.getXCenterText(line);
+            this.g2d.drawString(line, x, y);
+            y += lineHeight;
+        }
+
+        this.g2d.setComposite(AlphaComposite.getInstance(3, 1.0F));
+    }*/
 
     public void sceneDungeonBoss() {
         switch (scenePhase) {

@@ -8,6 +8,7 @@ public class PlaceObjects {
     public static final int MAP_MAIN = 0;
     public static final int MAP_DUNGEON = 1;
     public static final int MAP_HOUSE_BEACH = 2;
+    public static final int MAP_HOUSE_BEACH_CELLAR = 3;
 
     public PlaceObjects(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -18,6 +19,7 @@ public class PlaceObjects {
         objectPlacement.placeObjectsOnMap0();
         objectPlacement.placeObjectsOnMapHouseBeach1();
         objectPlacement.objectsOnDungeonMap1();
+        objectPlacement.placeObjectsOnMapHouseBeachCellar();
     }
 
     public void setInteractiveTiles() {
@@ -38,8 +40,10 @@ public class PlaceObjects {
 
     public void setMobs() {
         MobPlacement mobPlacement = new MobPlacement(gameManager);
-        mobPlacement.setMobsOnMap0();
-        mobPlacement.setMobsOnDungeonMap1();
+        switch (gameManager.currentMap) {
+            case 0 -> mobPlacement.setMobsOnMap0();
+            case 1 -> mobPlacement.setMobsOnDungeonMap1();
+        }
     }
 
     public void setTrapsOnDungeonMap1() {

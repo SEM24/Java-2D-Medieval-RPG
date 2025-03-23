@@ -1,6 +1,7 @@
 package com.khomsi.game.objects.editor.placement;
 
 import com.khomsi.game.main.GameManager;
+import com.khomsi.game.objects.equipment.MetalShieldObject;
 import com.khomsi.game.objects.equipment.MetalSwordObject;
 import com.khomsi.game.objects.inside.*;
 import com.khomsi.game.objects.inside.castle.BigDoorClosedObject;
@@ -89,13 +90,28 @@ public class ObjectPlacement {
         index++;
 
         gameManager.object[mapNum][index] = new StairsDownObject(gameManager);
-        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 57;
+        gameManager.object[mapNum][index].worldX = (int) (GameManager.TILE_SIZE * 56.5);
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 57;
         index++;
 
         gameManager.object[mapNum][index] = new BedObject(gameManager);
         gameManager.object[mapNum][index].worldX = (int) (GameManager.TILE_SIZE * 60.5);
         gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 59;
+    }
+
+    public void placeObjectsOnMapHouseBeachCellar() {
+        int index = 0;
+        int mapNum = MAP_HOUSE_BEACH_CELLAR;
+
+        gameManager.object[mapNum][index] = new StairsDownObject(gameManager);
+        gameManager.object[mapNum][index].worldX = (int) (GameManager.TILE_SIZE * 46.5);
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 65;
+        index++;
+
+        gameManager.object[mapNum][index] = new MetalShieldObject(gameManager);
+        gameManager.object[mapNum][index].setLoot(new PotionObject(gameManager));
+        gameManager.object[mapNum][index].worldX = GameManager.TILE_SIZE * 51;
+        gameManager.object[mapNum][index].worldY = GameManager.TILE_SIZE * 67;
     }
 
     public void objectsOnDungeonMap1() {

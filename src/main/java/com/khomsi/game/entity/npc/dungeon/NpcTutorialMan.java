@@ -57,7 +57,6 @@ public class NpcTutorialMan extends Entity {
         left1 = setup("/npc/tutorial/old_man/npc_old_man_13");
         left2 = setup("/npc/tutorial/old_man/npc_old_man_14");
         left3 = setup("/npc/tutorial/old_man/npc_old_man_15");
-
     }
 
     private void setDialog() {
@@ -66,6 +65,8 @@ public class NpcTutorialMan extends Entity {
         dialogues[0][2] = "But I remember you.";
         dialogues[0][3] = "But don't bother your head with this now.";
         dialogues[0][4] = "Grab this sword and go outside\nYou will need to find your shield now!";
+        dialogues[0][5] = "Visit my house, maybe you will find something there...";
+        dialogues[0][6] = "But to enter the house, you need\nthe key, find it somewhere in other dungeon!";
         dialogues[1][0] = "Are you still here?\n There's nothing to do here, go outside!";
     }
 
